@@ -1,98 +1,170 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <title>Phoenix Project - Innovation & Digital Transformation</title>
-    <style>
-        :root { --primary: #667eea; --secondary: #764ba2; --accent: #ffd700; --dark: #1a202c; --light: #f7fafc; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: var(--light); min-height: 100vh; overflow-x: hidden; }
-        header { padding: 20px; text-align: center; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
-        nav { margin-top: 10px; }
-        nav a { color: white; text-decoration: none; margin: 0 15px; padding: 8px 16px; border-radius: 5px; transition: all 0.3s; }
-        nav a:hover { background: rgba(255,255,255,0.2); }
-        .hero { text-align: center; padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
-        h1 { font-size: 4rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); animation: fadeInDown 1s; }
-        .subtitle { font-size: 1.5rem; opacity: 0.9; margin-bottom: 40px; animation: fadeInUp 1s; }
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 60px; padding: 0 20px; max-width: 1400px; margin-left: auto; margin-right: auto; }
-        .feature { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s, box-shadow 0.3s; animation: fadeIn 1s; }
-        .feature:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .feature h3 { margin-bottom: 15px; color: var(--accent); font-size: 1.5rem; }
-        .feature p { line-height: 1.6; }
-        .cta { margin-top: 60px; text-align: center; }
-        .btn { display: inline-block; padding: 15px 40px; background: var(--accent); color: var(--dark); text-decoration: none; border-radius: 50px; font-weight: bold; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        footer { text-align: center; padding: 40px 20px; margin-top: 80px; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
-        .tech-stack { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-        .tech-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { h1 { font-size: 2.5rem; } .subtitle { font-size: 1.2rem; } .features { grid-template-columns: 1fr; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io;">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+<title>The Phoenix Agency - AI, NoCode, Automation & Cybersecurity</title>
+<style>
+:root{--primary:#667eea;--secondary:#764ba2;--accent:#ff6b35;--dark:#1a202c;--light:#f7fafc;--text:#2d3748}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;color:var(--text);line-height:1.6;overflow-x:hidden}header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:1000}nav{max-width:1200px;margin:0 auto;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}nav a{text-decoration:none;color:var(--text);font-weight:500;padding:0.5rem 1rem;transition:color 0.3s}nav a:hover{color:var(--primary)}.logo{font-size:1.5rem;font-weight:bold;color:var(--primary)}.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:6rem 2rem 4rem;text-align:center}h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;font-weight:800}h2{font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:2rem}h3{font-size:clamp(1.2rem,3vw,1.8rem);margin-bottom:1rem}.subtitle{font-size:clamp(1rem,2.5vw,1.3rem);opacity:0.95;margin-bottom:2rem}.stats{display:flex;justify-content:center;gap:3rem;margin-top:3rem;flex-wrap:wrap}.stat{text-align:center}.stat-num{font-size:3rem;font-weight:bold;color:var(--accent)}.stat-label{font-size:0.9rem;opacity:0.9}.cta-buttons{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}.btn{padding:1rem 2rem;border-radius:50px;font-weight:600;text-decoration:none;transition:all 0.3s;display:inline-block;border:none;cursor:pointer;font-size:1rem}.btn-primary{background:var(--accent);color:white}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(255,107,53,0.3)}.btn-secondary{background:transparent;color:white;border:2px solid white}.btn-secondary:hover{background:white;color:var(--primary)}.section{max-width:1200px;margin:0 auto;padding:4rem 2rem}.section-title{text-align:center;margin-bottom:3rem}.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:3rem}.service-card{background:white;padding:2rem;border-radius:20px;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:transform 0.3s}.service-card:hover{transform:translateY(-5px)}.service-icon{font-size:3rem;margin-bottom:1rem}.service-list{list-style:none;padding:0}.service-list li{padding:0.5rem 0;padding-left:1.5rem;position:relative}.service-list li:before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:bold}.tech-stack{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-top:2rem}.tech-badge{background:var(--light);padding:0.5rem 1rem;border-radius:20px;font-size:0.9rem;color:var(--text);border:1px solid #e2e8f0}.contact-form{max-width:600px;margin:0 auto;background:white;padding:2rem;border-radius:20px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}.form-group{margin-bottom:1.5rem}.form-group label{display:block;margin-bottom:0.5rem;font-weight:600}.form-group input,.form-group textarea,.form-group select{width:100%;padding:0.75rem;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;font-family:inherit}.form-group textarea{min-height:120px;resize:vertical}footer{background:var(--dark);color:white;padding:3rem 2rem;text-align:center}.footer-content{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;text-align:left}.footer-section h4{margin-bottom:1rem}.footer-section a{color:white;text-decoration:none;display:block;padding:0.3rem 0;opacity:0.8}.footer-section a:hover{opacity:1}@media(max-width:768px){nav{flex-direction:column;gap:1rem}.services{grid-template-columns:1fr}.stats{flex-direction:column;gap:2rem}.cta-buttons{flex-direction:column;width:100%}.btn{width:100%}}
+</style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="#home">Accueil</a>
-            <a href="#services">Services</a>
-            <a href="#tech">Technologie</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
-    <div class="hero" id="home">
-        <h1>🔥 Phoenix Project</h1>
-        <p class="subtitle">Innovation, Excellence & Digital Transformation</p>
-        <p>Propulsé par l'intelligence multi-cloud et l'architecture hypersécurisée</p>
-    </div>
-    <div class="features" id="services">
-        <div class="feature">
-            <h3>🛡️ Sécurité Maximale</h3>
-            <p>Infrastructure hypersécurisée avec MFA, chiffrement de bout en bout, et protection DDoS intégrée</p>
-        </div>
-        <div class="feature">
-            <h3>☁️ Architecture Multi-Cloud</h3>
-            <p>Microsoft 365, Azure et Oracle Cloud Infrastructure parfaitement intégrés pour une redondance maximale</p>
-        </div>
-        <div class="feature">
-            <h3>⚡ Performance Optimale</h3>
-            <p>CDN mondial, compression automatique, et temps de réponse &lt; 50ms grâce à l'edge computing</p>
-        </div>
-        <div class="feature">
-            <h3>🚀 Évolutivité Illimitée</h3>
-            <p>Architecture modulaire permettant d'ajouter N sites statiques et applications dynamiques</p>
-        </div>
-        <div class="feature">
-            <h3>📊 Monitoring 24/7</h3>
-            <p>Surveillance continue avec alertes en temps réel et rapports de performance automatisés</p>
-        </div>
-        <div class="feature">
-            <h3>💰 Coût Optimisé</h3>
-            <p>Utilisation maximale des ressources gratuites (Oracle Cloud Always Free Tier)</p>
-        </div>
-    </div>
-    <div class="cta">
-        <a href="#contact" class="btn">Démarrer un Projet</a>
-    </div>
-    <footer id="tech">
-        <p>Technologies Utilisées</p>
-        <div class="tech-stack">
-            <span class="tech-badge">Microsoft 365</span>
-            <span class="tech-badge">Microsoft Entra ID</span>
-            <span class="tech-badge">Oracle Cloud</span>
-            <span class="tech-badge">GitHub Pages</span>
-            <span class="tech-badge">CloudFlare</span>
-            <span class="tech-badge">Let's Encrypt</span>
-        </div>
-        <p style="margin-top: 30px; opacity: 0.7;">
-            © 2025 Phoenix Project | Powered by PhoenixProject & NexusSaaS | Hosted on GitHub Pages
-        </p>
-    </footer>
+<header>
+<nav>
+<div class="logo">🔥 The Phoenix Agency</div>
+<div>
+<a href="#home">Home</a>
+<a href="#services">Services</a>
+<a href="#expertise">Expertise</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
+</header>
+<section class="hero" id="home">
+<div>
+<p class="subtitle">🔥 Your Digital Renaissance Starts Here</p>
+<h1>Transform Your Business with Artificial Intelligence</h1>
+<p class="subtitle">Specialists in AI, NoCode, Automation & Cybersecurity. We bring your digital projects to life with custom solutions.</p>
+<div class="stats">
+<div class="stat"><div class="stat-num">50</div><div class="stat-label">Projects Completed</div></div>
+<div class="stat"><div class="stat-num">98</div><div class="stat-label">% Satisfaction</div></div>
+<div class="stat"><div class="stat-num">24</div><div class="stat-label">Months Experience</div></div>
+</div>
+<div class="cta-buttons">
+<a href="#contact" class="btn btn-primary">Start Your Project</a>
+<a href="#services" class="btn btn-secondary">Discover Services</a>
+</div>
+</div>
+</section>
+<section class="section" id="services">
+<h2 class="section-title">Our Services</h2>
+<p style="text-align:center;margin-bottom:2rem">Innovative solutions to propel your business into the future</p>
+<div class="services">
+<div class="service-card">
+<div class="service-icon">🤖</div>
+<h3>Artificial Intelligence</h3>
+<p>Chatbot development, Machine Learning data analysis, and advanced AI API integration.</p>
+<ul class="service-list">
+<li>AI Chatbots & Assistants</li>
+<li>Machine Learning & Analytics</li>
+<li>OpenAI, Claude, GPT APIs</li>
+<li>Computer Vision</li>
+</ul>
+</div>
+<div class="service-card">
+<div class="service-icon">⚡</div>
+<h3>NoCode Solutions</h3>
+<p>Fast web application creation, intelligent automations, and custom workflows.</p>
+<ul class="service-list">
+<li>Rapid Web Applications</li>
+<li>Zapier, n8n, Make</li>
+<li>Airtable, Notion</li>
+<li>Custom Workflows</li>
+</ul>
+</div>
+<div class="service-card">
+<div class="service-icon">🔄</div>
+<h3>Automation</h3>
+<p>Custom Python scripts, GitHub Actions automation, and business process optimization.</p>
+<ul class="service-list">
+<li>Custom Python Scripts</li>
+<li>GitHub Actions</li>
+<li>Business Processes</li>
+<li>Monitoring & Alerts</li>
+</ul>
+</div>
+<div class="service-card">
+<div class="service-icon">🛡️</div>
+<h3>Cybersecurity</h3>
+<p>Security audits, penetration testing, team training, and GDPR compliance.</p>
+<ul class="service-list">
+<li>Security Audits</li>
+<li>Penetration Testing</li>
+<li>Team Training</li>
+<li>GDPR Compliance</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="section" id="expertise" style="background:#f8f9fa">
+<h2 class="section-title">Our Tech Stack</h2>
+<p style="text-align:center;margin-bottom:2rem">Cutting-edge technologies for high-performance solutions</p>
+<div class="tech-stack">
+<span class="tech-badge">Python</span>
+<span class="tech-badge">JavaScript</span>
+<span class="tech-badge">React</span>
+<span class="tech-badge">Node.js</span>
+<span class="tech-badge">TensorFlow</span>
+<span class="tech-badge">OpenAI</span>
+<span class="tech-badge">Claude</span>
+<span class="tech-badge">n8n</span>
+<span class="tech-badge">Zapier</span>
+<span class="tech-badge">Docker</span>
+<span class="tech-badge">Linux</span>
+<span class="tech-badge">GitHub Actions</span>
+</div>
+</section>
+<section class="section" id="contact">
+<h2 class="section-title">Ready to Transform Your Business?</h2>
+<p style="text-align:center;margin-bottom:2rem">Contact us to discuss your project</p>
+<form class="contact-form" action="https://formspree.io/f/mdklrzob" method="POST">
+<div class="form-group">
+<label for="name">Full Name *</label>
+<input type="text" id="name" name="name" required>
+</div>
+<div class="form-group">
+<label for="email">Email *</label>
+<input type="email" id="email" name="email" required>
+</div>
+<div class="form-group">
+<label for="service">Desired Service *</label>
+<select id="service" name="service" required>
+<option value="">Choose a service</option>
+<option value="AI">Artificial Intelligence</option>
+<option value="NoCode">NoCode Solutions</option>
+<option value="Automation">Automation</option>
+<option value="Cybersecurity">Cybersecurity</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="form-group">
+<label for="message">Project Description *</label>
+<textarea id="message" name="message" required></textarea>
+</div>
+<button type="submit" class="btn btn-primary" style="width:100%">Send Request</button>
+</form>
+</section>
+<footer>
+<div class="footer-content">
+<div class="footer-section">
+<h4>🔥 The Phoenix Agency</h4>
+<p>Your digital partner to be reborn in the AI era</p>
+</div>
+<div class="footer-section">
+<h4>Services</h4>
+<a href="#services">Artificial Intelligence</a>
+<a href="#services">NoCode Solutions</a>
+<a href="#services">Automation</a>
+<a href="#services">Cybersecurity</a>
+</div>
+<div class="footer-section">
+<h4>Resources</h4>
+<a href="https://github.com/ThePhoenixAgency" target="_blank" rel="noopener noreferrer">GitHub</a>
+<a href="#expertise">Technologies</a>
+</div>
+<div class="footer-section">
+<h4>Contact</h4>
+<a href="mailto:contact@phonxproject.onmicrosoft.com">Email</a>
+<a href="https://www.linkedin.com/company/phoenixproject-ai/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+</div>
+</div>
+<p style="margin-top:2rem;opacity:0.7">© 2025 The Phoenix Agency. All rights reserved.</p>
+</footer>
 </body>
 </html>
