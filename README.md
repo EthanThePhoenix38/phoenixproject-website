@@ -1,5 +1,12 @@
 # Phoenix Project - Site Web Professionnel
 
+![WCAG AA](https://img.shields.io/badge/WCAG-AA%20Compliant-green?style=flat-square&logo=w3c)
+![RGPD](https://img.shields.io/badge/RGPD-Compliant-blue?style=flat-square)
+![Responsive](https://img.shields.io/badge/Responsive-Mobile%20First-orange?style=flat-square)
+![i18n](https://img.shields.io/badge/i18n-FR%20%7C%20EN-purple?style=flat-square)
+![Dark Mode](https://img.shields.io/badge/Dark%20Mode-Supported-black?style=flat-square)
+![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)
+
 Site web moderne et multilingue pour services d'ingénierie logicielle.
 
 ## 🌐 Voir le Site
