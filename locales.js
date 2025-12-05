@@ -82,6 +82,16 @@ const translations = {
           "Team Training",
           "GDPR Compliance"
         ]
+      },
+
+      business: {
+        title: "Business Analysis",
+        description: "Requirements analysis, product backlog management, and change management support.",
+        list: [
+          "Requirements Analysis",
+          "Product Backlog (Waterfall/Hybrid/Agile)",
+          "Project Management & Change Support"
+        ]
       }
     },
 
@@ -105,6 +115,7 @@ const translations = {
           nocode: "NoCode Solutions",
           automation: "Automation",
           cybersecurity: "Cybersecurity",
+          business: "Business Analysis",
           other: "Other"
         },
         message: "Project Description",
@@ -209,6 +220,16 @@ const translations = {
           "Formation des Équipes",
           "Conformité RGPD"
         ]
+      },
+
+      business: {
+        title: "Business Analyse",
+        description: "Analyse des besoins, gestion du backlog produit, et accompagnement au changement.",
+        list: [
+          "Analyse des Besoins",
+          "Backlog Produit (Waterfall/Hybride/Agile)",
+          "Conduite de Projet & Accompagnement au Changement"
+        ]
       }
     },
 
@@ -232,6 +253,7 @@ const translations = {
           nocode: "Solutions NoCode",
           automation: "Automatisation",
           cybersecurity: "Cybersécurité",
+          business: "Business Analyse",
           other: "Autre"
         },
         message: "Description du Projet",
@@ -270,8 +292,7 @@ async function detectLanguageByIP() {
     const response = await fetch('https://ipapi.co/json/');
     const data = await response.json();
 
-    // Liste des pays francophones
-    const frenchCountries = ['FR', 'BE', 'CH', 'CA', 'LU', 'MC', 'DZ', 'MA', 'TN', 'SN', 'CI', 'ML', 'BF', 'NE', 'TD', 'GA', 'CG', 'CD', 'CM', 'MG', 'HT'];
+    const frenchCountries = ['FR', 'BE', 'CH', 'LU', 'MC', 'DZ', 'MA', 'TN', 'SN', 'CI', 'ML', 'BF', 'NE', 'TD', 'GA', 'CG', 'CD', 'CM', 'MG', 'HT'];
 
     if (frenchCountries.includes(data.country_code)) {
       return 'fr';
@@ -280,7 +301,7 @@ async function detectLanguageByIP() {
     }
   } catch (error) {
     console.log('Language detection failed, using French as default');
-    return 'fr'; // Par défaut français
+    return 'fr';
   }
 }
 
@@ -352,6 +373,13 @@ function applyTranslations() {
     el.textContent = t.services.cybersecurity.list[i];
   });
 
+  // Business Analysis Card
+  document.querySelector('[data-i18n="services.business.title"]').textContent = t.services.business.title;
+  document.querySelector('[data-i18n="services.business.description"]').textContent = t.services.business.description;
+  document.querySelectorAll('[data-i18n^="services.business.list"]').forEach((el, i) => {
+    el.textContent = t.services.business.list[i];
+  });
+
   // Tech Stack
   document.querySelector('[data-i18n="techStack.title"]').textContent = t.techStack.title;
   document.querySelector('[data-i18n="techStack.subtitle"]').textContent = t.techStack.subtitle;
@@ -373,6 +401,7 @@ function applyTranslations() {
   document.querySelector('[data-i18n="contact.form.serviceOptions.nocode"]').textContent = t.contact.form.serviceOptions.nocode;
   document.querySelector('[data-i18n="contact.form.serviceOptions.automation"]').textContent = t.contact.form.serviceOptions.automation;
   document.querySelector('[data-i18n="contact.form.serviceOptions.cybersecurity"]').textContent = t.contact.form.serviceOptions.cybersecurity;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.business"]').textContent = t.contact.form.serviceOptions.business;
   document.querySelector('[data-i18n="contact.form.serviceOptions.other"]').textContent = t.contact.form.serviceOptions.other;
 
   // Footer
