@@ -229,10 +229,148 @@ const VisitTracker = {
   }
 };
 
+// GESTION DES TEMPLATES
+const TemplateManager = {
+  templates: ['moderne', 'professionnel', 'fluide', 'epure'],
+
+  init() {
+    const savedTemplate = this.getPreference('template') || 'moderne';
+    this.applyTemplate(savedTemplate);
+    this.createTemplateSelector();
+  },
+
+  applyTemplate(template) {
+    document.documentElement.setAttribute('data-template', template);
+    this.updateTemplateButtons(template);
+    this.savePreference('template', template);
+  },
+
+  updateTemplateButtons(activeTemplate) {
+    document.querySelectorAll('.template-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.template === activeTemplate);
+    });
+  },
+
+  createTemplateSelector() {
+    const selector = document.createElement('div');
+    selector.className = 'template-selector';
+    selector.innerHTML = `
+      <button class="template-btn" data-template="moderne" onclick="TemplateManager.applyTemplate('moderne')">
+        🎨 Moderne
+      </button>
+      <button class="template-btn" data-template="professionnel" onclick="TemplateManager.applyTemplate('professionnel')">
+        💼 Professionnel
+      </button>
+      <button class="template-btn" data-template="fluide" onclick="TemplateManager.applyTemplate('fluide')">
+        🌊 Fluide
+      </button>
+      <button class="template-btn" data-template="epure" onclick="TemplateManager.applyTemplate('epure')">
+        ✨ Épuré
+      </button>
+    `;
+    document.body.appendChild(selector);
+
+    const savedTemplate = this.getPreference('template') || 'moderne';
+    this.updateTemplateButtons(savedTemplate);
+  },
+
+  savePreference(key, value) {
+    if (CookieManager.hasConsent()) {
+      localStorage.setItem(key, value);
+    }
+  },
+
+  getPreference(key) {
+    return localStorage.getItem(key);
+  }
+};
+
+// MENU À ONGLETS FLUIDE
+const TabMenuManager = {
+  tabs: [
+    { id: 'home', label: 'Accueil', section: 'home' },
+    { id: 'services', label: 'Services', section: 'services' },
+    { id: 'expertise', label: 'Expertise', section: 'expertise' },
+    { id: 'contact', label: 'Contact', section: 'contact' }
+  ],
+
+  init() {
+    this.createTabMenu();
+    this.setupTabInteractions();
+  },
+
+  createTabMenu() {
+    const menu = document.createElement('div');
+    menu.className = 'tab-menu';
+    menu.id = 'tabMenu';
+
+    this.tabs.forEach(tab => {
+      const tabEl = document.createElement('div');
+      tabEl.className = 'tab-item';
+      tabEl.dataset.tab = tab.id;
+      tabEl.innerHTML = `
+        <span>${tab.label}</span>
+        <span class="tab-close" onclick="TabMenuManager.closeTab('${tab.id}', event)">×</span>
+      `;
+      tabEl.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('tab-close')) {
+          this.scrollToSection(tab.section);
+        }
+      });
+      menu.appendChild(tabEl);
+    });
+
+    document.body.appendChild(menu);
+  },
+
+  setupTabInteractions() {
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.setActiveTab(entry.target.id);
+        }
+      });
+    }, {
+      threshold: 0.5,
+      rootMargin: '-100px 0px -40% 0px'
+    });
+
+    sections.forEach(section => observer.observe(section));
+  },
+
+  setActiveTab(sectionId) {
+    document.querySelectorAll('.tab-item').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.tab === sectionId);
+    });
+  },
+
+  scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  },
+
+  closeTab(tabId, event) {
+    event.stopPropagation();
+    const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
+    if (tabEl) {
+      tabEl.style.animation = 'fadeOutTab 0.3s ease-out';
+      setTimeout(() => {
+        tabEl.remove();
+        this.tabs = this.tabs.filter(t => t.id !== tabId);
+      }, 300);
+    }
+  }
+};
+
 // INITIALISATION GLOBALE
 document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
+  TemplateManager.init();
   NavigationManager.init();
+  TabMenuManager.init();
   CookieManager.init();
 
   if (CookieManager.hasConsent()) {
