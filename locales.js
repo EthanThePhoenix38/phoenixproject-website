@@ -18,16 +18,20 @@ const translations = {
       title: "Transform Your Business with Artificial Intelligence",
       subtitle2: "Specialists in AI, NoCode, Automation & Cybersecurity. We bring your digital projects to life with custom solutions.",
       stat1: {
-        number: "87%",
-        label: "of companies adopt AI"
+        number: "65%",
+        label: "adopt generative AI"
       },
       stat2: {
         number: "+40%",
-        label: "productivity gain"
+        label: "productivity boost"
       },
       stat3: {
-        number: "3x",
-        label: "faster with automation"
+        number: "22%",
+        label: "cost reduction"
+      },
+      stat4: {
+        number: "24/7",
+        label: "continuous availability"
       }
     },
 
@@ -141,16 +145,20 @@ const translations = {
       title: "Transformez votre entreprise avec l'Intelligence Artificielle",
       subtitle2: "Spécialistes en IA, NoCode, Automatisation & Cybersécurité. Nous donnons vie à vos projets numériques avec des solutions sur mesure.",
       stat1: {
-        number: "87%",
-        label: "des entreprises adoptent l'IA"
+        number: "65%",
+        label: "adoptent l'IA générative"
       },
       stat2: {
         number: "+40%",
         label: "de gain de productivité"
       },
       stat3: {
-        number: "3x",
-        label: "plus rapide avec l'automatisation"
+        number: "22%",
+        label: "de réduction des coûts"
+      },
+      stat4: {
+        number: "24/7",
+        label: "disponibilité continue"
       }
     },
 
@@ -309,6 +317,8 @@ function applyTranslations() {
   document.querySelector('[data-i18n="hero.stat2.label"]').textContent = t.hero.stat2.label;
   document.querySelector('[data-i18n="hero.stat3.number"]').textContent = t.hero.stat3.number;
   document.querySelector('[data-i18n="hero.stat3.label"]').textContent = t.hero.stat3.label;
+  document.querySelector('[data-i18n="hero.stat4.number"]').textContent = t.hero.stat4.number;
+  document.querySelector('[data-i18n="hero.stat4.label"]').textContent = t.hero.stat4.label;
 
   // Services Section
   document.querySelector('[data-i18n="services.title"]').textContent = t.services.title;
@@ -385,7 +395,7 @@ function updateLanguageButton() {
     langBtn.setAttribute('aria-label', 'Switch to English');
   } else {
     langBtn.textContent = 'FR';
-    langBtn.setAttribute('aria-label', 'Passer en Français');
+    langBtn.setAttribute('aria-label', 'Passer au français');
   }
 }
 
