@@ -139,6 +139,13 @@ const translations = {
         linkedin: "LinkedIn"
       },
       copyright: "© 2025 The Phoenix Agency. All rights reserved."
+    },
+
+    // Cookie Banner
+    cookie: {
+      message: "We use cookies to improve your experience and analyze site traffic.",
+      accept: "Accept",
+      reject: "Decline"
     }
   },
 
@@ -278,6 +285,13 @@ const translations = {
         linkedin: "LinkedIn"
       },
       copyright: "© 2025 The Phoenix Agency. Tous droits réservés."
+    },
+
+    // Bannière Cookie
+    cookie: {
+      message: "Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic du site.",
+      accept: "Accepter",
+      reject: "Refuser"
     }
   }
 };
@@ -417,6 +431,14 @@ function applyTranslations() {
   document.querySelector('[data-i18n="footer.links.email"]').textContent = t.footer.links.email;
   document.querySelector('[data-i18n="footer.links.linkedin"]').textContent = t.footer.links.linkedin;
   document.querySelector('[data-i18n="footer.copyright"]').textContent = t.footer.copyright;
+
+  // Cookie Banner (if exists)
+  const cookieMessage = document.querySelector('[data-i18n="cookie.message"]');
+  const cookieAccept = document.querySelector('[data-i18n="cookie.accept"]');
+  const cookieReject = document.querySelector('[data-i18n="cookie.reject"]');
+  if (cookieMessage) cookieMessage.textContent = t.cookie.message;
+  if (cookieAccept) cookieAccept.textContent = t.cookie.accept;
+  if (cookieReject) cookieReject.textContent = t.cookie.reject;
 }
 
 // Mettre à jour l'apparence du bouton de langue
