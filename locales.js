@@ -1,1 +1,416 @@
-const _0x4e2a=['ZW4=','ZnI=','VHJhbnNmb3JtIFlvdXIgQnVzaW5lc3Mgd2l0aCBBcnRpZmljaWFsIEludGVsbGlnZW5jZQ==','VHJhbnNmb3JtZXogdm90cmUgZW50cmVwcmlzZSBhdmVjIGwnSW50ZWxsaWdlbmNlIEFydGlmaWNpZWxsZQ==','U3BlY2lhbGlzdHMgaW4gQUksIE5vQ29kZSwgQXV0b21hdGlvbiAmIEN5YmVyc2VjdXJpdHk=','U3DDqWNpYWxpc3RlcyBlbiBJQSwgTm9Db2RlLCBBdXRvbWF0aXNhdGlvbiAmIEN5YmVyc8OpY3VyaXTDqQ==','U3RhcnQgWW91ciBQcm9qZWN0','RMOpbWFycmVyIHZvdHJlIHByb2pldA==','RGlzY292ZXIgU2VydmljZXM=','RMOpY291dnJpciBub3Mgc2VydmljZXM=','T3VyIFNlcnZpY2Vz','Tm9zIHNlcnZpY2Vz','QXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2U=','SW50ZWxsaWdlbmNlIEFydGlmaWNpZWxsZQ==','Tm9Db2RlIFNvbHV0aW9ucw==','U29sdXRpb25zIE5vQ29kZQ==','QXV0b21hdGlvbg==','QXV0b21hdGlzYXRpb24=','Q3liZXJzZWN1cml0eQ==','Q3liZXJzw6ljdXJpdMOp','T3VyIFRlY2ggU3RhY2s=','Tm90cmUgc3RhY2sgdGVjaG5pcXVl','UmVhZHkgdG8gVHJhbnNmb3JtIFlvdXIgQnVzaW5lc3M/','UHLDqnQgw6AgdHJhbnNmb3JtZXIgdm90cmUgZW50cmVwcmlzZSA/','Q29udGFjdCB1cyB0byBkaXNjdXNzIHlvdXIgcHJvamVjdA==','Q29udGFjdGV6LW5vdXMgcG91ciBkaXNjdXRlciBkZSB2b3RyZSBwcm9qZXQ=','RnVsbCBOYW1l','Tm9tIGNvbXBsZXQ=','RW1haWw=','Q291cnJpZWw=','RGVzaXJlZCBTZXJ2aWNl','U2VydmljZSBzb3VoYWl0w6k=','UHJvamVjdCBEZXNjcmlwdGlvbg==','RGVzY3JpcHRpb24gZHUgcHJvamV0','U2VuZCBSZXF1ZXN0','RW52b3llciB1bmUgZGVtYW5kZQ==','SG9tZQ==','QWNjdWVpbA==','U2VydmljZXM=','RXhwZXJ0aXNl','Q29udGFjdA=='];(function(_0x2d8f05,_0x4e2a02){const _0x3a6b5d=function(_0x32719f){while(--_0x32719f){_0x2d8f05['push'](_0x2d8f05['shift']());}};_0x3a6b5d(++_0x4e2a02);}(_0x4e2a,0x7c));const _0x3a6b=function(_0x2d8f05,_0x4e2a02){_0x2d8f05=_0x2d8f05-0x0;let _0x3a6b5d=_0x4e2a[_0x2d8f05];if(_0x3a6b['initialized']===undefined){(function(){let _0x32719f=function(){let _0x4c4d3e;try{_0x4c4d3e=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');')();}catch(_0x2d528e){_0x4c4d3e=window;}return _0x4c4d3e;};let _0x2f41ce=_0x32719f();const _0x1ba0ff='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x2f41ce['atob']||(_0x2f41ce['atob']=function(_0x5d96fc){const _0x4b5e73=String(_0x5d96fc)['replace'](/=+$/,'');let _0x4e8a1c='';for(let _0x2e7c38=0x0,_0x3f91d4,_0x1c8d52,_0x5f8ea3=0x0;_0x1c8d52=_0x4b5e73['charAt'](_0x5f8ea3++);~_0x1c8d52&&(_0x3f91d4=_0x2e7c38%0x4?_0x3f91d4*0x40+_0x1c8d52:_0x1c8d52,_0x2e7c38++%0x4)?_0x4e8a1c+=String['fromCharCode'](0xff&_0x3f91d4>>(-0x2*_0x2e7c38&0x6)):0x0){_0x1c8d52=_0x1ba0ff['indexOf'](_0x1c8d52);}return _0x4e8a1c;});}());_0x3a6b['decode']=function(_0x31a5f2){const _0x4d62b8=atob(_0x31a5f2);let _0x1f4e86=[];for(let _0x4a8c9d=0x0,_0x5c3e1f=_0x4d62b8['length'];_0x4a8c9d<_0x5c3e1f;_0x4a8c9d++){_0x1f4e86+='%'+('00'+_0x4d62b8['charCodeAt'](_0x4a8c9d)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x1f4e86);};_0x3a6b['data']={};_0x3a6b['initialized']=!![];}if(!_0x3a6b['data'][_0x2d8f05]){_0x3a6b5d=_0x3a6b['decode'](_0x3a6b5d);_0x3a6b['data'][_0x2d8f05]=_0x3a6b5d;}else{_0x3a6b5d=_0x3a6b['data'][_0x2d8f05];}return _0x3a6b5d;};const _0x5f2e={en:{h1:_0x3a6b('0x2'),h2:_0x3a6b('0x4'),btn1:_0x3a6b('0x6'),btn2:_0x3a6b('0x8'),serv:_0x3a6b('0xa'),ai:_0x3a6b('0xc'),nocode:_0x3a6b('0xe'),auto:_0x3a6b('0x10'),cyber:_0x3a6b('0x12'),tech:_0x3a6b('0x14'),ready:_0x3a6b('0x16'),contact:_0x3a6b('0x18'),name:_0x3a6b('0x1a'),email:_0x3a6b('0x1c'),service:_0x3a6b('0x1e'),desc:_0x3a6b('0x20'),send:_0x3a6b('0x22'),home:_0x3a6b('0x24'),services:_0x3a6b('0x26'),expertise:_0x3a6b('0x27'),contactLink:_0x3a6b('0x28')},fr:{h1:_0x3a6b('0x3'),h2:_0x3a6b('0x5'),btn1:_0x3a6b('0x7'),btn2:_0x3a6b('0x9'),serv:_0x3a6b('0xb'),ai:_0x3a6b('0xd'),nocode:_0x3a6b('0xf'),auto:_0x3a6b('0x11'),cyber:_0x3a6b('0x13'),tech:_0x3a6b('0x15'),ready:_0x3a6b('0x17'),contact:_0x3a6b('0x19'),name:_0x3a6b('0x1b'),email:_0x3a6b('0x1d'),service:_0x3a6b('0x1f'),desc:_0x3a6b('0x21'),send:_0x3a6b('0x23'),home:_0x3a6b('0x25'),services:_0x3a6b('0x26'),expertise:_0x3a6b('0x27'),contactLink:_0x3a6b('0x28')}};let _0x1c9f=_0x3a6b('0x0');function _0x4b8e(_0x2e4a){_0x1c9f=_0x2e4a;localStorage['setItem']('lang',_0x2e4a);_0x3f7d();}function _0x3f7d(){const _0x5a2c=_0x5f2e[_0x1c9f];document['querySelector']('.hero\x20h1')['textContent']=_0x5a2c['h1'];document['querySelector']('.subtitle')['textContent']=_0x5a2c['h2'];document['querySelectorAll']('.btn-primary')[0x0]['textContent']=_0x5a2c['btn1'];document['querySelectorAll']('.btn-secondary')[0x0]['textContent']=_0x5a2c['btn2'];document['querySelector']('.section-title')['textContent']=_0x5a2c['serv'];document['querySelectorAll']('.service-card\x20h3')[0x0]['textContent']=_0x5a2c['ai'];document['querySelectorAll']('.service-card\x20h3')[0x1]['textContent']=_0x5a2c['nocode'];document['querySelectorAll']('.service-card\x20h3')[0x2]['textContent']=_0x5a2c['auto'];document['querySelectorAll']('.service-card\x20h3')[0x3]['textContent']=_0x5a2c['cyber'];}window['addEventListener']('DOMContentLoaded',function(){const _0x4f1b=localStorage['getItem']('lang')||'en';_0x4b8e(_0x4f1b);});}
+// ===================================
+// SYSTÈME DE TRADUCTION FR/EN
+// ===================================
+
+const translations = {
+  en: {
+    // Navigation
+    nav: {
+      home: "Home",
+      services: "Services",
+      expertise: "Expertise",
+      contact: "Contact"
+    },
+
+    // Hero Section
+    hero: {
+      subtitle1: "🔥 Your Digital Renaissance Starts Here",
+      title: "Transform Your Business with Artificial Intelligence",
+      subtitle2: "Specialists in AI, NoCode, Automation & Cybersecurity. We bring your digital projects to life with custom solutions.",
+      stat1: {
+        number: "87%",
+        label: "of companies adopt AI"
+      },
+      stat2: {
+        number: "+40%",
+        label: "productivity gain"
+      },
+      stat3: {
+        number: "3x",
+        label: "faster with automation"
+      }
+    },
+
+    // Services Section
+    services: {
+      title: "Our Services",
+      subtitle: "Innovative solutions to propel your business into the future",
+
+      ai: {
+        title: "Artificial Intelligence",
+        description: "Chatbot development, Machine Learning data analysis, and advanced AI API integration.",
+        list: [
+          "AI Chatbots & Assistants",
+          "Machine Learning & Analytics",
+          "OpenAI, Cursor, Comet",
+          "AI Pair Programming"
+        ]
+      },
+
+      nocode: {
+        title: "NoCode Solutions",
+        description: "Fast web application creation, intelligent automations, and custom workflows.",
+        list: [
+          "Rapid Web Applications",
+          "n8n, Make",
+          "Airtable, Notion",
+          "Custom Workflows"
+        ]
+      },
+
+      automation: {
+        title: "Automation",
+        description: "Custom Python scripts, GitHub Actions automation, and business process optimization.",
+        list: [
+          "Custom Python Scripts",
+          "GitHub Actions",
+          "Business Analysis (CBAP)",
+          "Monitoring & Alerts"
+        ]
+      },
+
+      cybersecurity: {
+        title: "Cybersecurity",
+        description: "Security audits, penetration testing, team training, and GDPR compliance.",
+        list: [
+          "Security Audits",
+          "Penetration Testing",
+          "Team Training",
+          "GDPR Compliance"
+        ]
+      }
+    },
+
+    // Tech Stack Section
+    techStack: {
+      title: "Our Tech Stack",
+      subtitle: "Cutting-edge technologies for high-performance solutions"
+    },
+
+    // Contact Section
+    contact: {
+      title: "Ready to Transform Your Business?",
+      subtitle: "Contact us to discuss your project",
+      form: {
+        name: "Full Name",
+        email: "Email",
+        service: "Desired Service",
+        servicePlaceholder: "Choose a service",
+        serviceOptions: {
+          ai: "Artificial Intelligence",
+          nocode: "NoCode Solutions",
+          automation: "Automation",
+          cybersecurity: "Cybersecurity",
+          other: "Other"
+        },
+        message: "Project Description",
+        submit: "Send Request"
+      }
+    },
+
+    // Footer
+    footer: {
+      tagline: "Your digital partner to be reborn in the AI era",
+      sections: {
+        services: "Services",
+        resources: "Resources",
+        contact: "Contact"
+      },
+      links: {
+        github: "GitHub",
+        technologies: "Technologies",
+        email: "Email",
+        linkedin: "LinkedIn"
+      },
+      copyright: "© 2025 The Phoenix Agency. All rights reserved."
+    }
+  },
+
+  fr: {
+    // Navigation
+    nav: {
+      home: "Accueil",
+      services: "Services",
+      expertise: "Expertise",
+      contact: "Contact"
+    },
+
+    // Hero Section
+    hero: {
+      subtitle1: "🔥 Votre Renaissance Numérique Commence Ici",
+      title: "Transformez votre entreprise avec l'Intelligence Artificielle",
+      subtitle2: "Spécialistes en IA, NoCode, Automatisation & Cybersécurité. Nous donnons vie à vos projets numériques avec des solutions sur mesure.",
+      stat1: {
+        number: "87%",
+        label: "des entreprises adoptent l'IA"
+      },
+      stat2: {
+        number: "+40%",
+        label: "de gain de productivité"
+      },
+      stat3: {
+        number: "3x",
+        label: "plus rapide avec l'automatisation"
+      }
+    },
+
+    // Services Section
+    services: {
+      title: "Nos Services",
+      subtitle: "Des solutions innovantes pour propulser votre entreprise vers le futur",
+
+      ai: {
+        title: "Intelligence Artificielle",
+        description: "Développement de chatbots, analyse de données Machine Learning, et intégration d'API IA avancées.",
+        list: [
+          "Chatbots & Assistants IA",
+          "Machine Learning & Analytique",
+          "OpenAI, Cursor, Comet",
+          "Programmation assistée par IA"
+        ]
+      },
+
+      nocode: {
+        title: "Solutions NoCode",
+        description: "Création rapide d'applications web, automatisations intelligentes et workflows personnalisés.",
+        list: [
+          "Applications Web Rapides",
+          "n8n, Make",
+          "Airtable, Notion",
+          "Workflows Personnalisés"
+        ]
+      },
+
+      automation: {
+        title: "Automatisation",
+        description: "Scripts Python personnalisés, automatisation GitHub Actions, et optimisation des processus métier.",
+        list: [
+          "Scripts Python Sur Mesure",
+          "GitHub Actions",
+          "Analyse d'Affaires (CBAP)",
+          "Monitoring & Alertes"
+        ]
+      },
+
+      cybersecurity: {
+        title: "Cybersécurité",
+        description: "Audits de sécurité, tests d'intrusion, formation des équipes, et conformité RGPD.",
+        list: [
+          "Audits de Sécurité",
+          "Tests d'Intrusion",
+          "Formation des Équipes",
+          "Conformité RGPD"
+        ]
+      }
+    },
+
+    // Tech Stack Section
+    techStack: {
+      title: "Notre Stack Technique",
+      subtitle: "Des technologies de pointe pour des solutions performantes"
+    },
+
+    // Contact Section
+    contact: {
+      title: "Prêt à Transformer Votre Entreprise ?",
+      subtitle: "Contactez-nous pour discuter de votre projet",
+      form: {
+        name: "Nom Complet",
+        email: "Email",
+        service: "Service Souhaité",
+        servicePlaceholder: "Choisir un service",
+        serviceOptions: {
+          ai: "Intelligence Artificielle",
+          nocode: "Solutions NoCode",
+          automation: "Automatisation",
+          cybersecurity: "Cybersécurité",
+          other: "Autre"
+        },
+        message: "Description du Projet",
+        submit: "Envoyer la Demande"
+      }
+    },
+
+    // Footer
+    footer: {
+      tagline: "Votre partenaire numérique pour renaître à l'ère de l'IA",
+      sections: {
+        services: "Services",
+        resources: "Ressources",
+        contact: "Contact"
+      },
+      links: {
+        github: "GitHub",
+        technologies: "Technologies",
+        email: "Email",
+        linkedin: "LinkedIn"
+      },
+      copyright: "© 2025 The Phoenix Agency. Tous droits réservés."
+    }
+  }
+};
+
+// ===================================
+// GESTION DE LA LANGUE
+// ===================================
+
+let currentLang = 'fr'; // Langue par défaut : français
+
+// Détection automatique de la langue par IP
+async function detectLanguageByIP() {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+
+    // Liste des pays francophones
+    const frenchCountries = ['FR', 'BE', 'CH', 'CA', 'LU', 'MC', 'DZ', 'MA', 'TN', 'SN', 'CI', 'ML', 'BF', 'NE', 'TD', 'GA', 'CG', 'CD', 'CM', 'MG', 'HT'];
+
+    if (frenchCountries.includes(data.country_code)) {
+      return 'fr';
+    } else {
+      return 'en';
+    }
+  } catch (error) {
+    console.log('Language detection failed, using French as default');
+    return 'fr'; // Par défaut français
+  }
+}
+
+// Changer la langue
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('preferredLanguage', lang);
+  applyTranslations();
+  updateLanguageButton();
+}
+
+// Appliquer les traductions
+function applyTranslations() {
+  const t = translations[currentLang];
+
+  // Mettre à jour l'attribut lang du HTML
+  document.documentElement.lang = currentLang;
+
+  // Navigation
+  document.querySelector('[data-i18n="nav.home"]').textContent = t.nav.home;
+  document.querySelector('[data-i18n="nav.services"]').textContent = t.nav.services;
+  document.querySelector('[data-i18n="nav.expertise"]').textContent = t.nav.expertise;
+  document.querySelector('[data-i18n="nav.contact"]').textContent = t.nav.contact;
+
+  // Hero Section
+  document.querySelector('[data-i18n="hero.subtitle1"]').textContent = t.hero.subtitle1;
+  document.querySelector('[data-i18n="hero.title"]').textContent = t.hero.title;
+  document.querySelector('[data-i18n="hero.subtitle2"]').textContent = t.hero.subtitle2;
+
+  // Stats
+  document.querySelector('[data-i18n="hero.stat1.number"]').textContent = t.hero.stat1.number;
+  document.querySelector('[data-i18n="hero.stat1.label"]').textContent = t.hero.stat1.label;
+  document.querySelector('[data-i18n="hero.stat2.number"]').textContent = t.hero.stat2.number;
+  document.querySelector('[data-i18n="hero.stat2.label"]').textContent = t.hero.stat2.label;
+  document.querySelector('[data-i18n="hero.stat3.number"]').textContent = t.hero.stat3.number;
+  document.querySelector('[data-i18n="hero.stat3.label"]').textContent = t.hero.stat3.label;
+
+  // Services Section
+  document.querySelector('[data-i18n="services.title"]').textContent = t.services.title;
+  document.querySelector('[data-i18n="services.subtitle"]').textContent = t.services.subtitle;
+
+  // AI Card
+  document.querySelector('[data-i18n="services.ai.title"]').textContent = t.services.ai.title;
+  document.querySelector('[data-i18n="services.ai.description"]').textContent = t.services.ai.description;
+  document.querySelectorAll('[data-i18n^="services.ai.list"]').forEach((el, i) => {
+    el.textContent = t.services.ai.list[i];
+  });
+
+  // NoCode Card
+  document.querySelector('[data-i18n="services.nocode.title"]').textContent = t.services.nocode.title;
+  document.querySelector('[data-i18n="services.nocode.description"]').textContent = t.services.nocode.description;
+  document.querySelectorAll('[data-i18n^="services.nocode.list"]').forEach((el, i) => {
+    el.textContent = t.services.nocode.list[i];
+  });
+
+  // Automation Card
+  document.querySelector('[data-i18n="services.automation.title"]').textContent = t.services.automation.title;
+  document.querySelector('[data-i18n="services.automation.description"]').textContent = t.services.automation.description;
+  document.querySelectorAll('[data-i18n^="services.automation.list"]').forEach((el, i) => {
+    el.textContent = t.services.automation.list[i];
+  });
+
+  // Cybersecurity Card
+  document.querySelector('[data-i18n="services.cybersecurity.title"]').textContent = t.services.cybersecurity.title;
+  document.querySelector('[data-i18n="services.cybersecurity.description"]').textContent = t.services.cybersecurity.description;
+  document.querySelectorAll('[data-i18n^="services.cybersecurity.list"]').forEach((el, i) => {
+    el.textContent = t.services.cybersecurity.list[i];
+  });
+
+  // Tech Stack
+  document.querySelector('[data-i18n="techStack.title"]').textContent = t.techStack.title;
+  document.querySelector('[data-i18n="techStack.subtitle"]').textContent = t.techStack.subtitle;
+
+  // Contact Section
+  document.querySelector('[data-i18n="contact.title"]').textContent = t.contact.title;
+  document.querySelector('[data-i18n="contact.subtitle"]').textContent = t.contact.subtitle;
+
+  // Form Labels
+  document.querySelector('[data-i18n="contact.form.name"]').textContent = t.contact.form.name;
+  document.querySelector('[data-i18n="contact.form.email"]').textContent = t.contact.form.email;
+  document.querySelector('[data-i18n="contact.form.service"]').textContent = t.contact.form.service;
+  document.querySelector('[data-i18n="contact.form.message"]').textContent = t.contact.form.message;
+  document.querySelector('[data-i18n="contact.form.submit"]').textContent = t.contact.form.submit;
+
+  // Form Select Options
+  document.querySelector('[data-i18n="contact.form.servicePlaceholder"]').textContent = t.contact.form.servicePlaceholder;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.ai"]').textContent = t.contact.form.serviceOptions.ai;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.nocode"]').textContent = t.contact.form.serviceOptions.nocode;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.automation"]').textContent = t.contact.form.serviceOptions.automation;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.cybersecurity"]').textContent = t.contact.form.serviceOptions.cybersecurity;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.other"]').textContent = t.contact.form.serviceOptions.other;
+
+  // Footer
+  document.querySelector('[data-i18n="footer.tagline"]').textContent = t.footer.tagline;
+  document.querySelector('[data-i18n="footer.sections.services"]').textContent = t.footer.sections.services;
+  document.querySelector('[data-i18n="footer.sections.resources"]').textContent = t.footer.sections.resources;
+  document.querySelector('[data-i18n="footer.sections.contact"]').textContent = t.footer.sections.contact;
+  document.querySelector('[data-i18n="footer.links.github"]').textContent = t.footer.links.github;
+  document.querySelector('[data-i18n="footer.links.technologies"]').textContent = t.footer.links.technologies;
+  document.querySelector('[data-i18n="footer.links.email"]').textContent = t.footer.links.email;
+  document.querySelector('[data-i18n="footer.links.linkedin"]').textContent = t.footer.links.linkedin;
+  document.querySelector('[data-i18n="footer.copyright"]').textContent = t.footer.copyright;
+}
+
+// Mettre à jour l'apparence du bouton de langue
+function updateLanguageButton() {
+  const langBtn = document.getElementById('langSwitcher');
+  if (currentLang === 'fr') {
+    langBtn.textContent = 'EN';
+    langBtn.setAttribute('aria-label', 'Switch to English');
+  } else {
+    langBtn.textContent = 'FR';
+    langBtn.setAttribute('aria-label', 'Passer en Français');
+  }
+}
+
+// Basculer entre les langues
+function toggleLanguage() {
+  const newLang = currentLang === 'fr' ? 'en' : 'fr';
+  changeLanguage(newLang);
+}
+
+// Initialisation au chargement de la page
+async function initializeLanguage() {
+  // Vérifier si l'utilisateur a une préférence sauvegardée
+  const savedLang = localStorage.getItem('preferredLanguage');
+
+  if (savedLang) {
+    currentLang = savedLang;
+  } else {
+    // Détecter la langue par IP
+    currentLang = await detectLanguageByIP();
+    localStorage.setItem('preferredLanguage', currentLang);
+  }
+
+  applyTranslations();
+  updateLanguageButton();
+}
+
+// Lancer l'initialisation quand le DOM est prêt
+document.addEventListener('DOMContentLoaded', initializeLanguage);
