@@ -252,8 +252,17 @@ const TemplateManager = {
   },
 
   createTemplateSelector() {
+    // Create toggle button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'template-toggle-btn';
+    toggleBtn.textContent = 'Templates';
+    toggleBtn.onclick = () => this.toggleSelector();
+    document.body.appendChild(toggleBtn);
+
+    // Create selector
     const selector = document.createElement('div');
     selector.className = 'template-selector';
+    selector.id = 'templateSelector';
     selector.innerHTML = `
       <button class="template-btn" data-template="moderne" onclick="TemplateManager.applyTemplate('moderne')">
         Moderne
@@ -272,6 +281,18 @@ const TemplateManager = {
 
     const savedTemplate = this.getPreference('template') || 'moderne';
     this.updateTemplateButtons(savedTemplate);
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!selector.contains(e.target) && !toggleBtn.contains(e.target)) {
+        selector.classList.remove('visible');
+      }
+    });
+  },
+
+  toggleSelector() {
+    const selector = document.getElementById('templateSelector');
+    selector.classList.toggle('visible');
   },
 
   savePreference(key, value) {
