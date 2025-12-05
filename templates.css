@@ -325,6 +325,9 @@
   transition: all 0.3s ease;
   white-space: nowrap;
   border: 1px solid transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .tab-item:hover {
