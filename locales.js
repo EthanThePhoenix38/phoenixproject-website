@@ -14,7 +14,7 @@ const translations = {
 
     // Hero Section
     hero: {
-      subtitle1: "🔥 Your Digital Renaissance Starts Here",
+      subtitle1: "Your Digital Renaissance Starts Here",
       title: "Transform Your Business with Artificial Intelligence",
       subtitle2: "Specialists in AI, NoCode, Automation & Cybersecurity. We bring your digital projects to life with custom solutions.",
       stat1: {
@@ -160,7 +160,7 @@ const translations = {
 
     // Hero Section
     hero: {
-      subtitle1: "🔥 Votre Renaissance Numérique Commence Ici",
+      subtitle1: "Votre Renaissance Numérique Commence Ici",
       title: "Transformez votre entreprise avec l'Intelligence Artificielle",
       subtitle2: "Spécialistes en IA, NoCode, Automatisation & Cybersécurité. Nous donnons vie à vos projets numériques avec des solutions sur mesure.",
       stat1: {

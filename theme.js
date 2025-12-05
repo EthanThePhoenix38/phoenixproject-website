@@ -29,7 +29,7 @@ const ThemeManager = {
   updateThemeButton(theme) {
     const btn = document.getElementById('themeToggle');
     if (btn) {
-      btn.textContent = theme === 'light' ? '🌙' : '☀️';
+      btn.textContent = theme === 'light' ? 'Dark' : 'Light';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
     }
   },
@@ -256,16 +256,16 @@ const TemplateManager = {
     selector.className = 'template-selector';
     selector.innerHTML = `
       <button class="template-btn" data-template="moderne" onclick="TemplateManager.applyTemplate('moderne')">
-        🎨 Moderne
+        Moderne
       </button>
       <button class="template-btn" data-template="professionnel" onclick="TemplateManager.applyTemplate('professionnel')">
-        💼 Professionnel
+        Professionnel
       </button>
       <button class="template-btn" data-template="fluide" onclick="TemplateManager.applyTemplate('fluide')">
-        🌊 Fluide
+        Fluide
       </button>
       <button class="template-btn" data-template="epure" onclick="TemplateManager.applyTemplate('epure')">
-        ✨ Épuré
+        Épuré
       </button>
     `;
     document.body.appendChild(selector);
