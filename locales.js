@@ -116,6 +116,7 @@ const translations = {
           automation: "Automation",
           cybersecurity: "Cybersecurity",
           business: "Business Analysis",
+          project: "Project Management",
           other: "Other"
         },
         message: "Project Description",
@@ -254,6 +255,7 @@ const translations = {
           automation: "Automatisation",
           cybersecurity: "Cybersécurité",
           business: "Business Analyse",
+          project: "Conduite de Projet",
           other: "Autre"
         },
         message: "Description du Projet",
@@ -402,6 +404,7 @@ function applyTranslations() {
   document.querySelector('[data-i18n="contact.form.serviceOptions.automation"]').textContent = t.contact.form.serviceOptions.automation;
   document.querySelector('[data-i18n="contact.form.serviceOptions.cybersecurity"]').textContent = t.contact.form.serviceOptions.cybersecurity;
   document.querySelector('[data-i18n="contact.form.serviceOptions.business"]').textContent = t.contact.form.serviceOptions.business;
+  document.querySelector('[data-i18n="contact.form.serviceOptions.project"]').textContent = t.contact.form.serviceOptions.project;
   document.querySelector('[data-i18n="contact.form.serviceOptions.other"]').textContent = t.contact.form.serviceOptions.other;
 
   // Footer
