@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhoenixOS - Système d'Exploitation Web Complet</title>
+<title>PhoenixOS - Complete Web Operating System</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;background:#000;user-select:none;height:100vh}
@@ -30,6 +30,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 .taskbar-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
 .taskbar-btn.active{background:rgba(102,126,234,.4)}
 .taskbar-clock{margin-left:auto;color:#fff;font-weight:600;font-size:13px;padding:0.4rem 0.8rem;background:rgba(255,255,255,.1);border-radius:6px}
+.taskbar-lang{color:#fff;font-weight:600;font-size:12px;padding:0.4rem 0.8rem;background:rgba(255,255,255,.1);border-radius:6px;cursor:pointer;position:relative}
+.taskbar-lang:hover{background:rgba(255,255,255,.2)}
+.lang-menu{position:absolute;bottom:100%;right:0;background:rgba(20,20,30,.98);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:0.5rem 0;min-width:120px;box-shadow:0 10px 25px rgba(0,0,0,.5);z-index:10001;display:none;margin-bottom:0.5rem}
+.lang-menu.show{display:block}
+.lang-item{padding:0.6rem 1rem;cursor:pointer;font-size:12px;transition:background .2s;display:flex;align-items:center;gap:0.5rem}
+.lang-item:hover{background:rgba(102,126,234,.4)}
+.lang-item.active{background:rgba(102,126,234,.3);font-weight:bold}
 .taskbar-power{background:rgba(220,38,38,.3);margin-left:0.5rem}
 .taskbar-power:hover{background:rgba(220,38,38,.5)}
 
@@ -112,51 +119,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <body>
 
 <!-- BOOT SCREEN -->
-<div id="boot">
-<div class="boot-line">PhoenixOS v3.0 - Booting...</div>
-<div class="boot-line">[ OK ] Initializing kernel...</div>
-<div class="boot-line">[ OK ] Loading file system...</div>
-<div class="boot-line">[ OK ] Starting device drivers...</div>
-<div class="boot-line">[ OK ] Mounting virtual disks...</div>
-<div class="boot-line">[ OK ] Starting network services...</div>
-<div class="boot-line">[ OK ] Loading desktop environment...</div>
-<div class="boot-line">System ready. Welcome to PhoenixOS!</div>
-</div>
+<div id="boot"></div>
 
 <!-- DESKTOP -->
 <div class="desktop" id="desktop">
 <!-- Desktop Icons -->
-<div class="desktop-icons">
-<div class="icon" onclick="openWindow('explorer')">
-<div class="icon-img">📁</div>
-<div class="icon-label">Explorateur</div>
-</div>
-<div class="icon" onclick="openWindow('terminal')">
-<div class="icon-img">⌨️</div>
-<div class="icon-label">Terminal</div>
-</div>
-<div class="icon" onclick="openWindow('browser')">
-<div class="icon-img">🌐</div>
-<div class="icon-label">Navigateur</div>
-</div>
-<div class="icon" onclick="openWindow('games')">
-<div class="icon-img">🎮</div>
-<div class="icon-label">Jeux</div>
-</div>
-<div class="icon" onclick="openWindow('editor')">
-<div class="icon-img">📝</div>
-<div class="icon-label">Éditeur</div>
-</div>
-</div>
+<div class="desktop-icons" id="desktopIcons"></div>
 
 <!-- Taskbar -->
 <div class="taskbar">
 <div class="taskbar-start">
-<button class="taskbar-btn" onclick="showStartMenu()">🔥 PhoenixOS</button>
+<button class="taskbar-btn" onclick="showStartMenu()" id="startBtn">🔥 PhoenixOS</button>
 <div id="taskbarApps"></div>
 </div>
+<div class="taskbar-lang" id="langSelector" onclick="toggleLangMenu()">
+<span id="currentLangFlag">🇬🇧</span> <span id="currentLangCode">EN</span>
+<div class="lang-menu" id="langMenu">
+<div class="lang-item active" onclick="setLanguage('en')">🇬🇧 English</div>
+<div class="lang-item" onclick="setLanguage('fr')">🇫🇷 Français</div>
+<div class="lang-item" onclick="setLanguage('it')">🇮🇹 Italiano</div>
+<div class="lang-item" onclick="setLanguage('es')">🇪🇸 Español</div>
+<div class="lang-item" onclick="setLanguage('zh')">🇨🇳 中文</div>
+</div>
+</div>
 <div class="taskbar-clock" id="clock">00:00</div>
-<button class="taskbar-btn taskbar-power" onclick="shutdown()">⏻</button>
+<button class="taskbar-btn taskbar-power" onclick="shutdown()" id="powerBtn">⏻</button>
 </div>
 </div>
 
@@ -164,7 +151,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <!-- File Explorer Window -->
 <div class="window" id="win-explorer" style="top:10%;left:10%;width:800px;height:600px">
 <div class="window-header" onmousedown="startDrag(event,'win-explorer')">
-<div class="window-title">📁 Explorateur de Fichiers</div>
+<div class="window-title" id="explorerTitle">📁 File Explorer</div>
 <div class="window-controls">
 <button class="window-btn window-minimize" onclick="minimizeWindow('win-explorer')">−</button>
 <button class="window-btn window-maximize" onclick="toggleMaximize('win-explorer')">□</button>
@@ -173,19 +160,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 </div>
 <div class="window-content">
 <div class="explorer">
-<div class="explorer-sidebar">
-<div style="margin-bottom:1rem"><strong>Favoris</strong></div>
-<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home')">🏠 Accueil</div>
-<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/documents')">📄 Documents</div>
-<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/downloads')">⬇️ Téléchargements</div>
-<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/games')">🎮 Jeux</div>
-</div>
+<div class="explorer-sidebar" id="explorerSidebar"></div>
 <div class="explorer-main">
 <div class="explorer-toolbar">
 <button class="toolbar-btn" onclick="navigateBack()">←</button>
 <button class="toolbar-btn" onclick="navigateForward()">→</button>
 <div class="explorer-path" id="currentPath">/home</div>
-<button class="toolbar-btn" onclick="showCreateMenu()">+ Nouveau</button>
+<button class="toolbar-btn" onclick="showCreateMenu()" id="newBtn">+ New</button>
 </div>
 <div class="explorer-content" id="explorerContent" oncontextmenu="return false"></div>
 </div>
@@ -196,7 +177,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <!-- Terminal Window -->
 <div class="window" id="win-terminal" style="top:15%;left:15%;width:700px;height:500px">
 <div class="window-header" onmousedown="startDrag(event,'win-terminal')">
-<div class="window-title">⌨️ Terminal</div>
+<div class="window-title" id="terminalTitle">⌨️ Terminal</div>
 <div class="window-controls">
 <button class="window-btn window-minimize" onclick="minimizeWindow('win-terminal')">−</button>
 <button class="window-btn window-maximize" onclick="toggleMaximize('win-terminal')">□</button>
@@ -204,18 +185,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 </div>
 </div>
 <div class="window-content">
-<div class="terminal" id="terminal">
-<div class="terminal-line">PhoenixOS Terminal v3.0</div>
-<div class="terminal-line">Type 'help' for available commands</div>
-<div class="terminal-line"><span class="terminal-prompt">user@phoenixos:~$</span> <input type="text" class="terminal-input" id="terminalInput" onkeypress="handleTerminalInput(event)"></div>
-</div>
+<div class="terminal" id="terminal"></div>
 </div>
 </div>
 
 <!-- Browser Window -->
 <div class="window" id="win-browser" style="top:8%;left:20%;width:900px;height:650px">
 <div class="window-header" onmousedown="startDrag(event,'win-browser')">
-<div class="window-title">🌐 Navigateur Phoenix</div>
+<div class="window-title" id="browserTitle">🌐 Browser</div>
 <div class="window-controls">
 <button class="window-btn window-minimize" onclick="minimizeWindow('win-browser')">−</button>
 <button class="window-btn window-maximize" onclick="toggleMaximize('win-browser')">□</button>
@@ -228,7 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <button class="browser-btn" onclick="browserBack()">←</button>
 <button class="browser-btn" onclick="browserForward()">→</button>
 <button class="browser-btn" onclick="browserRefresh()">⟳</button>
-<input type="text" class="browser-url" id="browserUrl" placeholder="Entrez une URL..." onkeypress="if(event.key==='Enter')browserGo()">
+<input type="text" class="browser-url" id="browserUrl" placeholder="Enter URL..." onkeypress="if(event.key==='Enter')browserGo()">
 <button class="browser-btn" onclick="browserGo()">Go</button>
 </div>
 <iframe class="browser-frame" id="browserFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
@@ -239,39 +216,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <!-- Games Window -->
 <div class="window" id="win-games" style="top:12%;left:25%;width:600px;height:500px">
 <div class="window-header" onmousedown="startDrag(event,'win-games')">
-<div class="window-title">🎮 Centre de Jeux</div>
+<div class="window-title" id="gamesTitle">🎮 Games</div>
 <div class="window-controls">
 <button class="window-btn window-minimize" onclick="minimizeWindow('win-games')">−</button>
 <button class="window-btn window-maximize" onclick="toggleMaximize('win-games')">□</button>
 <button class="window-btn window-close" onclick="closeWindow('win-games')">×</button>
 </div>
 </div>
-<div class="window-content" id="gamesContent">
-<div class="games-grid">
-<div class="game-card" onclick="playGame('snake')">
-<div class="game-icon">🐍</div>
-<div class="game-name">Snake</div>
-</div>
-<div class="game-card" onclick="playGame('tictactoe')">
-<div class="game-icon">⭕</div>
-<div class="game-name">Morpion</div>
-</div>
-<div class="game-card" onclick="playGame('memory')">
-<div class="game-icon">🧠</div>
-<div class="game-name">Memory</div>
-</div>
-<div class="game-card" onclick="playGame('pong')">
-<div class="game-icon">🏓</div>
-<div class="game-name">Pong</div>
-</div>
-</div>
-</div>
+<div class="window-content" id="gamesContent"></div>
 </div>
 
 <!-- Editor Window -->
 <div class="window" id="win-editor" style="top:10%;left:18%;width:750px;height:550px">
 <div class="window-header" onmousedown="startDrag(event,'win-editor')">
-<div class="window-title">📝 Éditeur de Texte</div>
+<div class="window-title" id="editorTitle">📝 Text Editor</div>
 <div class="window-controls">
 <button class="window-btn window-minimize" onclick="minimizeWindow('win-editor')">−</button>
 <button class="window-btn window-maximize" onclick="toggleMaximize('win-editor')">□</button>
@@ -281,12 +239,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <div class="window-content">
 <div class="editor">
 <div class="editor-toolbar">
-<button class="toolbar-btn" onclick="saveFile()">💾 Sauvegarder</button>
-<button class="toolbar-btn" onclick="openFileInEditor()">📂 Ouvrir</button>
-<button class="toolbar-btn" onclick="newFile()">📄 Nouveau</button>
-<span style="margin-left:auto;color:#fff;font-size:12px" id="editorFilename">sans_titre.txt</span>
+<button class="toolbar-btn" onclick="saveFile()" id="saveBtn">💾 Save</button>
+<button class="toolbar-btn" onclick="openFileInEditor()" id="openBtn">📂 Open</button>
+<button class="toolbar-btn" onclick="newFile()" id="newFileBtn">📄 New</button>
+<span style="margin-left:auto;color:#fff;font-size:12px" id="editorFilename">untitled.txt</span>
 </div>
-<textarea class="editor-content" id="editorContent" placeholder="Commencez à écrire..."></textarea>
+<textarea class="editor-content" id="editorContent" placeholder="Start typing..."></textarea>
 </div>
 </div>
 </div>
@@ -294,6 +252,623 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <div class="context-menu" id="contextMenu"></div>
 
 <script>
+// ===== INTERNATIONALIZATION =====
+const translations = {
+  en: {
+    boot: {
+      booting: 'PhoenixOS v3.0 - Booting...',
+      kernel: '[ OK ] Initializing kernel...',
+      filesystem: '[ OK ] Loading file system...',
+      drivers: '[ OK ] Starting device drivers...',
+      disks: '[ OK ] Mounting virtual disks...',
+      network: '[ OK ] Starting network services...',
+      desktop: '[ OK ] Loading desktop environment...',
+      ready: 'System ready. Welcome to PhoenixOS!',
+      shutdown: 'Shutting down system...',
+      stopping: '[ OK ] Stopping services...',
+      unmounting: '[ OK ] Unmounting file systems...',
+      goodbye: 'System halted. Goodbye!'
+    },
+    desktop: {
+      explorer: 'Explorer',
+      terminal: 'Terminal',
+      browser: 'Browser',
+      games: 'Games',
+      editor: 'Editor'
+    },
+    window: {
+      fileExplorer: 'File Explorer',
+      terminal: 'Terminal',
+      browser: 'Browser',
+      games: 'Games Center',
+      editor: 'Text Editor'
+    },
+    explorer: {
+      favorites: 'Favorites',
+      home: 'Home',
+      documents: 'Documents',
+      downloads: 'Downloads',
+      games: 'Games',
+      new: '+ New',
+      notFound: 'Folder not found',
+      rename: 'Rename',
+      delete: 'Delete',
+      open: 'Open',
+      newPrompt: 'Name of new file/folder:\n(Add / at the end for a folder)',
+      exists: 'Error: Already exists',
+      deleteConfirm: 'Delete',
+      renamePrompt: 'New name:'
+    },
+    terminal: {
+      version: 'PhoenixOS Terminal v3.0',
+      help: 'Type \'help\' for available commands',
+      helpMsg: 'Commands: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help',
+      notFound: 'Directory not found',
+      usage: 'Usage:',
+      created: 'Created',
+      deleted: 'Deleted',
+      cmdNotFound: 'Command not found:',
+      fileNotFound: 'File not found',
+      folderExists: 'Folder already exists',
+      fileExists: 'File already exists'
+    },
+    browser: {
+      urlPlaceholder: 'Enter URL...'
+    },
+    editor: {
+      save: '💾 Save',
+      open: '📂 Open',
+      new: '📄 New',
+      untitled: 'untitled.txt',
+      startTyping: 'Start typing...',
+      savePrompt: 'File name:',
+      saved: 'File saved!',
+      noFiles: 'No files in this folder',
+      readError: 'Read error'
+    },
+    games: {
+      snake: 'Snake',
+      tictactoe: 'Tic-Tac-Toe',
+      memory: 'Memory',
+      pong: 'Pong',
+      loading: 'Loading...',
+      restart: '🔄 Restart',
+      back: '⬅️ Back',
+      snakeScore: 'Score:',
+      snakeControls: '| Arrows to play',
+      snakeGameOver: 'Game Over! Score:',
+      tictactoePlayer: 'Player',
+      tictactoeDraw: 'Draw!',
+      tictactoeWins: 'wins!',
+      memoryInstructions: 'Find all pairs!',
+      memoryWin: 'Congratulations! You won!',
+      pongInstructions: 'First to 5 points!',
+      pongAI: 'AI:',
+      pongYou: 'You:',
+      pongWin: '- You win!',
+      pongLose: '- AI wins!'
+    }
+  },
+  fr: {
+    boot: {
+      booting: 'PhoenixOS v3.0 - Démarrage...',
+      kernel: '[ OK ] Initialisation du noyau...',
+      filesystem: '[ OK ] Chargement du système de fichiers...',
+      drivers: '[ OK ] Démarrage des pilotes...',
+      disks: '[ OK ] Montage des disques virtuels...',
+      network: '[ OK ] Démarrage des services réseau...',
+      desktop: '[ OK ] Chargement de l\'environnement...',
+      ready: 'Système prêt. Bienvenue sur PhoenixOS!',
+      shutdown: 'Arrêt du système...',
+      stopping: '[ OK ] Arrêt des services...',
+      unmounting: '[ OK ] Démontage des systèmes de fichiers...',
+      goodbye: 'Système arrêté. Au revoir!'
+    },
+    desktop: {
+      explorer: 'Explorateur',
+      terminal: 'Terminal',
+      browser: 'Navigateur',
+      games: 'Jeux',
+      editor: 'Éditeur'
+    },
+    window: {
+      fileExplorer: 'Explorateur de Fichiers',
+      terminal: 'Terminal',
+      browser: 'Navigateur Phoenix',
+      games: 'Centre de Jeux',
+      editor: 'Éditeur de Texte'
+    },
+    explorer: {
+      favorites: 'Favoris',
+      home: 'Accueil',
+      documents: 'Documents',
+      downloads: 'Téléchargements',
+      games: 'Jeux',
+      new: '+ Nouveau',
+      notFound: 'Dossier introuvable',
+      rename: 'Renommer',
+      delete: 'Supprimer',
+      open: 'Ouvrir',
+      newPrompt: 'Nom du nouveau fichier/dossier:\n(Ajoutez / à la fin pour un dossier)',
+      exists: 'Erreur: Déjà existant',
+      deleteConfirm: 'Supprimer',
+      renamePrompt: 'Nouveau nom:'
+    },
+    terminal: {
+      version: 'Terminal PhoenixOS v3.0',
+      help: 'Tapez \'help\' pour les commandes disponibles',
+      helpMsg: 'Commandes: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help',
+      notFound: 'Répertoire introuvable',
+      usage: 'Usage:',
+      created: 'Créé',
+      deleted: 'Supprimé',
+      cmdNotFound: 'Commande introuvable:',
+      fileNotFound: 'Fichier introuvable',
+      folderExists: 'Dossier déjà existant',
+      fileExists: 'Fichier déjà existant'
+    },
+    browser: {
+      urlPlaceholder: 'Entrez une URL...'
+    },
+    editor: {
+      save: '💾 Sauvegarder',
+      open: '📂 Ouvrir',
+      new: '📄 Nouveau',
+      untitled: 'sans_titre.txt',
+      startTyping: 'Commencez à écrire...',
+      savePrompt: 'Nom du fichier:',
+      saved: 'Fichier sauvegardé!',
+      noFiles: 'Aucun fichier dans ce dossier',
+      readError: 'Erreur de lecture'
+    },
+    games: {
+      snake: 'Snake',
+      tictactoe: 'Morpion',
+      memory: 'Memory',
+      pong: 'Pong',
+      loading: 'Chargement...',
+      restart: '🔄 Rejouer',
+      back: '⬅️ Retour',
+      snakeScore: 'Score:',
+      snakeControls: '| Flèches pour jouer',
+      snakeGameOver: 'Game Over! Score:',
+      tictactoePlayer: 'Joueur',
+      tictactoeDraw: 'Match nul!',
+      tictactoeWins: 'gagne!',
+      memoryInstructions: 'Trouvez toutes les paires!',
+      memoryWin: 'Bravo! Vous avez gagné!',
+      pongInstructions: 'Premier à 5 points!',
+      pongAI: 'IA:',
+      pongYou: 'Vous:',
+      pongWin: '- Vous gagnez!',
+      pongLose: '- IA gagne!'
+    }
+  },
+  it: {
+    boot: {
+      booting: 'PhoenixOS v3.0 - Avvio...',
+      kernel: '[ OK ] Inizializzazione kernel...',
+      filesystem: '[ OK ] Caricamento file system...',
+      drivers: '[ OK ] Avvio driver...',
+      disks: '[ OK ] Montaggio dischi virtuali...',
+      network: '[ OK ] Avvio servizi di rete...',
+      desktop: '[ OK ] Caricamento ambiente desktop...',
+      ready: 'Sistema pronto. Benvenuto su PhoenixOS!',
+      shutdown: 'Arresto del sistema...',
+      stopping: '[ OK ] Arresto servizi...',
+      unmounting: '[ OK ] Smontaggio file system...',
+      goodbye: 'Sistema arrestato. Arrivederci!'
+    },
+    desktop: {
+      explorer: 'Esplora',
+      terminal: 'Terminale',
+      browser: 'Browser',
+      games: 'Giochi',
+      editor: 'Editor'
+    },
+    window: {
+      fileExplorer: 'Esplora File',
+      terminal: 'Terminale',
+      browser: 'Browser Phoenix',
+      games: 'Centro Giochi',
+      editor: 'Editor di Testo'
+    },
+    explorer: {
+      favorites: 'Preferiti',
+      home: 'Home',
+      documents: 'Documenti',
+      downloads: 'Download',
+      games: 'Giochi',
+      new: '+ Nuovo',
+      notFound: 'Cartella non trovata',
+      rename: 'Rinomina',
+      delete: 'Elimina',
+      open: 'Apri',
+      newPrompt: 'Nome del nuovo file/cartella:\n(Aggiungi / alla fine per una cartella)',
+      exists: 'Errore: Già esistente',
+      deleteConfirm: 'Eliminare',
+      renamePrompt: 'Nuovo nome:'
+    },
+    terminal: {
+      version: 'Terminale PhoenixOS v3.0',
+      help: 'Digita \'help\' per i comandi disponibili',
+      helpMsg: 'Comandi: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help',
+      notFound: 'Directory non trovata',
+      usage: 'Uso:',
+      created: 'Creato',
+      deleted: 'Eliminato',
+      cmdNotFound: 'Comando non trovato:',
+      fileNotFound: 'File non trovato',
+      folderExists: 'Cartella già esistente',
+      fileExists: 'File già esistente'
+    },
+    browser: {
+      urlPlaceholder: 'Inserisci URL...'
+    },
+    editor: {
+      save: '💾 Salva',
+      open: '📂 Apri',
+      new: '📄 Nuovo',
+      untitled: 'senza_titolo.txt',
+      startTyping: 'Inizia a scrivere...',
+      savePrompt: 'Nome file:',
+      saved: 'File salvato!',
+      noFiles: 'Nessun file in questa cartella',
+      readError: 'Errore di lettura'
+    },
+    games: {
+      snake: 'Snake',
+      tictactoe: 'Tris',
+      memory: 'Memory',
+      pong: 'Pong',
+      loading: 'Caricamento...',
+      restart: '🔄 Ricomincia',
+      back: '⬅️ Indietro',
+      snakeScore: 'Punteggio:',
+      snakeControls: '| Frecce per giocare',
+      snakeGameOver: 'Game Over! Punteggio:',
+      tictactoePlayer: 'Giocatore',
+      tictactoeDraw: 'Pareggio!',
+      tictactoeWins: 'vince!',
+      memoryInstructions: 'Trova tutte le coppie!',
+      memoryWin: 'Congratulazioni! Hai vinto!',
+      pongInstructions: 'Primo a 5 punti!',
+      pongAI: 'IA:',
+      pongYou: 'Tu:',
+      pongWin: '- Hai vinto!',
+      pongLose: '- IA vince!'
+    }
+  },
+  es: {
+    boot: {
+      booting: 'PhoenixOS v3.0 - Iniciando...',
+      kernel: '[ OK ] Inicializando kernel...',
+      filesystem: '[ OK ] Cargando sistema de archivos...',
+      drivers: '[ OK ] Iniciando controladores...',
+      disks: '[ OK ] Montando discos virtuales...',
+      network: '[ OK ] Iniciando servicios de red...',
+      desktop: '[ OK ] Cargando entorno de escritorio...',
+      ready: 'Sistema listo. ¡Bienvenido a PhoenixOS!',
+      shutdown: 'Apagando sistema...',
+      stopping: '[ OK ] Deteniendo servicios...',
+      unmounting: '[ OK ] Desmontando sistemas de archivos...',
+      goodbye: 'Sistema detenido. ¡Adiós!'
+    },
+    desktop: {
+      explorer: 'Explorador',
+      terminal: 'Terminal',
+      browser: 'Navegador',
+      games: 'Juegos',
+      editor: 'Editor'
+    },
+    window: {
+      fileExplorer: 'Explorador de Archivos',
+      terminal: 'Terminal',
+      browser: 'Navegador Phoenix',
+      games: 'Centro de Juegos',
+      editor: 'Editor de Texto'
+    },
+    explorer: {
+      favorites: 'Favoritos',
+      home: 'Inicio',
+      documents: 'Documentos',
+      downloads: 'Descargas',
+      games: 'Juegos',
+      new: '+ Nuevo',
+      notFound: 'Carpeta no encontrada',
+      rename: 'Renombrar',
+      delete: 'Eliminar',
+      open: 'Abrir',
+      newPrompt: 'Nombre del nuevo archivo/carpeta:\n(Añade / al final para una carpeta)',
+      exists: 'Error: Ya existe',
+      deleteConfirm: 'Eliminar',
+      renamePrompt: 'Nuevo nombre:'
+    },
+    terminal: {
+      version: 'Terminal PhoenixOS v3.0',
+      help: 'Escribe \'help\' para comandos disponibles',
+      helpMsg: 'Comandos: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help',
+      notFound: 'Directorio no encontrado',
+      usage: 'Uso:',
+      created: 'Creado',
+      deleted: 'Eliminado',
+      cmdNotFound: 'Comando no encontrado:',
+      fileNotFound: 'Archivo no encontrado',
+      folderExists: 'Carpeta ya existe',
+      fileExists: 'Archivo ya existe'
+    },
+    browser: {
+      urlPlaceholder: 'Ingresa URL...'
+    },
+    editor: {
+      save: '💾 Guardar',
+      open: '📂 Abrir',
+      new: '📄 Nuevo',
+      untitled: 'sin_título.txt',
+      startTyping: 'Comienza a escribir...',
+      savePrompt: 'Nombre del archivo:',
+      saved: '¡Archivo guardado!',
+      noFiles: 'No hay archivos en esta carpeta',
+      readError: 'Error de lectura'
+    },
+    games: {
+      snake: 'Serpiente',
+      tictactoe: 'Tres en Raya',
+      memory: 'Memoria',
+      pong: 'Pong',
+      loading: 'Cargando...',
+      restart: '🔄 Reiniciar',
+      back: '⬅️ Volver',
+      snakeScore: 'Puntuación:',
+      snakeControls: '| Flechas para jugar',
+      snakeGameOver: '¡Game Over! Puntuación:',
+      tictactoePlayer: 'Jugador',
+      tictactoeDraw: '¡Empate!',
+      tictactoeWins: '¡gana!',
+      memoryInstructions: '¡Encuentra todos los pares!',
+      memoryWin: '¡Felicidades! ¡Ganaste!',
+      pongInstructions: '¡Primero a 5 puntos!',
+      pongAI: 'IA:',
+      pongYou: 'Tú:',
+      pongWin: '- ¡Ganaste!',
+      pongLose: '- ¡IA gana!'
+    }
+  },
+  zh: {
+    boot: {
+      booting: 'PhoenixOS v3.0 - 启动中...',
+      kernel: '[ 确定 ] 初始化内核...',
+      filesystem: '[ 确定 ] 加载文件系统...',
+      drivers: '[ 确定 ] 启动驱动程序...',
+      disks: '[ 确定 ] 挂载虚拟磁盘...',
+      network: '[ 确定 ] 启动网络服务...',
+      desktop: '[ 确定 ] 加载桌面环境...',
+      ready: '系统就绪。欢迎使用PhoenixOS！',
+      shutdown: '正在关闭系统...',
+      stopping: '[ 确定 ] 停止服务...',
+      unmounting: '[ 确定 ] 卸载文件系统...',
+      goodbye: '系统已停止。再见！'
+    },
+    desktop: {
+      explorer: '文件管理器',
+      terminal: '终端',
+      browser: '浏览器',
+      games: '游戏',
+      editor: '编辑器'
+    },
+    window: {
+      fileExplorer: '文件资源管理器',
+      terminal: '终端',
+      browser: 'Phoenix浏览器',
+      games: '游戏中心',
+      editor: '文本编辑器'
+    },
+    explorer: {
+      favorites: '收藏夹',
+      home: '主页',
+      documents: '文档',
+      downloads: '下载',
+      games: '游戏',
+      new: '+ 新建',
+      notFound: '找不到文件夹',
+      rename: '重命名',
+      delete: '删除',
+      open: '打开',
+      newPrompt: '新文件/文件夹名称:\n(在末尾添加/表示文件夹)',
+      exists: '错误：已存在',
+      deleteConfirm: '删除',
+      renamePrompt: '新名称：'
+    },
+    terminal: {
+      version: 'PhoenixOS终端 v3.0',
+      help: '输入 \'help\' 查看可用命令',
+      helpMsg: '命令：ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help',
+      notFound: '找不到目录',
+      usage: '用法：',
+      created: '已创建',
+      deleted: '已删除',
+      cmdNotFound: '找不到命令：',
+      fileNotFound: '找不到文件',
+      folderExists: '文件夹已存在',
+      fileExists: '文件已存在'
+    },
+    browser: {
+      urlPlaceholder: '输入网址...'
+    },
+    editor: {
+      save: '💾 保存',
+      open: '📂 打开',
+      new: '📄 新建',
+      untitled: '未命名.txt',
+      startTyping: '开始输入...',
+      savePrompt: '文件名：',
+      saved: '文件已保存！',
+      noFiles: '此文件夹中没有文件',
+      readError: '读取错误'
+    },
+    games: {
+      snake: '贪吃蛇',
+      tictactoe: '井字棋',
+      memory: '记忆',
+      pong: '乒乓',
+      loading: '加载中...',
+      restart: '🔄 重新开始',
+      back: '⬅️ 返回',
+      snakeScore: '得分：',
+      snakeControls: '| 方向键控制',
+      snakeGameOver: '游戏结束！得分：',
+      tictactoePlayer: '玩家',
+      tictactoeDraw: '平局！',
+      tictactoeWins: '获胜！',
+      memoryInstructions: '找到所有配对！',
+      memoryWin: '恭喜！你赢了！',
+      pongInstructions: '先得5分者获胜！',
+      pongAI: 'AI：',
+      pongYou: '你：',
+      pongWin: '- 你赢了！',
+      pongLose: '- AI获胜！'
+    }
+  }
+};
+
+let currentLang = 'en';
+const langFlags = {en:'🇬🇧',fr:'🇫🇷',it:'🇮🇹',es:'🇪🇸',zh:'🇨🇳'};
+const langCodes = {en:'EN',fr:'FR',it:'IT',es:'ES',zh:'中文'};
+
+function detectLanguage() {
+  const saved = localStorage.getItem('phoenixLang');
+  if (saved && translations[saved]) return saved;
+
+  const browserLang = navigator.language.toLowerCase();
+  if (browserLang.startsWith('en')) return 'en';
+  if (browserLang.startsWith('fr')) return 'fr';
+  if (browserLang.startsWith('it')) return 'it';
+  if (browserLang.startsWith('es')) return 'es';
+  if (browserLang.startsWith('zh')) return 'zh';
+  return 'en';
+}
+
+function t(key) {
+  const keys = key.split('.');
+  let value = translations[currentLang];
+  for (const k of keys) {
+    if (value && value[k]) value = value[k];
+    else return key;
+  }
+  return value;
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('phoenixLang', lang);
+  document.documentElement.lang = lang;
+  document.getElementById('currentLangFlag').textContent = langFlags[lang];
+  document.getElementById('currentLangCode').textContent = langCodes[lang];
+
+  document.querySelectorAll('.lang-item').forEach(item => {
+    item.classList.toggle('active', item.onclick.toString().includes(`'${lang}'`));
+  });
+
+  updateAllText();
+  toggleLangMenu();
+}
+
+function toggleLangMenu() {
+  const menu = document.getElementById('langMenu');
+  menu.classList.toggle('show');
+  if (menu.classList.contains('show')) {
+    setTimeout(() => document.addEventListener('click', () => menu.classList.remove('show'), {once:true}), 10);
+  }
+}
+
+function updateAllText() {
+  // Desktop icons
+  renderDesktopIcons();
+
+  // Window titles
+  document.getElementById('explorerTitle').textContent = '📁 ' + t('window.fileExplorer');
+  document.getElementById('terminalTitle').textContent = '⌨️ ' + t('window.terminal');
+  document.getElementById('browserTitle').textContent = '🌐 ' + t('window.browser');
+  document.getElementById('gamesTitle').textContent = '🎮 ' + t('window.games');
+  document.getElementById('editorTitle').textContent = '📝 ' + t('window.editor');
+
+  // Explorer
+  renderExplorerSidebar();
+  document.getElementById('newBtn').textContent = t('explorer.new');
+  if (document.getElementById('explorerContent').children.length > 0) renderExplorer();
+
+  // Browser
+  document.getElementById('browserUrl').placeholder = t('browser.urlPlaceholder');
+
+  // Editor
+  document.getElementById('saveBtn').textContent = t('editor.save');
+  document.getElementById('openBtn').textContent = t('editor.open');
+  document.getElementById('newFileBtn').textContent = t('editor.new');
+  document.getElementById('editorContent').placeholder = t('editor.startTyping');
+  if (!currentFile) document.getElementById('editorFilename').textContent = t('editor.untitled');
+
+  // Games
+  if (currentGame === null) renderGamesGrid();
+}
+
+function renderDesktopIcons() {
+  document.getElementById('desktopIcons').innerHTML = `
+    <div class="icon" onclick="openWindow('explorer')">
+      <div class="icon-img">📁</div>
+      <div class="icon-label">${t('desktop.explorer')}</div>
+    </div>
+    <div class="icon" onclick="openWindow('terminal')">
+      <div class="icon-img">⌨️</div>
+      <div class="icon-label">${t('desktop.terminal')}</div>
+    </div>
+    <div class="icon" onclick="openWindow('browser')">
+      <div class="icon-img">🌐</div>
+      <div class="icon-label">${t('desktop.browser')}</div>
+    </div>
+    <div class="icon" onclick="openWindow('games')">
+      <div class="icon-img">🎮</div>
+      <div class="icon-label">${t('desktop.games')}</div>
+    </div>
+    <div class="icon" onclick="openWindow('editor')">
+      <div class="icon-img">📝</div>
+      <div class="icon-label">${t('desktop.editor')}</div>
+    </div>
+  `;
+}
+
+function renderExplorerSidebar() {
+  document.getElementById('explorerSidebar').innerHTML = `
+    <div style="margin-bottom:1rem"><strong>${t('explorer.favorites')}</strong></div>
+    <div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home')">🏠 ${t('explorer.home')}</div>
+    <div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home/documents')">📄 ${t('explorer.documents')}</div>
+    <div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home/downloads')">⬇️ ${t('explorer.downloads')}</div>
+    <div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home/games')">🎮 ${t('explorer.games')}</div>
+  `;
+}
+
+function renderGamesGrid() {
+  document.getElementById('gamesContent').innerHTML = `
+    <div class="games-grid">
+      <div class="game-card" onclick="playGame('snake')">
+        <div class="game-icon">🐍</div>
+        <div class="game-name">${t('games.snake')}</div>
+      </div>
+      <div class="game-card" onclick="playGame('tictactoe')">
+        <div class="game-icon">⭕</div>
+        <div class="game-name">${t('games.tictactoe')}</div>
+      </div>
+      <div class="game-card" onclick="playGame('memory')">
+        <div class="game-icon">🧠</div>
+        <div class="game-name">${t('games.memory')}</div>
+      </div>
+      <div class="game-card" onclick="playGame('pong')">
+        <div class="game-icon">🏓</div>
+        <div class="game-name">${t('games.pong')}</div>
+      </div>
+    </div>
+  `;
+}
+
 // ===== FILE SYSTEM =====
 class FileSystem{constructor(){this.load()}load(){const saved=localStorage.getItem('phoenixFS');this.fs=saved?JSON.parse(saved):{'/':{'home':{'documents':{},'downloads':{},'games':{}},'bin':{},'etc':{}}}}save(){localStorage.setItem('phoenixFS',JSON.stringify(this.fs))}
 getNode(path){const parts=path.split('/').filter(p=>p);let node=this.fs['/'];for(const part of parts){if(!node[part])return null;node=node[part]}return node}
@@ -312,7 +887,7 @@ let currentPath='/home',currentFile=null,pathHistory=['/home'],historyIndex=0;
 // ===== WINDOW MANAGEMENT =====
 const windows={};let draggedWindow=null,dragOffset={x:0,y:0};
 
-function openWindow(id){const win=document.getElementById('win-'+id);if(!win)return;win.classList.add('show');win.style.zIndex=getTopZIndex();windows[id]=true;updateTaskbar();if(id==='explorer')renderExplorer();if(id==='terminal')setTimeout(()=>document.getElementById('terminalInput').focus(),100)}
+function openWindow(id){const win=document.getElementById('win-'+id);if(!win)return;win.classList.add('show');win.style.zIndex=getTopZIndex();windows[id]=true;updateTaskbar();if(id==='explorer'){renderExplorer();renderExplorerSidebar()}if(id==='terminal'){initTerminal();setTimeout(()=>document.getElementById('terminalInput').focus(),100)}if(id==='games')renderGamesGrid()}
 
 function closeWindow(id){document.getElementById(id).classList.remove('show');delete windows[Object.keys(windows).find(k=>'win-'+k===id)];updateTaskbar()}
 
@@ -334,8 +909,10 @@ function getWindowTitle(id){const titles={explorer:'📁',terminal:'⌨️',brow
 
 function focusWindow(id){openWindow(id)}
 
+function showStartMenu(){}
+
 // ===== EXPLORER =====
-function renderExplorer(){const content=document.getElementById('explorerContent');document.getElementById('currentPath').textContent=currentPath;const items=fs.list(currentPath);if(!items){content.innerHTML='<div style="padding:2rem;text-align:center">Dossier introuvable</div>';return}
+function renderExplorer(){const content=document.getElementById('explorerContent');document.getElementById('currentPath').textContent=currentPath;const items=fs.list(currentPath);if(!items){content.innerHTML=`<div style="padding:2rem;text-align:center">${t('explorer.notFound')}</div>`;return}
 content.innerHTML='';if(currentPath!=='/'){content.innerHTML='<div class="folder-item" onclick="navigateUp()"><div class="folder-icon">⬆️</div><div class="folder-name">..</div></div>'}
 items.forEach(item=>{const div=document.createElement('div');div.className=item.isFile?'file-item':'folder-item';div.onclick=()=>item.isFile?openFileInEditor(item.name):navigateTo(currentPath+'/'+item.name);div.oncontextmenu=e=>{e.preventDefault();showContextMenu(e,item.name,item.isFile)};div.innerHTML=`<div class="${item.isFile?'file-icon':'folder-icon'}">${item.isFile?'📄':'📁'}</div><div class="${item.isFile?'file-name':'folder-name'}">${item.name}</div>`;content.appendChild(div)})}
 
@@ -347,27 +924,42 @@ function navigateBack(){if(historyIndex>0){historyIndex--;currentPath=pathHistor
 
 function navigateForward(){if(historyIndex<pathHistory.length-1){historyIndex++;currentPath=pathHistory[historyIndex];renderExplorer()}}
 
-function showCreateMenu(){const name=prompt('Nom du nouveau fichier/dossier:\n(Ajoutez / à la fin pour un dossier)');if(!name)return;if(name.endsWith('/')){if(fs.createFolder(currentPath,name.slice(0,-1)))renderExplorer();else alert('Erreur: Dossier déjà existant')}else{if(fs.createFile(currentPath,name))renderExplorer();else alert('Erreur: Fichier déjà existant')}}
+function showCreateMenu(){const name=prompt(t('explorer.newPrompt'));if(!name)return;if(name.endsWith('/')){if(fs.createFolder(currentPath,name.slice(0,-1)))renderExplorer();else alert(t('explorer.exists'))}else{if(fs.createFile(currentPath,name))renderExplorer();else alert(t('explorer.exists'))}}
 
 function showContextMenu(e,name,isFile){const menu=document.getElementById('contextMenu');menu.innerHTML=`
-<div class="context-item" onclick="renameItem('${name}')">✏️ Renommer</div>
-<div class="context-item" onclick="deleteItem('${name}')">🗑️ Supprimer</div>
-${isFile?`<div class="context-item" onclick="openFileInEditor('${name}')">📝 Ouvrir</div>`:''}`;menu.style.left=e.pageX+'px';menu.style.top=e.pageY+'px';menu.classList.add('show');setTimeout(()=>document.addEventListener('click',()=>menu.classList.remove('show'),{once:true}),10)}
+<div class="context-item" onclick="renameItem('${name}')">✏️ ${t('explorer.rename')}</div>
+<div class="context-item" onclick="deleteItem('${name}')">🗑️ ${t('explorer.delete')}</div>
+${isFile?`<div class="context-item" onclick="openFileInEditor('${name}')">📝 ${t('explorer.open')}</div>`:''}`;menu.style.left=e.pageX+'px';menu.style.top=e.pageY+'px';menu.classList.add('show');setTimeout(()=>document.addEventListener('click',()=>menu.classList.remove('show'),{once:true}),10)}
 
-function renameItem(oldName){const newName=prompt('Nouveau nom:',oldName);if(newName&&fs.rename(currentPath,oldName,newName))renderExplorer()}
+function renameItem(oldName){const newName=prompt(t('explorer.renamePrompt'),oldName);if(newName&&fs.rename(currentPath,oldName,newName))renderExplorer()}
 
-function deleteItem(name){if(confirm('Supprimer '+name+' ?')&&fs.delete(currentPath,name))renderExplorer()}
+function deleteItem(name){if(confirm(t('explorer.deleteConfirm')+' '+name+' ?')&&fs.delete(currentPath,name))renderExplorer()}
 
 // ===== TERMINAL =====
 const terminalHistory=[];let termHistoryIndex=0;
 
-function handleTerminalInput(e){if(e.key!=='Enter')return;const input=e.target.value.trim();if(!input)return;addTerminalLine('<span class="terminal-prompt">user@phoenixos:'+currentPath+'$</span> '+input);executeCommand(input);terminalHistory.push(input);termHistoryIndex=terminalHistory.length;e.target.value=''}
+function initTerminal(){const term=document.getElementById('terminal');term.innerHTML=`<div class="terminal-line">${t('terminal.version')}</div><div class="terminal-line">${t('terminal.help')}</div>`;addTerminalPrompt()}
+
+function addTerminalPrompt(){const term=document.getElementById('terminal');const div=document.createElement('div');div.className='terminal-line';div.innerHTML=`<span class="terminal-prompt">user@phoenixos:${currentPath}$</span> <input type="text" class="terminal-input" id="terminalInput" onkeypress="handleTerminalInput(event)">`;term.appendChild(div);term.scrollTop=term.scrollHeight;setTimeout(()=>document.getElementById('terminalInput')?.focus(),50)}
+
+function handleTerminalInput(e){if(e.key!=='Enter')return;const input=e.target.value.trim();if(!input)return;const line=`<span class="terminal-prompt">user@phoenixos:${currentPath}$</span> ${input}`;e.target.parentElement.innerHTML=line;executeCommand(input);terminalHistory.push(input);termHistoryIndex=terminalHistory.length}
 
 function executeCommand(cmd){const parts=cmd.split(' ');const command=parts[0];const args=parts.slice(1);
-const commands={help:()=>addTerminalLine('Commands: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help'),ls:()=>{const items=fs.list(currentPath);if(!items)return addTerminalLine('Directory not found','error');items.forEach(i=>addTerminalLine((i.isFile?'📄':'📁')+' '+i.name))},pwd:()=>addTerminalLine(currentPath),cd:()=>{const target=args[0]||'/home';const newPath=target.startsWith('/')?target:currentPath+'/'+target;if(fs.getNode(newPath)){currentPath=newPath.replace(/\/+/g,'/');renderExplorer()}else addTerminalLine('Directory not found','error')},mkdir:()=>{if(!args[0])return addTerminalLine('Usage: mkdir <name>','error');if(fs.createFolder(currentPath,args[0])){addTerminalLine('Folder created','success');renderExplorer()}else addTerminalLine('Folder already exists','error')},touch:()=>{if(!args[0])return addTerminalLine('Usage: touch <name>','error');if(fs.createFile(currentPath,args[0])){addTerminalLine('File created','success');renderExplorer()}else addTerminalLine('File already exists','error')},rm:()=>{if(!args[0])return addTerminalLine('Usage: rm <name>','error');if(fs.delete(currentPath,args[0])){addTerminalLine('Deleted','success');renderExplorer()}else addTerminalLine('Not found','error')},cat:()=>{if(!args[0])return addTerminalLine('Usage: cat <file>','error');const content=fs.readFile(currentPath,args[0]);if(content!==null)addTerminalLine(content);else addTerminalLine('File not found','error')},clear:()=>document.getElementById('terminal').innerHTML='',echo:()=>addTerminalLine(args.join(' '))};
+const commands={
+help:()=>addTerminalLine(t('terminal.helpMsg')),
+ls:()=>{const items=fs.list(currentPath);if(!items)return addTerminalLine(t('terminal.notFound'),'error');items.forEach(i=>addTerminalLine((i.isFile?'📄':'📁')+' '+i.name))},
+pwd:()=>addTerminalLine(currentPath),
+cd:()=>{const target=args[0]||'/home';const newPath=target.startsWith('/')?target:currentPath+'/'+target;if(fs.getNode(newPath)){currentPath=newPath.replace(/\/+/g,'/');renderExplorer()}else addTerminalLine(t('terminal.notFound'),'error')},
+mkdir:()=>{if(!args[0])return addTerminalLine(t('terminal.usage')+' mkdir <name>','error');if(fs.createFolder(currentPath,args[0])){addTerminalLine(t('terminal.created'),'success');renderExplorer()}else addTerminalLine(t('terminal.folderExists'),'error')},
+touch:()=>{if(!args[0])return addTerminalLine(t('terminal.usage')+' touch <name>','error');if(fs.createFile(currentPath,args[0])){addTerminalLine(t('terminal.created'),'success');renderExplorer()}else addTerminalLine(t('terminal.fileExists'),'error')},
+rm:()=>{if(!args[0])return addTerminalLine(t('terminal.usage')+' rm <name>','error');if(fs.delete(currentPath,args[0])){addTerminalLine(t('terminal.deleted'),'success');renderExplorer()}else addTerminalLine(t('terminal.notFound'),'error')},
+cat:()=>{if(!args[0])return addTerminalLine(t('terminal.usage')+' cat <file>','error');const content=fs.readFile(currentPath,args[0]);if(content!==null)addTerminalLine(content);else addTerminalLine(t('terminal.fileNotFound'),'error')},
+clear:()=>{document.getElementById('terminal').innerHTML='';return},
+echo:()=>addTerminalLine(args.join(' '))
+};
 
-if(commands[command])commands[command]();else addTerminalLine('Command not found: '+command,'error');
-addTerminalLine('<span class="terminal-prompt">user@phoenixos:'+currentPath+'$</span> <input type="text" class="terminal-input" id="terminalInput" onkeypress="handleTerminalInput(event)">');document.getElementById('terminalInput').focus()}
+if(commands[command])commands[command]();else addTerminalLine(t('terminal.cmdNotFound')+' '+command,'error');
+addTerminalPrompt()}
 
 function addTerminalLine(html,type=''){const term=document.getElementById('terminal');const div=document.createElement('div');div.className='terminal-line'+(type?' terminal-'+type:'');div.innerHTML=html;term.appendChild(div);term.scrollTop=term.scrollHeight}
 
@@ -378,56 +970,76 @@ function browserForward(){document.getElementById('browserFrame').contentWindow.
 function browserRefresh(){document.getElementById('browserFrame').contentWindow.location.reload()}
 
 // ===== EDITOR =====
-function newFile(){currentFile=null;document.getElementById('editorFilename').textContent='sans_titre.txt';document.getElementById('editorContent').value=''}
+function newFile(){currentFile=null;document.getElementById('editorFilename').textContent=t('editor.untitled');document.getElementById('editorContent').value=''}
 
-function saveFile(){const content=document.getElementById('editorContent').value;const filename=currentFile||prompt('Nom du fichier:','sans_titre.txt');if(!filename)return;if(fs.writeFile(currentPath,filename,content)||fs.createFile(currentPath,filename,content)){currentFile=filename;document.getElementById('editorFilename').textContent=filename;renderExplorer();alert('Fichier sauvegardé!')}}
+function saveFile(){const content=document.getElementById('editorContent').value;const filename=currentFile||prompt(t('editor.savePrompt'),t('editor.untitled'));if(!filename)return;if(fs.writeFile(currentPath,filename,content)||fs.createFile(currentPath,filename,content)){currentFile=filename;document.getElementById('editorFilename').textContent=filename;renderExplorer();alert(t('editor.saved'))}}
 
-function openFileInEditor(name){if(!name){const items=fs.list(currentPath).filter(i=>i.isFile);if(!items.length)return alert('Aucun fichier dans ce dossier');name=items[0].name}const content=fs.readFile(currentPath,name);if(content===null)return alert('Erreur de lecture');currentFile=name;document.getElementById('editorFilename').textContent=name;document.getElementById('editorContent').value=content;openWindow('editor')}
+function openFileInEditor(name){if(!name){const items=fs.list(currentPath).filter(i=>i.isFile);if(!items.length)return alert(t('editor.noFiles'));name=items[0].name}const content=fs.readFile(currentPath,name);if(content===null)return alert(t('editor.readError'));currentFile=name;document.getElementById('editorFilename').textContent=name;document.getElementById('editorContent').value=content;openWindow('editor')}
 
 // ===== GAMES =====
 let currentGame=null,gameState={},gameLoop=null;const canvas=document.createElement('canvas');canvas.className='game-canvas';canvas.width=500;canvas.height=500;const ctx=canvas.getContext('2d');
 
-function playGame(game){currentGame=game;const content=document.getElementById('gamesContent');content.innerHTML=`<div style="padding:2rem"><div class="game-info" id="gameInfo">Chargement...</div></div>`;content.appendChild(canvas);content.innerHTML+=`<div class="game-controls"><button class="game-btn" onclick="restartGame()">🔄 Rejouer</button><button class="game-btn" onclick="backToGames()">⬅️ Retour</button></div>`;
+function playGame(game){currentGame=game;const content=document.getElementById('gamesContent');content.innerHTML=`<div style="padding:2rem"><div class="game-info" id="gameInfo">${t('games.loading')}</div></div>`;content.appendChild(canvas);content.innerHTML+=`<div class="game-controls"><button class="game-btn" onclick="restartGame()">${t('games.restart')}</button><button class="game-btn" onclick="backToGames()">${t('games.back')}</button></div>`;
 if(gameLoop)clearInterval(gameLoop);
 const games={snake:initSnake,tictactoe:initTicTacToe,memory:initMemory,pong:initPong};if(games[game])games[game]()}
 
-function backToGames(){if(gameLoop)clearInterval(gameLoop);canvas.onclick=null;document.onkeydown=null;document.getElementById('gamesContent').innerHTML=`<div class="games-grid"><div class="game-card" onclick="playGame('snake')"><div class="game-icon">🐍</div><div class="game-name">Snake</div></div><div class="game-card" onclick="playGame('tictactoe')"><div class="game-icon">⭕</div><div class="game-name">Morpion</div></div><div class="game-card" onclick="playGame('memory')"><div class="game-icon">🧠</div><div class="game-name">Memory</div></div><div class="game-card" onclick="playGame('pong')"><div class="game-icon">🏓</div><div class="game-name">Pong</div></div></div>`}
+function backToGames(){if(gameLoop)clearInterval(gameLoop);canvas.onclick=null;document.onkeydown=null;currentGame=null;renderGamesGrid()}
 
 function restartGame(){if(currentGame)playGame(currentGame)}
 
 // SNAKE
-function initSnake(){gameState={snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:15,y:15},score:0};document.getElementById('gameInfo').textContent='Score: 0 | Flèches pour jouer';document.onkeydown=e=>{const key=e.key;if(key==='ArrowUp'&&gameState.dir.y===0)gameState.dir={x:0,y:-1};else if(key==='ArrowDown'&&gameState.dir.y===0)gameState.dir={x:0,y:1};else if(key==='ArrowLeft'&&gameState.dir.x===0)gameState.dir={x:-1,y:0};else if(key==='ArrowRight'&&gameState.dir.x===0)gameState.dir={x:1,y:0}};
-gameLoop=setInterval(()=>{const head={x:gameState.snake[0].x+gameState.dir.x,y:gameState.snake[0].y+gameState.dir.y};if(head.x<0||head.x>=25||head.y<0||head.y>=25||gameState.snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(gameLoop);document.getElementById('gameInfo').textContent='Game Over! Score: '+gameState.score;return}
-gameState.snake.unshift(head);if(head.x===gameState.food.x&&head.y===gameState.food.y){gameState.score++;gameState.food={x:Math.floor(Math.random()*25),y:Math.floor(Math.random()*25)};document.getElementById('gameInfo').textContent='Score: '+gameState.score}else gameState.snake.pop();
+function initSnake(){gameState={snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:15,y:15},score:0};document.getElementById('gameInfo').textContent=t('games.snakeScore')+' 0 '+t('games.snakeControls');document.onkeydown=e=>{const key=e.key;if(key==='ArrowUp'&&gameState.dir.y===0)gameState.dir={x:0,y:-1};else if(key==='ArrowDown'&&gameState.dir.y===0)gameState.dir={x:0,y:1};else if(key==='ArrowLeft'&&gameState.dir.x===0)gameState.dir={x:-1,y:0};else if(key==='ArrowRight'&&gameState.dir.x===0)gameState.dir={x:1,y:0}};
+gameLoop=setInterval(()=>{const head={x:gameState.snake[0].x+gameState.dir.x,y:gameState.snake[0].y+gameState.dir.y};if(head.x<0||head.x>=25||head.y<0||head.y>=25||gameState.snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(gameLoop);document.getElementById('gameInfo').textContent=t('games.snakeGameOver')+' '+gameState.score;return}
+gameState.snake.unshift(head);if(head.x===gameState.food.x&&head.y===gameState.food.y){gameState.score++;gameState.food={x:Math.floor(Math.random()*25),y:Math.floor(Math.random()*25)};document.getElementById('gameInfo').textContent=t('games.snakeScore')+' '+gameState.score+' '+t('games.snakeControls')}else gameState.snake.pop();
 ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='#0f0';gameState.snake.forEach(s=>ctx.fillRect(s.x*20,s.y*20,18,18));ctx.fillStyle='#f00';ctx.fillRect(gameState.food.x*20,gameState.food.y*20,18,18)},120)}
 
 // TIC TAC TOE
-function initTicTacToe(){gameState={board:Array(9).fill(null),player:'X',gameOver:false};document.getElementById('gameInfo').textContent='Joueur X commence';drawTicTacToe();canvas.onclick=e=>{if(gameState.gameOver)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/(canvas.width/3));const y=Math.floor((e.clientY-rect.top)/(canvas.height/3));const idx=y*3+x;if(gameState.board[idx])return;gameState.board[idx]=gameState.player;drawTicTacToe();const winner=checkWinner();if(winner){document.getElementById('gameInfo').textContent=winner==='Égalité'?'Match nul!':'Joueur '+winner+' gagne!';gameState.gameOver=true}else{gameState.player=gameState.player==='X'?'O':'X';document.getElementById('gameInfo').textContent='Joueur '+gameState.player}}}
+function initTicTacToe(){gameState={board:Array(9).fill(null),player:'X',gameOver:false};document.getElementById('gameInfo').textContent=t('games.tictactoePlayer')+' X';drawTicTacToe();canvas.onclick=e=>{if(gameState.gameOver)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/(canvas.width/3));const y=Math.floor((e.clientY-rect.top)/(canvas.height/3));const idx=y*3+x;if(gameState.board[idx])return;gameState.board[idx]=gameState.player;drawTicTacToe();const winner=checkWinner();if(winner){document.getElementById('gameInfo').textContent=winner==='Égalité'||winner==='Draw'?t('games.tictactoeDraw'):t('games.tictactoePlayer')+' '+winner+' '+t('games.tictactoeWins');gameState.gameOver=true}else{gameState.player=gameState.player==='X'?'O':'X';document.getElementById('gameInfo').textContent=t('games.tictactoePlayer')+' '+gameState.player}}}
 
 function drawTicTacToe(){ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.strokeStyle='#fff';ctx.lineWidth=3;for(let i=1;i<3;i++){ctx.beginPath();ctx.moveTo(i*166,0);ctx.lineTo(i*166,500);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*166);ctx.lineTo(500,i*166);ctx.stroke()}
 gameState.board.forEach((cell,i)=>{if(cell){const x=(i%3)*166+83;const y=Math.floor(i/3)*166+83;ctx.font='bold 80px Arial';ctx.fillStyle=cell==='X'?'#0f0':'#f00';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(cell,x,y)}})}
 
-function checkWinner(){const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(let w of wins)if(gameState.board[w[0]]&&gameState.board[w[0]]===gameState.board[w[1]]&&gameState.board[w[0]]===gameState.board[w[2]])return gameState.board[w[0]];return gameState.board.every(c=>c)?'Égalité':null}
+function checkWinner(){const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(let w of wins)if(gameState.board[w[0]]&&gameState.board[w[0]]===gameState.board[w[1]]&&gameState.board[w[0]]===gameState.board[w[2]])return gameState.board[w[0]];return gameState.board.every(c=>c)?'Draw':null}
 
 // MEMORY
-function initMemory(){const symbols=['🎮','🎯','🎲','🎪','🎨','🎭','🎬','🎸'];const cards=[...symbols,...symbols].sort(()=>Math.random()-.5).map((s,i)=>({symbol:s,flipped:false,matched:false,id:i}));gameState={cards,flipped:[],matches:0};document.getElementById('gameInfo').textContent='Trouvez toutes les paires!';drawMemory();canvas.onclick=e=>{if(gameState.flipped.length>=2)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/125);const y=Math.floor((e.clientY-rect.top)/125);const idx=y*4+x;const card=gameState.cards[idx];if(!card||card.flipped||card.matched)return;card.flipped=true;gameState.flipped.push(idx);drawMemory();if(gameState.flipped.length===2){setTimeout(()=>{const[i1,i2]=gameState.flipped;if(gameState.cards[i1].symbol===gameState.cards[i2].symbol){gameState.cards[i1].matched=true;gameState.cards[i2].matched=true;gameState.matches++;if(gameState.matches===8)document.getElementById('gameInfo').textContent='Bravo! Vous avez gagné!'}else{gameState.cards[i1].flipped=false;gameState.cards[i2].flipped=false}gameState.flipped=[];drawMemory()},800)}}}
+function initMemory(){const symbols=['🎮','🎯','🎲','🎪','🎨','🎭','🎬','🎸'];const cards=[...symbols,...symbols].sort(()=>Math.random()-.5).map((s,i)=>({symbol:s,flipped:false,matched:false,id:i}));gameState={cards,flipped:[],matches:0};document.getElementById('gameInfo').textContent=t('games.memoryInstructions');drawMemory();canvas.onclick=e=>{if(gameState.flipped.length>=2)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/125);const y=Math.floor((e.clientY-rect.top)/125);const idx=y*4+x;const card=gameState.cards[idx];if(!card||card.flipped||card.matched)return;card.flipped=true;gameState.flipped.push(idx);drawMemory();if(gameState.flipped.length===2){setTimeout(()=>{const[i1,i2]=gameState.flipped;if(gameState.cards[i1].symbol===gameState.cards[i2].symbol){gameState.cards[i1].matched=true;gameState.cards[i2].matched=true;gameState.matches++;if(gameState.matches===8)document.getElementById('gameInfo').textContent=t('games.memoryWin')}else{gameState.cards[i1].flipped=false;gameState.cards[i2].flipped=false}gameState.flipped=[];drawMemory()},800)}}}
 
 function drawMemory(){ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);gameState.cards.forEach((card,i)=>{const x=(i%4)*125;const y=Math.floor(i/4)*125;ctx.fillStyle=card.matched?'rgba(0,255,0,.3)':card.flipped?'#667eea':'#444';ctx.fillRect(x+5,y+5,115,115);if(card.flipped||card.matched){ctx.font='60px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(card.symbol,x+62,y+62)}})}
 
 // PONG
-function initPong(){gameState={paddle1Y:200,paddle2Y:200,ballX:250,ballY:250,ballDX:3,ballDY:3,score1:0,score2:0};document.getElementById('gameInfo').textContent='Premier à 5 points!';let keys={};document.onkeydown=e=>keys[e.key]=true;document.onkeyup=e=>keys[e.key]=false;
-gameLoop=setInterval(()=>{if(keys['ArrowUp'])gameState.paddle2Y=Math.max(0,gameState.paddle2Y-5);if(keys['ArrowDown'])gameState.paddle2Y=Math.min(420,gameState.paddle2Y+5);const paddleCenter=gameState.ballY-40;if(paddleCenter<gameState.paddle1Y)gameState.paddle1Y=Math.max(0,gameState.paddle1Y-4);if(paddleCenter>gameState.paddle1Y)gameState.paddle1Y=Math.min(420,gameState.paddle1Y+4);gameState.ballX+=gameState.ballDX;gameState.ballY+=gameState.ballDY;if(gameState.ballY<=0||gameState.ballY>=490)gameState.ballDY*=-1;if(gameState.ballX<=20&&gameState.ballY>=gameState.paddle1Y&&gameState.ballY<=gameState.paddle1Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX>=470&&gameState.ballY>=gameState.paddle2Y&&gameState.ballY<=gameState.paddle2Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX<0){gameState.score2++;resetBall()}if(gameState.ballX>500){gameState.score1++;resetBall()}document.getElementById('gameInfo').textContent=`IA: ${gameState.score1} | Vous: ${gameState.score2}`;if(gameState.score1>=5||gameState.score2>=5){clearInterval(gameLoop);document.getElementById('gameInfo').textContent+=gameState.score2>=5?' - Vous gagnez!':' - IA gagne!';return}
+function initPong(){gameState={paddle1Y:200,paddle2Y:200,ballX:250,ballY:250,ballDX:3,ballDY:3,score1:0,score2:0};document.getElementById('gameInfo').textContent=t('games.pongInstructions');let keys={};document.onkeydown=e=>keys[e.key]=true;document.onkeyup=e=>keys[e.key]=false;
+gameLoop=setInterval(()=>{if(keys['ArrowUp'])gameState.paddle2Y=Math.max(0,gameState.paddle2Y-5);if(keys['ArrowDown'])gameState.paddle2Y=Math.min(420,gameState.paddle2Y+5);const paddleCenter=gameState.ballY-40;if(paddleCenter<gameState.paddle1Y)gameState.paddle1Y=Math.max(0,gameState.paddle1Y-4);if(paddleCenter>gameState.paddle1Y)gameState.paddle1Y=Math.min(420,gameState.paddle1Y+4);gameState.ballX+=gameState.ballDX;gameState.ballY+=gameState.ballDY;if(gameState.ballY<=0||gameState.ballY>=490)gameState.ballDY*=-1;if(gameState.ballX<=20&&gameState.ballY>=gameState.paddle1Y&&gameState.ballY<=gameState.paddle1Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX>=470&&gameState.ballY>=gameState.paddle2Y&&gameState.ballY<=gameState.paddle2Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX<0){gameState.score2++;resetBall()}if(gameState.ballX>500){gameState.score1++;resetBall()}document.getElementById('gameInfo').textContent=`${t('games.pongAI')} ${gameState.score1} | ${t('games.pongYou')} ${gameState.score2}`;if(gameState.score1>=5||gameState.score2>=5){clearInterval(gameLoop);document.getElementById('gameInfo').textContent+=(gameState.score2>=5?t('games.pongWin'):t('games.pongLose'));return}
 ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='#fff';ctx.fillRect(10,gameState.paddle1Y,10,80);ctx.fillRect(480,gameState.paddle2Y,10,80);ctx.fillRect(gameState.ballX,gameState.ballY,10,10);ctx.setLineDash([10,10]);ctx.beginPath();ctx.moveTo(250,0);ctx.lineTo(250,500);ctx.strokeStyle='rgba(255,255,255,.3)';ctx.stroke();ctx.setLineDash([])},16)}
 
 function resetBall(){gameState.ballX=250;gameState.ballY=250;gameState.ballDX=3*(Math.random()>.5?1:-1);gameState.ballDY=3*(Math.random()>.5?1:-1)}
 
 // ===== SYSTEM =====
-function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString(currentLang,{hour:'2-digit',minute:'2-digit'})}
 
-function shutdown(){document.getElementById('desktop').classList.remove('show');setTimeout(()=>{document.getElementById('boot').classList.remove('hide');document.getElementById('boot').innerHTML='<div class="boot-line">Shutting down system...</div><div class="boot-line">[ OK ] Stopping services...</div><div class="boot-line">[ OK ] Unmounting file systems...</div><div class="boot-line">System halted. Goodbye!</div>';setTimeout(()=>location.reload(),3000)},500)}
+function shutdown(){document.getElementById('desktop').classList.remove('show');setTimeout(()=>{const boot=document.getElementById('boot');boot.classList.remove('hide');boot.innerHTML=`<div class="boot-line">${t('boot.shutdown')}</div><div class="boot-line">${t('boot.stopping')}</div><div class="boot-line">${t('boot.unmounting')}</div><div class="boot-line">${t('boot.goodbye')}</div>`;setTimeout(()=>location.reload(),3000)},500)}
 
 // ===== BOOT =====
-window.onload=()=>{const bootLines=document.querySelectorAll('.boot-line');bootLines.forEach((line,i)=>setTimeout(()=>line.style.animation='fadeIn .2s',i*400));setTimeout(()=>{document.getElementById('boot').classList.add('hide');setTimeout(()=>{document.getElementById('desktop').classList.add('show');updateClock();setInterval(updateClock,1000)},500)},3500)}
+window.onload=()=>{
+currentLang=detectLanguage();
+document.documentElement.lang=currentLang;
+document.getElementById('currentLangFlag').textContent=langFlags[currentLang];
+document.getElementById('currentLangCode').textContent=langCodes[currentLang];
+
+const boot=document.getElementById('boot');
+boot.innerHTML=`<div class="boot-line">${t('boot.booting')}</div><div class="boot-line">${t('boot.kernel')}</div><div class="boot-line">${t('boot.filesystem')}</div><div class="boot-line">${t('boot.drivers')}</div><div class="boot-line">${t('boot.disks')}</div><div class="boot-line">${t('boot.network')}</div><div class="boot-line">${t('boot.desktop')}</div><div class="boot-line">${t('boot.ready')}</div>`;
+
+const bootLines=document.querySelectorAll('.boot-line');
+bootLines.forEach((line,i)=>setTimeout(()=>line.style.animation='fadeIn .2s',i*400));
+setTimeout(()=>{
+boot.classList.add('hide');
+setTimeout(()=>{
+document.getElementById('desktop').classList.add('show');
+renderDesktopIcons();
+updateClock();
+setInterval(updateClock,1000)
+},500)
+},3500)
+}
 </script>
 </body>
 </html>
