@@ -22,21 +22,21 @@
 
 :root[data-theme="dark"] {
   /* WCAG AA Compliant - Contraste >= 4.5:1 */
-  --bg-primary: #1e2738;
-  --bg-secondary: #151d2b;
-  --bg-card: #283244;
-  --text-primary: #e8eaed;
-  --text-secondary: #b4b9c5;
-  --border-color: #3d4a5f;
+  --bg-primary: #2d3748;
+  --bg-secondary: #1a202c;
+  --bg-card: #374151;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --border-color: #4a5568;
   --shadow: rgba(0, 0, 0, 0.3);
   --shadow-hover: rgba(0, 0, 0, 0.4);
 
   /* Couleurs ajustées pour le dark mode */
-  --primary: #7c8fed;
-  --secondary: #8b5cb8;
-  --accent: #ff7f50;
-  --dark: #0f1419;
-  --light: #2a3750;
+  --primary: #93a5fd;
+  --secondary: #a78bfa;
+  --accent: #ffa366;
+  --dark: #1a202c;
+  --light: #4a5568;
 }
 
 /* ===================================

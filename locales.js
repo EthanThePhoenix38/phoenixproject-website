@@ -135,10 +135,12 @@ const translations = {
       links: {
         github: "GitHub",
         technologies: "Technologies",
+        readme: "Documentation",
         email: "Email",
         linkedin: "LinkedIn"
       },
-      copyright: "© 2025 The Phoenix Agency. All rights reserved."
+      copyright: "© 2025 The Phoenix Agency. All rights reserved.",
+      lastUpdated: "Last updated: December 6, 2025"
     },
 
     // Cookie Banner
@@ -285,7 +287,8 @@ const translations = {
         email: "Email",
         linkedin: "LinkedIn"
       },
-      copyright: "© 2025 The Phoenix Agency. Tous droits réservés."
+      copyright: "© 2025 The Phoenix Agency. Tous droits réservés.",
+      lastUpdated: "Dernière mise à jour: 6 décembre 2025"
     },
 
     // Bannière Cookie
