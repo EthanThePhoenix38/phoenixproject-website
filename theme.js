@@ -329,14 +329,9 @@ const TabMenuManager = {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
       tabEl.dataset.tab = tab.id;
-      tabEl.innerHTML = `
-        <span>${tab.label}</span>
-        <span class="tab-close" onclick="TabMenuManager.closeTab('${tab.id}', event)">×</span>
-      `;
+      tabEl.innerHTML = `<span>${tab.label}</span>`;
       tabEl.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('tab-close')) {
-          this.scrollToSection(tab.section);
-        }
+        this.scrollToSection(tab.section);
       });
       menu.appendChild(tabEl);
     });
@@ -370,18 +365,6 @@ const TabMenuManager = {
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  },
-
-  closeTab(tabId, event) {
-    event.stopPropagation();
-    const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
-    if (tabEl) {
-      tabEl.style.animation = 'fadeOutTab 0.3s ease-out';
-      setTimeout(() => {
-        tabEl.remove();
-        this.tabs = this.tabs.filter(t => t.id !== tabId);
-      }, 300);
     }
   }
 };

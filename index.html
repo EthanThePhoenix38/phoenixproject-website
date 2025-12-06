@@ -246,15 +246,15 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 <p style="text-align:center;margin-bottom:2rem" data-i18n="contact.subtitle">Contactez-nous pour discuter de votre projet</p>
 <form class="contact-form" action="https://formspree.io/f/mdklrzob" method="POST">
 <div class="form-group">
-<label for="name" data-i18n="contact.form.name">Nom Complet</label> *
+<label for="name"><span data-i18n="contact.form.name">Nom Complet</span> <span class="required">*</span></label>
 <input type="text" id="name" name="name" required>
 </div>
 <div class="form-group">
-<label for="email" data-i18n="contact.form.email">Email</label> *
+<label for="email"><span data-i18n="contact.form.email">Email</span> <span class="required">*</span></label>
 <input type="email" id="email" name="email" required>
 </div>
 <div class="form-group">
-<label for="service" data-i18n="contact.form.service">Service Souhaité</label> *
+<label for="service"><span data-i18n="contact.form.service">Service Souhaité</span> <span class="required">*</span></label>
 <select id="service" name="service" required>
 <option value="" data-i18n="contact.form.servicePlaceholder">Choisir un service</option>
 <option value="AI" data-i18n="contact.form.serviceOptions.ai">Intelligence Artificielle</option>
@@ -267,7 +267,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </select>
 </div>
 <div class="form-group">
-<label for="message" data-i18n="contact.form.message">Description du Projet</label> *
+<label for="message"><span data-i18n="contact.form.message">Description du Projet</span> <span class="required">*</span></label>
 <textarea id="message" name="message" required></textarea>
 </div>
 <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="contact.form.submit">Envoyer la Demande</button>
