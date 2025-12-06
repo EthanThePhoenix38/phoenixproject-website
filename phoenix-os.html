@@ -1117,7 +1117,7 @@ function showStartMenu(){}
 // ===== EXPLORER =====
 function renderExplorer(){const content=document.getElementById('explorerContent');document.getElementById('currentPath').textContent=currentPath;const items=fs.list(currentPath);if(!items){content.innerHTML=`<div style="padding:2rem;text-align:center">${t('explorer.notFound')}</div>`;return}
 content.innerHTML='';if(currentPath!=='/'){content.innerHTML='<div class="folder-item" onclick="navigateUp()"><div class="folder-icon">⬆️</div><div class="folder-name">..</div></div>'}
-items.forEach(item=>{const div=document.createElement('div');div.className=item.isFile?'file-item':'folder-item';div.onclick=()=>item.isFile?openFileInEditor(item.name):navigateTo(currentPath+'/'+item.name);div.oncontextmenu=e=>{e.preventDefault();showContextMenu(e,item.name,item.isFile)};div.innerHTML=`<div class="${item.isFile?'file-icon':'folder-icon'}">${item.isFile?'📄':'📁'}</div><div class="${item.isFile?'file-name':'folder-name'}">${item.name}</div>`;content.appendChild(div)})}
+items.forEach(item=>{const div=document.createElement('div');div.className=item.isFile?'file-item':'folder-item';div.onclick=()=>item.isFile?openFileInEditor(item.name):navigateTo(currentPath+'/'+item.name);div.oncontextmenu=e=>{e.preventDefault();showContextMenu(e,item.name,item.isFile)};const iconDiv=document.createElement('div');iconDiv.className=item.isFile?'file-icon':'folder-icon';iconDiv.textContent=item.isFile?'📄':'📁';const nameDiv=document.createElement('div');nameDiv.className=item.isFile?'file-name':'folder-name';nameDiv.textContent=item.name;div.appendChild(iconDiv);div.appendChild(nameDiv);content.appendChild(div)})}
 
 function navigateTo(path){path=path.replace(/\/+/g,'/').replace(/\/$/,'');if(!fs.getNode(path))return;currentPath=path;pathHistory=pathHistory.slice(0,historyIndex+1);pathHistory.push(path);historyIndex=pathHistory.length-1;renderExplorer()}
 
@@ -1129,10 +1129,10 @@ function navigateForward(){if(historyIndex<pathHistory.length-1){historyIndex++;
 
 function showCreateMenu(){const name=prompt(t('explorer.newPrompt'));if(!name)return;if(name.endsWith('/')){if(fs.createFolder(currentPath,name.slice(0,-1)))renderExplorer();else alert(t('explorer.exists'))}else{if(fs.createFile(currentPath,name))renderExplorer();else alert(t('explorer.exists'))}}
 
-function showContextMenu(e,name,isFile){const menu=document.getElementById('contextMenu');menu.innerHTML=`
-<div class="context-item" onclick="renameItem('${name}')">✏️ ${t('explorer.rename')}</div>
-<div class="context-item" onclick="deleteItem('${name}')">🗑️ ${t('explorer.delete')}</div>
-${isFile?`<div class="context-item" onclick="openFileInEditor('${name}')">📝 ${t('explorer.open')}</div>`:''}`;menu.style.left=e.pageX+'px';menu.style.top=e.pageY+'px';menu.classList.add('show');setTimeout(()=>document.addEventListener('click',()=>menu.classList.remove('show'),{once:true}),10)}
+function showContextMenu(e,name,isFile){const menu=document.getElementById('contextMenu');const escapedName=name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');menu.innerHTML=`
+<div class="context-item" data-action="rename" data-name="${escapedName}">✏️ ${t('explorer.rename')}</div>
+<div class="context-item" data-action="delete" data-name="${escapedName}">🗑️ ${t('explorer.delete')}</div>
+${isFile?`<div class="context-item" data-action="open" data-name="${escapedName}">📝 ${t('explorer.open')}</div>`:''}`;menu.querySelectorAll('.context-item').forEach(item=>{item.onclick=()=>{const action=item.dataset.action;const itemName=item.dataset.name.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#x27;/g,"'");if(action==='rename')renameItem(itemName);else if(action==='delete')deleteItem(itemName);else if(action==='open')openFileInEditor(itemName)}});menu.style.left=e.pageX+'px';menu.style.top=e.pageY+'px';menu.classList.add('show');setTimeout(()=>document.addEventListener('click',()=>menu.classList.remove('show'),{once:true}),10)}
 
 function renameItem(oldName){const newName=prompt(t('explorer.renamePrompt'),oldName);if(newName&&fs.rename(currentPath,oldName,newName))renderExplorer()}
 
