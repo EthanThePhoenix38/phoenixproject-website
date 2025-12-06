@@ -369,8 +369,73 @@ const TabMenuManager = {
   }
 };
 
+// GESTION GLOBALE DES ERREURS
+const ErrorHandler = {
+  init() {
+    // Capture les erreurs JavaScript non gérées
+    window.addEventListener('error', (event) => {
+      this.logError({
+        type: 'JavaScript Error',
+        message: event.message,
+        file: event.filename,
+        line: event.lineno,
+        column: event.colno,
+        stack: event.error?.stack,
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    // Capture les promesses rejetées non gérées
+    window.addEventListener('unhandledrejection', (event) => {
+      this.logError({
+        type: 'Unhandled Promise Rejection',
+        message: event.reason?.message || event.reason,
+        stack: event.reason?.stack,
+        timestamp: new Date().toISOString()
+      });
+    });
+  },
+
+  logError(errorData) {
+    // Log en console en développement
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.error('Error logged:', errorData);
+    }
+
+    // Sauvegarder dans localStorage si consentement
+    if (CookieManager.hasConsent()) {
+      try {
+        const errors = JSON.parse(localStorage.getItem('errors') || '[]');
+        errors.push(errorData);
+
+        // Garder seulement les 50 dernières erreurs
+        if (errors.length > 50) {
+          errors.shift();
+        }
+
+        localStorage.setItem('errors', JSON.stringify(errors));
+      } catch (e) {
+        console.error('Failed to log error:', e);
+      }
+    }
+  },
+
+  getErrors() {
+    try {
+      return JSON.parse(localStorage.getItem('errors') || '[]');
+    } catch (e) {
+      return [];
+    }
+  },
+
+  clearErrors() {
+    localStorage.removeItem('errors');
+  }
+};
+
 // INITIALISATION GLOBALE
 document.addEventListener('DOMContentLoaded', () => {
+  ErrorHandler.init();
   ThemeManager.init();
   TemplateManager.init();
   NavigationManager.init();
