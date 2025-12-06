@@ -281,6 +281,7 @@ const translations = {
       links: {
         github: "GitHub",
         technologies: "Technologies",
+        readme: "Documentation",
         email: "Email",
         linkedin: "LinkedIn"
       },
