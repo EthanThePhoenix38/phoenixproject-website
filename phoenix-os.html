@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoenixOS - Système d'Exploitation Web Complet</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;background:#000;user-select:none;height:100vh}
+
+/* BOOT SCREEN */
+#boot{position:fixed;inset:0;background:#000;color:#0f0;font-family:'Courier New',monospace;padding:2rem;font-size:13px;z-index:10000;display:flex;flex-direction:column;justify-content:center;opacity:1;transition:opacity .5s}
+#boot.hide{opacity:0;pointer-events:none}
+.boot-line{margin:3px 0;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* DESKTOP */
+.desktop{position:fixed;inset:0;background:linear-gradient(135deg,#667eea,#764ba2);display:none;opacity:0;transition:opacity .5s}
+.desktop.show{display:block;opacity:1}
+.desktop-icons{position:absolute;top:2rem;left:2rem;display:grid;grid-template-columns:repeat(auto-fill,90px);gap:1.5rem;padding:1rem}
+.icon{width:80px;text-align:center;cursor:pointer;transition:transform .3s;padding:0.5rem;border-radius:8px}
+.icon:hover{transform:scale(1.05);background:rgba(255,255,255,.1)}
+.icon-img{width:56px;height:56px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 6px;border:2px solid rgba(255,255,255,.3);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.icon-label{color:#fff;font-size:11px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* TASKBAR */
+.taskbar{position:absolute;bottom:0;left:0;right:0;height:44px;background:rgba(0,0,0,.85);backdrop-filter:blur(15px);display:flex;align-items:center;padding:0 1rem;gap:0.5rem;border-top:1px solid rgba(255,255,255,.1);z-index:1000}
+.taskbar-start{display:flex;align-items:center;gap:0.5rem}
+.taskbar-btn{padding:0.4rem 0.8rem;background:rgba(255,255,255,.1);border:none;border-radius:6px;color:#fff;cursor:pointer;font-weight:600;font-size:12px;transition:all .2s;display:flex;align-items:center;gap:0.3rem}
+.taskbar-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
+.taskbar-btn.active{background:rgba(102,126,234,.4)}
+.taskbar-clock{margin-left:auto;color:#fff;font-weight:600;font-size:13px;padding:0.4rem 0.8rem;background:rgba(255,255,255,.1);border-radius:6px}
+.taskbar-power{background:rgba(220,38,38,.3);margin-left:0.5rem}
+.taskbar-power:hover{background:rgba(220,38,38,.5)}
+
+/* WINDOW */
+.window{position:absolute;background:rgba(30,30,50,.98);backdrop-filter:blur(25px);border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);display:none;flex-direction:column;overflow:hidden;min-width:400px;min-height:300px;resize:both}
+.window.show{display:flex}
+.window.maximized{top:0!important;left:0!important;width:100%!important;height:calc(100vh - 44px)!important;border-radius:0;resize:none}
+.window-header{padding:0.6rem 1rem;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none}
+.window-title{color:#fff;font-weight:600;font-size:13px;display:flex;align-items:center;gap:0.5rem}
+.window-controls{display:flex;gap:0.4rem}
+.window-btn{width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;font-size:14px;line-height:1;transition:all .2s;color:#fff}
+.window-btn:hover{transform:scale(1.1)}
+.window-minimize{background:rgba(251,191,36,.8)}
+.window-maximize{background:rgba(34,197,94,.8)}
+.window-close{background:rgba(239,68,68,.8)}
+.window-content{flex:1;overflow:auto;background:rgba(15,15,25,.95);color:#fff;position:relative}
+
+/* FILE EXPLORER */
+.explorer{display:flex;height:100%}
+.explorer-sidebar{width:200px;background:rgba(0,0,0,.3);border-right:1px solid rgba(255,255,255,.1);padding:1rem;overflow-y:auto}
+.explorer-main{flex:1;display:flex;flex-direction:column}
+.explorer-toolbar{padding:0.8rem;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.1);display:flex;gap:0.5rem}
+.explorer-path{flex:1;background:rgba(0,0,0,.3);padding:0.5rem;border-radius:6px;font-size:12px;border:1px solid rgba(255,255,255,.1)}
+.toolbar-btn{padding:0.4rem 0.8rem;background:rgba(102,126,234,.6);border:none;border-radius:6px;color:#fff;cursor:pointer;font-size:11px;font-weight:600;transition:all .2s}
+.toolbar-btn:hover{background:rgba(102,126,234,.8)}
+.explorer-content{flex:1;padding:1rem;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:1rem;align-content:start}
+.file-item,.folder-item{text-align:center;cursor:pointer;padding:0.8rem;border-radius:8px;transition:all .2s;position:relative}
+.file-item:hover,.folder-item:hover{background:rgba(255,255,255,.1)}
+.file-item.selected,.folder-item.selected{background:rgba(102,126,234,.3)}
+.file-icon,.folder-icon{font-size:40px;margin-bottom:0.3rem}
+.file-name,.folder-name{font-size:11px;word-break:break-word}
+.context-menu{position:absolute;background:rgba(20,20,30,.98);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:0.5rem 0;min-width:150px;box-shadow:0 10px 25px rgba(0,0,0,.5);z-index:10001;display:none}
+.context-menu.show{display:block}
+.context-item{padding:0.6rem 1rem;cursor:pointer;font-size:12px;transition:background .2s}
+.context-item:hover{background:rgba(102,126,234,.4)}
+
+/* TERMINAL */
+.terminal{padding:1rem;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;height:100%;overflow-y:auto;background:#000}
+.terminal-line{margin:2px 0}
+.terminal-prompt{color:#0f0}
+.terminal-input{background:transparent;border:none;color:#0f0;font-family:inherit;font-size:inherit;outline:none;width:calc(100% - 30px);caret-color:#0f0}
+.terminal-error{color:#ff4444}
+.terminal-success{color:#44ff44}
+
+/* BROWSER */
+.browser{display:flex;flex-direction:column;height:100%;background:rgba(10,10,20,.95)}
+.browser-bar{display:flex;gap:0.5rem;padding:0.8rem;background:rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,.1)}
+.browser-btn{padding:0.4rem 0.8rem;background:rgba(102,126,234,.6);border:none;border-radius:6px;color:#fff;cursor:pointer;font-size:11px;font-weight:600}
+.browser-btn:hover{background:rgba(102,126,234,.8)}
+.browser-url{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:0.5rem;color:#fff;font-size:12px}
+.browser-frame{flex:1;border:none;background:#fff}
+
+/* TEXT EDITOR */
+.editor{display:flex;flex-direction:column;height:100%}
+.editor-toolbar{padding:0.8rem;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.1);display:flex;gap:0.5rem}
+.editor-content{flex:1;padding:1rem;font-family:'Courier New',monospace;font-size:13px;background:rgba(0,0,0,.3);color:#fff;border:none;outline:none;resize:none}
+
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;padding:1.5rem}
+.game-card{background:rgba(255,255,255,.1);padding:1.5rem;border-radius:12px;text-align:center;cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.2)}
+.game-card:hover{background:rgba(255,255,255,.2);transform:translateY(-4px);box-shadow:0 8px 24px rgba(102,126,234,.4)}
+.game-icon{font-size:50px;margin-bottom:0.5rem}
+.game-name{font-weight:600;font-size:13px}
+.game-canvas{width:100%;max-width:500px;height:500px;background:#000;border-radius:8px;margin:1rem auto;display:block;border:2px solid rgba(255,255,255,.3)}
+.game-info{text-align:center;margin:1rem;font-size:15px;font-weight:600}
+.game-controls{display:flex;gap:1rem;justify-content:center;margin:1rem;flex-wrap:wrap}
+.game-btn{padding:0.75rem 1.5rem;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:all .3s}
+.game-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.desktop-icons{grid-template-columns:repeat(auto-fill,70px);gap:1rem}
+.icon{width:60px}
+.icon-img{width:44px;height:44px;font-size:22px}
+.window{min-width:95%;min-height:70vh}
+.explorer-sidebar{width:150px}
+}
+</style>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot">
+<div class="boot-line">PhoenixOS v3.0 - Booting...</div>
+<div class="boot-line">[ OK ] Initializing kernel...</div>
+<div class="boot-line">[ OK ] Loading file system...</div>
+<div class="boot-line">[ OK ] Starting device drivers...</div>
+<div class="boot-line">[ OK ] Mounting virtual disks...</div>
+<div class="boot-line">[ OK ] Starting network services...</div>
+<div class="boot-line">[ OK ] Loading desktop environment...</div>
+<div class="boot-line">System ready. Welcome to PhoenixOS!</div>
+</div>
+
+<!-- DESKTOP -->
+<div class="desktop" id="desktop">
+<!-- Desktop Icons -->
+<div class="desktop-icons">
+<div class="icon" onclick="openWindow('explorer')">
+<div class="icon-img">📁</div>
+<div class="icon-label">Explorateur</div>
+</div>
+<div class="icon" onclick="openWindow('terminal')">
+<div class="icon-img">⌨️</div>
+<div class="icon-label">Terminal</div>
+</div>
+<div class="icon" onclick="openWindow('browser')">
+<div class="icon-img">🌐</div>
+<div class="icon-label">Navigateur</div>
+</div>
+<div class="icon" onclick="openWindow('games')">
+<div class="icon-img">🎮</div>
+<div class="icon-label">Jeux</div>
+</div>
+<div class="icon" onclick="openWindow('editor')">
+<div class="icon-img">📝</div>
+<div class="icon-label">Éditeur</div>
+</div>
+</div>
+
+<!-- Taskbar -->
+<div class="taskbar">
+<div class="taskbar-start">
+<button class="taskbar-btn" onclick="showStartMenu()">🔥 PhoenixOS</button>
+<div id="taskbarApps"></div>
+</div>
+<div class="taskbar-clock" id="clock">00:00</div>
+<button class="taskbar-btn taskbar-power" onclick="shutdown()">⏻</button>
+</div>
+</div>
+
+<!-- WINDOWS -->
+<!-- File Explorer Window -->
+<div class="window" id="win-explorer" style="top:10%;left:10%;width:800px;height:600px">
+<div class="window-header" onmousedown="startDrag(event,'win-explorer')">
+<div class="window-title">📁 Explorateur de Fichiers</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-explorer')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-explorer')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-explorer')">×</button>
+</div>
+</div>
+<div class="window-content">
+<div class="explorer">
+<div class="explorer-sidebar">
+<div style="margin-bottom:1rem"><strong>Favoris</strong></div>
+<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/home')">🏠 Accueil</div>
+<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/documents')">📄 Documents</div>
+<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/downloads')">⬇️ Téléchargements</div>
+<div style="cursor:pointer;padding:0.5rem;border-radius:4px;margin:0.3rem 0" onclick="navigateTo('/games')">🎮 Jeux</div>
+</div>
+<div class="explorer-main">
+<div class="explorer-toolbar">
+<button class="toolbar-btn" onclick="navigateBack()">←</button>
+<button class="toolbar-btn" onclick="navigateForward()">→</button>
+<div class="explorer-path" id="currentPath">/home</div>
+<button class="toolbar-btn" onclick="showCreateMenu()">+ Nouveau</button>
+</div>
+<div class="explorer-content" id="explorerContent" oncontextmenu="return false"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Terminal Window -->
+<div class="window" id="win-terminal" style="top:15%;left:15%;width:700px;height:500px">
+<div class="window-header" onmousedown="startDrag(event,'win-terminal')">
+<div class="window-title">⌨️ Terminal</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-terminal')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-terminal')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-terminal')">×</button>
+</div>
+</div>
+<div class="window-content">
+<div class="terminal" id="terminal">
+<div class="terminal-line">PhoenixOS Terminal v3.0</div>
+<div class="terminal-line">Type 'help' for available commands</div>
+<div class="terminal-line"><span class="terminal-prompt">user@phoenixos:~$</span> <input type="text" class="terminal-input" id="terminalInput" onkeypress="handleTerminalInput(event)"></div>
+</div>
+</div>
+</div>
+
+<!-- Browser Window -->
+<div class="window" id="win-browser" style="top:8%;left:20%;width:900px;height:650px">
+<div class="window-header" onmousedown="startDrag(event,'win-browser')">
+<div class="window-title">🌐 Navigateur Phoenix</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-browser')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-browser')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-browser')">×</button>
+</div>
+</div>
+<div class="window-content">
+<div class="browser">
+<div class="browser-bar">
+<button class="browser-btn" onclick="browserBack()">←</button>
+<button class="browser-btn" onclick="browserForward()">→</button>
+<button class="browser-btn" onclick="browserRefresh()">⟳</button>
+<input type="text" class="browser-url" id="browserUrl" placeholder="Entrez une URL..." onkeypress="if(event.key==='Enter')browserGo()">
+<button class="browser-btn" onclick="browserGo()">Go</button>
+</div>
+<iframe class="browser-frame" id="browserFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+</div>
+</div>
+</div>
+
+<!-- Games Window -->
+<div class="window" id="win-games" style="top:12%;left:25%;width:600px;height:500px">
+<div class="window-header" onmousedown="startDrag(event,'win-games')">
+<div class="window-title">🎮 Centre de Jeux</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-games')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-games')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-games')">×</button>
+</div>
+</div>
+<div class="window-content" id="gamesContent">
+<div class="games-grid">
+<div class="game-card" onclick="playGame('snake')">
+<div class="game-icon">🐍</div>
+<div class="game-name">Snake</div>
+</div>
+<div class="game-card" onclick="playGame('tictactoe')">
+<div class="game-icon">⭕</div>
+<div class="game-name">Morpion</div>
+</div>
+<div class="game-card" onclick="playGame('memory')">
+<div class="game-icon">🧠</div>
+<div class="game-name">Memory</div>
+</div>
+<div class="game-card" onclick="playGame('pong')">
+<div class="game-icon">🏓</div>
+<div class="game-name">Pong</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Editor Window -->
+<div class="window" id="win-editor" style="top:10%;left:18%;width:750px;height:550px">
+<div class="window-header" onmousedown="startDrag(event,'win-editor')">
+<div class="window-title">📝 Éditeur de Texte</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-editor')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-editor')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-editor')">×</button>
+</div>
+</div>
+<div class="window-content">
+<div class="editor">
+<div class="editor-toolbar">
+<button class="toolbar-btn" onclick="saveFile()">💾 Sauvegarder</button>
+<button class="toolbar-btn" onclick="openFileInEditor()">📂 Ouvrir</button>
+<button class="toolbar-btn" onclick="newFile()">📄 Nouveau</button>
+<span style="margin-left:auto;color:#fff;font-size:12px" id="editorFilename">sans_titre.txt</span>
+</div>
+<textarea class="editor-content" id="editorContent" placeholder="Commencez à écrire..."></textarea>
+</div>
+</div>
+</div>
+
+<div class="context-menu" id="contextMenu"></div>
+
+<script>
+// ===== FILE SYSTEM =====
+class FileSystem{constructor(){this.load()}load(){const saved=localStorage.getItem('phoenixFS');this.fs=saved?JSON.parse(saved):{'/':{'home':{'documents':{},'downloads':{},'games':{}},'bin':{},'etc':{}}}}save(){localStorage.setItem('phoenixFS',JSON.stringify(this.fs))}
+getNode(path){const parts=path.split('/').filter(p=>p);let node=this.fs['/'];for(const part of parts){if(!node[part])return null;node=node[part]}return node}
+createFolder(path,name){const node=this.getNode(path);if(!node||node[name])return false;node[name]={};this.save();return true}
+createFile(path,name,content=''){const node=this.getNode(path);if(!node||node[name])return false;node[name]={_file:true,content};this.save();return true}
+delete(path,name){const node=this.getNode(path);if(!node||!node[name])return false;delete node[name];this.save();return true}
+rename(path,oldName,newName){const node=this.getNode(path);if(!node||!node[oldName]||node[newName])return false;node[newName]=node[oldName];delete node[oldName];this.save();return true}
+move(fromPath,name,toPath){const fromNode=this.getNode(fromPath);const toNode=this.getNode(toPath);if(!fromNode||!fromNode[name]||!toNode)return false;toNode[name]=fromNode[name];delete fromNode[name];this.save();return true}
+readFile(path,name){const node=this.getNode(path);if(!node||!node[name]||!node[name]._file)return null;return node[name].content}
+writeFile(path,name,content){const node=this.getNode(path);if(!node||!node[name]||!node[name]._file)return false;node[name].content=content;this.save();return true}
+list(path){const node=this.getNode(path);if(!node)return null;return Object.keys(node).filter(k=>k!=='_file').map(name=>({name,isFile:node[name]._file||false}))}}
+
+const fs=new FileSystem();
+let currentPath='/home',currentFile=null,pathHistory=['/home'],historyIndex=0;
+
+// ===== WINDOW MANAGEMENT =====
+const windows={};let draggedWindow=null,dragOffset={x:0,y:0};
+
+function openWindow(id){const win=document.getElementById('win-'+id);if(!win)return;win.classList.add('show');win.style.zIndex=getTopZIndex();windows[id]=true;updateTaskbar();if(id==='explorer')renderExplorer();if(id==='terminal')setTimeout(()=>document.getElementById('terminalInput').focus(),100)}
+
+function closeWindow(id){document.getElementById(id).classList.remove('show');delete windows[Object.keys(windows).find(k=>'win-'+k===id)];updateTaskbar()}
+
+function minimizeWindow(id){closeWindow(id)}
+
+function toggleMaximize(id){document.getElementById(id).classList.toggle('maximized')}
+
+function getTopZIndex(){return Math.max(1000,...Array.from(document.querySelectorAll('.window')).map(w=>parseInt(w.style.zIndex)||1000))+1}
+
+function startDrag(e,id){if(e.target.classList.contains('window-btn'))return;draggedWindow=document.getElementById(id);const rect=draggedWindow.getBoundingClientRect();dragOffset={x:e.clientX-rect.left,y:e.clientY-rect.top};draggedWindow.style.zIndex=getTopZIndex()}
+
+document.addEventListener('mousemove',e=>{if(!draggedWindow||draggedWindow.classList.contains('maximized'))return;draggedWindow.style.left=e.clientX-dragOffset.x+'px';draggedWindow.style.top=e.clientY-dragOffset.y+'px'});
+
+document.addEventListener('mouseup',()=>draggedWindow=null);
+
+function updateTaskbar(){const bar=document.getElementById('taskbarApps');bar.innerHTML=Object.keys(windows).map(id=>`<button class="taskbar-btn active" onclick="focusWindow('${id}')">${getWindowTitle(id)}</button>`).join('')}
+
+function getWindowTitle(id){const titles={explorer:'📁',terminal:'⌨️',browser:'🌐',games:'🎮',editor:'📝'};return titles[id]||id}
+
+function focusWindow(id){openWindow(id)}
+
+// ===== EXPLORER =====
+function renderExplorer(){const content=document.getElementById('explorerContent');document.getElementById('currentPath').textContent=currentPath;const items=fs.list(currentPath);if(!items){content.innerHTML='<div style="padding:2rem;text-align:center">Dossier introuvable</div>';return}
+content.innerHTML='';if(currentPath!=='/'){content.innerHTML='<div class="folder-item" onclick="navigateUp()"><div class="folder-icon">⬆️</div><div class="folder-name">..</div></div>'}
+items.forEach(item=>{const div=document.createElement('div');div.className=item.isFile?'file-item':'folder-item';div.onclick=()=>item.isFile?openFileInEditor(item.name):navigateTo(currentPath+'/'+item.name);div.oncontextmenu=e=>{e.preventDefault();showContextMenu(e,item.name,item.isFile)};div.innerHTML=`<div class="${item.isFile?'file-icon':'folder-icon'}">${item.isFile?'📄':'📁'}</div><div class="${item.isFile?'file-name':'folder-name'}">${item.name}</div>`;content.appendChild(div)})}
+
+function navigateTo(path){path=path.replace(/\/+/g,'/').replace(/\/$/,'');if(!fs.getNode(path))return;currentPath=path;pathHistory=pathHistory.slice(0,historyIndex+1);pathHistory.push(path);historyIndex=pathHistory.length-1;renderExplorer()}
+
+function navigateUp(){const parts=currentPath.split('/').filter(p=>p);parts.pop();navigateTo('/'+parts.join('/'))}
+
+function navigateBack(){if(historyIndex>0){historyIndex--;currentPath=pathHistory[historyIndex];renderExplorer()}}
+
+function navigateForward(){if(historyIndex<pathHistory.length-1){historyIndex++;currentPath=pathHistory[historyIndex];renderExplorer()}}
+
+function showCreateMenu(){const name=prompt('Nom du nouveau fichier/dossier:\n(Ajoutez / à la fin pour un dossier)');if(!name)return;if(name.endsWith('/')){if(fs.createFolder(currentPath,name.slice(0,-1)))renderExplorer();else alert('Erreur: Dossier déjà existant')}else{if(fs.createFile(currentPath,name))renderExplorer();else alert('Erreur: Fichier déjà existant')}}
+
+function showContextMenu(e,name,isFile){const menu=document.getElementById('contextMenu');menu.innerHTML=`
+<div class="context-item" onclick="renameItem('${name}')">✏️ Renommer</div>
+<div class="context-item" onclick="deleteItem('${name}')">🗑️ Supprimer</div>
+${isFile?`<div class="context-item" onclick="openFileInEditor('${name}')">📝 Ouvrir</div>`:''}`;menu.style.left=e.pageX+'px';menu.style.top=e.pageY+'px';menu.classList.add('show');setTimeout(()=>document.addEventListener('click',()=>menu.classList.remove('show'),{once:true}),10)}
+
+function renameItem(oldName){const newName=prompt('Nouveau nom:',oldName);if(newName&&fs.rename(currentPath,oldName,newName))renderExplorer()}
+
+function deleteItem(name){if(confirm('Supprimer '+name+' ?')&&fs.delete(currentPath,name))renderExplorer()}
+
+// ===== TERMINAL =====
+const terminalHistory=[];let termHistoryIndex=0;
+
+function handleTerminalInput(e){if(e.key!=='Enter')return;const input=e.target.value.trim();if(!input)return;addTerminalLine('<span class="terminal-prompt">user@phoenixos:'+currentPath+'$</span> '+input);executeCommand(input);terminalHistory.push(input);termHistoryIndex=terminalHistory.length;e.target.value=''}
+
+function executeCommand(cmd){const parts=cmd.split(' ');const command=parts[0];const args=parts.slice(1);
+const commands={help:()=>addTerminalLine('Commands: ls, cd, pwd, mkdir, touch, rm, cat, clear, echo, help'),ls:()=>{const items=fs.list(currentPath);if(!items)return addTerminalLine('Directory not found','error');items.forEach(i=>addTerminalLine((i.isFile?'📄':'📁')+' '+i.name))},pwd:()=>addTerminalLine(currentPath),cd:()=>{const target=args[0]||'/home';const newPath=target.startsWith('/')?target:currentPath+'/'+target;if(fs.getNode(newPath)){currentPath=newPath.replace(/\/+/g,'/');renderExplorer()}else addTerminalLine('Directory not found','error')},mkdir:()=>{if(!args[0])return addTerminalLine('Usage: mkdir <name>','error');if(fs.createFolder(currentPath,args[0])){addTerminalLine('Folder created','success');renderExplorer()}else addTerminalLine('Folder already exists','error')},touch:()=>{if(!args[0])return addTerminalLine('Usage: touch <name>','error');if(fs.createFile(currentPath,args[0])){addTerminalLine('File created','success');renderExplorer()}else addTerminalLine('File already exists','error')},rm:()=>{if(!args[0])return addTerminalLine('Usage: rm <name>','error');if(fs.delete(currentPath,args[0])){addTerminalLine('Deleted','success');renderExplorer()}else addTerminalLine('Not found','error')},cat:()=>{if(!args[0])return addTerminalLine('Usage: cat <file>','error');const content=fs.readFile(currentPath,args[0]);if(content!==null)addTerminalLine(content);else addTerminalLine('File not found','error')},clear:()=>document.getElementById('terminal').innerHTML='',echo:()=>addTerminalLine(args.join(' '))};
+
+if(commands[command])commands[command]();else addTerminalLine('Command not found: '+command,'error');
+addTerminalLine('<span class="terminal-prompt">user@phoenixos:'+currentPath+'$</span> <input type="text" class="terminal-input" id="terminalInput" onkeypress="handleTerminalInput(event)">');document.getElementById('terminalInput').focus()}
+
+function addTerminalLine(html,type=''){const term=document.getElementById('terminal');const div=document.createElement('div');div.className='terminal-line'+(type?' terminal-'+type:'');div.innerHTML=html;term.appendChild(div);term.scrollTop=term.scrollHeight}
+
+// ===== BROWSER =====
+function browserGo(){const url=document.getElementById('browserUrl').value;if(!url)return;let finalUrl=url;if(!url.startsWith('http'))finalUrl='https://'+url;document.getElementById('browserFrame').src=finalUrl}
+function browserBack(){document.getElementById('browserFrame').contentWindow.history.back()}
+function browserForward(){document.getElementById('browserFrame').contentWindow.history.forward()}
+function browserRefresh(){document.getElementById('browserFrame').contentWindow.location.reload()}
+
+// ===== EDITOR =====
+function newFile(){currentFile=null;document.getElementById('editorFilename').textContent='sans_titre.txt';document.getElementById('editorContent').value=''}
+
+function saveFile(){const content=document.getElementById('editorContent').value;const filename=currentFile||prompt('Nom du fichier:','sans_titre.txt');if(!filename)return;if(fs.writeFile(currentPath,filename,content)||fs.createFile(currentPath,filename,content)){currentFile=filename;document.getElementById('editorFilename').textContent=filename;renderExplorer();alert('Fichier sauvegardé!')}}
+
+function openFileInEditor(name){if(!name){const items=fs.list(currentPath).filter(i=>i.isFile);if(!items.length)return alert('Aucun fichier dans ce dossier');name=items[0].name}const content=fs.readFile(currentPath,name);if(content===null)return alert('Erreur de lecture');currentFile=name;document.getElementById('editorFilename').textContent=name;document.getElementById('editorContent').value=content;openWindow('editor')}
+
+// ===== GAMES =====
+let currentGame=null,gameState={},gameLoop=null;const canvas=document.createElement('canvas');canvas.className='game-canvas';canvas.width=500;canvas.height=500;const ctx=canvas.getContext('2d');
+
+function playGame(game){currentGame=game;const content=document.getElementById('gamesContent');content.innerHTML=`<div style="padding:2rem"><div class="game-info" id="gameInfo">Chargement...</div></div>`;content.appendChild(canvas);content.innerHTML+=`<div class="game-controls"><button class="game-btn" onclick="restartGame()">🔄 Rejouer</button><button class="game-btn" onclick="backToGames()">⬅️ Retour</button></div>`;
+if(gameLoop)clearInterval(gameLoop);
+const games={snake:initSnake,tictactoe:initTicTacToe,memory:initMemory,pong:initPong};if(games[game])games[game]()}
+
+function backToGames(){if(gameLoop)clearInterval(gameLoop);canvas.onclick=null;document.onkeydown=null;document.getElementById('gamesContent').innerHTML=`<div class="games-grid"><div class="game-card" onclick="playGame('snake')"><div class="game-icon">🐍</div><div class="game-name">Snake</div></div><div class="game-card" onclick="playGame('tictactoe')"><div class="game-icon">⭕</div><div class="game-name">Morpion</div></div><div class="game-card" onclick="playGame('memory')"><div class="game-icon">🧠</div><div class="game-name">Memory</div></div><div class="game-card" onclick="playGame('pong')"><div class="game-icon">🏓</div><div class="game-name">Pong</div></div></div>`}
+
+function restartGame(){if(currentGame)playGame(currentGame)}
+
+// SNAKE
+function initSnake(){gameState={snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:15,y:15},score:0};document.getElementById('gameInfo').textContent='Score: 0 | Flèches pour jouer';document.onkeydown=e=>{const key=e.key;if(key==='ArrowUp'&&gameState.dir.y===0)gameState.dir={x:0,y:-1};else if(key==='ArrowDown'&&gameState.dir.y===0)gameState.dir={x:0,y:1};else if(key==='ArrowLeft'&&gameState.dir.x===0)gameState.dir={x:-1,y:0};else if(key==='ArrowRight'&&gameState.dir.x===0)gameState.dir={x:1,y:0}};
+gameLoop=setInterval(()=>{const head={x:gameState.snake[0].x+gameState.dir.x,y:gameState.snake[0].y+gameState.dir.y};if(head.x<0||head.x>=25||head.y<0||head.y>=25||gameState.snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(gameLoop);document.getElementById('gameInfo').textContent='Game Over! Score: '+gameState.score;return}
+gameState.snake.unshift(head);if(head.x===gameState.food.x&&head.y===gameState.food.y){gameState.score++;gameState.food={x:Math.floor(Math.random()*25),y:Math.floor(Math.random()*25)};document.getElementById('gameInfo').textContent='Score: '+gameState.score}else gameState.snake.pop();
+ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='#0f0';gameState.snake.forEach(s=>ctx.fillRect(s.x*20,s.y*20,18,18));ctx.fillStyle='#f00';ctx.fillRect(gameState.food.x*20,gameState.food.y*20,18,18)},120)}
+
+// TIC TAC TOE
+function initTicTacToe(){gameState={board:Array(9).fill(null),player:'X',gameOver:false};document.getElementById('gameInfo').textContent='Joueur X commence';drawTicTacToe();canvas.onclick=e=>{if(gameState.gameOver)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/(canvas.width/3));const y=Math.floor((e.clientY-rect.top)/(canvas.height/3));const idx=y*3+x;if(gameState.board[idx])return;gameState.board[idx]=gameState.player;drawTicTacToe();const winner=checkWinner();if(winner){document.getElementById('gameInfo').textContent=winner==='Égalité'?'Match nul!':'Joueur '+winner+' gagne!';gameState.gameOver=true}else{gameState.player=gameState.player==='X'?'O':'X';document.getElementById('gameInfo').textContent='Joueur '+gameState.player}}}
+
+function drawTicTacToe(){ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.strokeStyle='#fff';ctx.lineWidth=3;for(let i=1;i<3;i++){ctx.beginPath();ctx.moveTo(i*166,0);ctx.lineTo(i*166,500);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*166);ctx.lineTo(500,i*166);ctx.stroke()}
+gameState.board.forEach((cell,i)=>{if(cell){const x=(i%3)*166+83;const y=Math.floor(i/3)*166+83;ctx.font='bold 80px Arial';ctx.fillStyle=cell==='X'?'#0f0':'#f00';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(cell,x,y)}})}
+
+function checkWinner(){const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(let w of wins)if(gameState.board[w[0]]&&gameState.board[w[0]]===gameState.board[w[1]]&&gameState.board[w[0]]===gameState.board[w[2]])return gameState.board[w[0]];return gameState.board.every(c=>c)?'Égalité':null}
+
+// MEMORY
+function initMemory(){const symbols=['🎮','🎯','🎲','🎪','🎨','🎭','🎬','🎸'];const cards=[...symbols,...symbols].sort(()=>Math.random()-.5).map((s,i)=>({symbol:s,flipped:false,matched:false,id:i}));gameState={cards,flipped:[],matches:0};document.getElementById('gameInfo').textContent='Trouvez toutes les paires!';drawMemory();canvas.onclick=e=>{if(gameState.flipped.length>=2)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/125);const y=Math.floor((e.clientY-rect.top)/125);const idx=y*4+x;const card=gameState.cards[idx];if(!card||card.flipped||card.matched)return;card.flipped=true;gameState.flipped.push(idx);drawMemory();if(gameState.flipped.length===2){setTimeout(()=>{const[i1,i2]=gameState.flipped;if(gameState.cards[i1].symbol===gameState.cards[i2].symbol){gameState.cards[i1].matched=true;gameState.cards[i2].matched=true;gameState.matches++;if(gameState.matches===8)document.getElementById('gameInfo').textContent='Bravo! Vous avez gagné!'}else{gameState.cards[i1].flipped=false;gameState.cards[i2].flipped=false}gameState.flipped=[];drawMemory()},800)}}}
+
+function drawMemory(){ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);gameState.cards.forEach((card,i)=>{const x=(i%4)*125;const y=Math.floor(i/4)*125;ctx.fillStyle=card.matched?'rgba(0,255,0,.3)':card.flipped?'#667eea':'#444';ctx.fillRect(x+5,y+5,115,115);if(card.flipped||card.matched){ctx.font='60px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(card.symbol,x+62,y+62)}})}
+
+// PONG
+function initPong(){gameState={paddle1Y:200,paddle2Y:200,ballX:250,ballY:250,ballDX:3,ballDY:3,score1:0,score2:0};document.getElementById('gameInfo').textContent='Premier à 5 points!';let keys={};document.onkeydown=e=>keys[e.key]=true;document.onkeyup=e=>keys[e.key]=false;
+gameLoop=setInterval(()=>{if(keys['ArrowUp'])gameState.paddle2Y=Math.max(0,gameState.paddle2Y-5);if(keys['ArrowDown'])gameState.paddle2Y=Math.min(420,gameState.paddle2Y+5);const paddleCenter=gameState.ballY-40;if(paddleCenter<gameState.paddle1Y)gameState.paddle1Y=Math.max(0,gameState.paddle1Y-4);if(paddleCenter>gameState.paddle1Y)gameState.paddle1Y=Math.min(420,gameState.paddle1Y+4);gameState.ballX+=gameState.ballDX;gameState.ballY+=gameState.ballDY;if(gameState.ballY<=0||gameState.ballY>=490)gameState.ballDY*=-1;if(gameState.ballX<=20&&gameState.ballY>=gameState.paddle1Y&&gameState.ballY<=gameState.paddle1Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX>=470&&gameState.ballY>=gameState.paddle2Y&&gameState.ballY<=gameState.paddle2Y+80){gameState.ballDX*=-1;gameState.ballDX*=1.05}if(gameState.ballX<0){gameState.score2++;resetBall()}if(gameState.ballX>500){gameState.score1++;resetBall()}document.getElementById('gameInfo').textContent=`IA: ${gameState.score1} | Vous: ${gameState.score2}`;if(gameState.score1>=5||gameState.score2>=5){clearInterval(gameLoop);document.getElementById('gameInfo').textContent+=gameState.score2>=5?' - Vous gagnez!':' - IA gagne!';return}
+ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='#fff';ctx.fillRect(10,gameState.paddle1Y,10,80);ctx.fillRect(480,gameState.paddle2Y,10,80);ctx.fillRect(gameState.ballX,gameState.ballY,10,10);ctx.setLineDash([10,10]);ctx.beginPath();ctx.moveTo(250,0);ctx.lineTo(250,500);ctx.strokeStyle='rgba(255,255,255,.3)';ctx.stroke();ctx.setLineDash([])},16)}
+
+function resetBall(){gameState.ballX=250;gameState.ballY=250;gameState.ballDX=3*(Math.random()>.5?1:-1);gameState.ballDY=3*(Math.random()>.5?1:-1)}
+
+// ===== SYSTEM =====
+function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+
+function shutdown(){document.getElementById('desktop').classList.remove('show');setTimeout(()=>{document.getElementById('boot').classList.remove('hide');document.getElementById('boot').innerHTML='<div class="boot-line">Shutting down system...</div><div class="boot-line">[ OK ] Stopping services...</div><div class="boot-line">[ OK ] Unmounting file systems...</div><div class="boot-line">System halted. Goodbye!</div>';setTimeout(()=>location.reload(),3000)},500)}
+
+// ===== BOOT =====
+window.onload=()=>{const bootLines=document.querySelectorAll('.boot-line');bootLines.forEach((line,i)=>setTimeout(()=>line.style.animation='fadeIn .2s',i*400));setTimeout(()=>{document.getElementById('boot').classList.add('hide');setTimeout(()=>{document.getElementById('desktop').classList.add('show');updateClock();setInterval(updateClock,1000)},500)},3500)}
+</script>
+</body>
+</html>
