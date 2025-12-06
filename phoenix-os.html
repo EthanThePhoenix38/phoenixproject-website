@@ -106,6 +106,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 .game-btn{padding:0.75rem 1.5rem;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:all .3s}
 .game-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
 
+/* HELP SYSTEM */
+.help-content{padding:1.5rem;overflow-y:auto;line-height:1.8}
+.help-section{margin:2rem 0}
+.help-section h3{color:var(--primary);font-size:1.3rem;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid rgba(102,126,234,.3)}
+.help-section h4{color:var(--secondary);font-size:1.1rem;margin:1rem 0 0.5rem}
+.help-list{list-style:none;padding-left:0}
+.help-list li{padding:0.5rem 0;padding-left:1.5rem;position:relative}
+.help-list li::before{content:'▸';position:absolute;left:0;color:var(--primary);font-weight:bold}
+.help-kbd{display:inline-block;padding:0.2rem 0.6rem;background:rgba(102,126,234,.2);border:1px solid rgba(102,126,234,.4);border-radius:4px;font-family:'Courier New',monospace;font-size:0.9em;font-weight:bold}
+.help-tip{background:rgba(102,126,234,.1);padding:1rem;border-left:3px solid var(--primary);border-radius:4px;margin:1rem 0;font-size:0.95em}
+.help-search{width:100%;padding:0.8rem;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#f7fafc;font-size:14px;margin-bottom:1rem}
+.help-search:focus{outline:none;border-color:var(--primary)}
+.tooltip{position:absolute;background:rgba(20,20,30,.95);color:#f7fafc;padding:0.5rem 1rem;border-radius:6px;font-size:11px;white-space:nowrap;z-index:10002;pointer-events:none;opacity:0;transition:opacity .2s}
+.tooltip.show{opacity:1}
+.help-btn-taskbar{background:rgba(102,126,234,.3);margin-right:0.5rem}
+.help-btn-taskbar:hover{background:rgba(102,126,234,.5)}
+
 /* RESPONSIVE */
 @media(max-width:768px){
 .desktop-icons{grid-template-columns:repeat(auto-fill,70px);gap:1rem}
@@ -142,6 +159,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 <div class="lang-item" onclick="setLanguage('zh')">🇨🇳 中文</div>
 </div>
 </div>
+<button class="taskbar-btn help-btn-taskbar" onclick="openWindow('help')" id="helpBtn" title="Help (F1)">❓</button>
 <div class="taskbar-clock" id="clock">00:00</div>
 <button class="taskbar-btn taskbar-power" onclick="shutdown()" id="powerBtn">⏻</button>
 </div>
@@ -249,7 +267,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow
 </div>
 </div>
 
+<!-- Help Window -->
+<div class="window" id="win-help" style="top:5%;left:12%;width:850px;height:700px">
+<div class="window-header" onmousedown="startDrag(event,'win-help')">
+<div class="window-title" id="helpTitle">❓ Help</div>
+<div class="window-controls">
+<button class="window-btn window-minimize" onclick="minimizeWindow('win-help')">−</button>
+<button class="window-btn window-maximize" onclick="toggleMaximize('win-help')">□</button>
+<button class="window-btn window-close" onclick="closeWindow('win-help')">×</button>
+</div>
+</div>
+<div class="window-content">
+<div class="help-content" id="helpContent"></div>
+</div>
+</div>
+
 <div class="context-menu" id="contextMenu"></div>
+<div class="tooltip" id="tooltip"></div>
 
 <script>
 // ===== INTERNATIONALIZATION =====
@@ -347,6 +381,39 @@ const translations = {
       pongYou: 'You:',
       pongWin: '- You win!',
       pongLose: '- AI wins!'
+    },
+    help: {
+      title: 'PhoenixOS Help Center',
+      search: 'Search help...',
+      quickStart: 'Quick Start',
+      quickStartDesc: 'PhoenixOS is a complete web-based operating system. Here\'s how to get started:',
+      features: 'Main Features',
+      explorer: 'File Explorer',
+      explorerDesc: 'Manage your files and folders with a graphical interface.',
+      explorerFeatures: ['Create files and folders', 'Rename and delete items', 'Navigate through directories', 'Right-click for context menu'],
+      terminal: 'Terminal',
+      terminalDesc: 'Use Unix commands to interact with the file system.',
+      terminalCommands: ['ls - list files', 'cd - change directory', 'mkdir - create folder', 'touch - create file', 'rm - delete', 'cat - read file', 'pwd - current path', 'clear - clear screen'],
+      browser: 'Browser',
+      browserDesc: 'Secure iframe-based browser to access web pages.',
+      browserFeatures: ['Navigate to any URL', 'Back/Forward navigation', 'Refresh page', 'Sandboxed for security'],
+      games: 'Games',
+      gamesDesc: 'Four integrated games to play:',
+      gamesList: ['Snake - Classic snake game', 'Tic-Tac-Toe - Two player strategy', 'Memory - Match pairs', 'Pong - AI opponent'],
+      editor: 'Text Editor',
+      editorDesc: 'Create and edit text files.',
+      editorFeatures: ['Save files to the file system', 'Open existing files', 'Simple and lightweight'],
+      shortcuts: 'Keyboard Shortcuts',
+      shortcutsList: ['F1 - Open Help', 'Arrows - Navigate (in games)', 'Enter - Execute (in terminal)'],
+      language: 'Language Selection',
+      languageDesc: 'PhoenixOS supports 5 languages: English, Français, Italiano, Español, 中文. Click the language selector in the taskbar to switch.',
+      windowManagement: 'Window Management',
+      windowDesc: 'Drag windows to move, use buttons to minimize/maximize/close.',
+      tips: 'Tips',
+      tip1: 'All data is stored locally in your browser',
+      tip2: 'Press F1 anytime to open this help',
+      tip3: 'Right-click files for more options',
+      tip4: 'File system persists across sessions'
     }
   },
   fr: {
@@ -442,6 +509,39 @@ const translations = {
       pongYou: 'Vous:',
       pongWin: '- Vous gagnez!',
       pongLose: '- IA gagne!'
+    },
+    help: {
+      title: 'Centre d\'Aide PhoenixOS',
+      search: 'Rechercher dans l\'aide...',
+      quickStart: 'Démarrage Rapide',
+      quickStartDesc: 'PhoenixOS est un système d\'exploitation web complet. Voici comment commencer :',
+      features: 'Fonctionnalités Principales',
+      explorer: 'Explorateur de Fichiers',
+      explorerDesc: 'Gérez vos fichiers et dossiers avec une interface graphique.',
+      explorerFeatures: ['Créer fichiers et dossiers', 'Renommer et supprimer', 'Naviguer dans les répertoires', 'Clic droit pour menu contextuel'],
+      terminal: 'Terminal',
+      terminalDesc: 'Utilisez des commandes Unix pour interagir avec le système de fichiers.',
+      terminalCommands: ['ls - lister fichiers', 'cd - changer répertoire', 'mkdir - créer dossier', 'touch - créer fichier', 'rm - supprimer', 'cat - lire fichier', 'pwd - chemin actuel', 'clear - effacer écran'],
+      browser: 'Navigateur',
+      browserDesc: 'Navigateur sécurisé basé sur iframe pour accéder aux pages web.',
+      browserFeatures: ['Naviguer vers n\'importe quelle URL', 'Navigation avant/arrière', 'Actualiser la page', 'Sécurisé par sandbox'],
+      games: 'Jeux',
+      gamesDesc: 'Quatre jeux intégrés :',
+      gamesList: ['Snake - Jeu classique', 'Morpion - Stratégie deux joueurs', 'Memory - Trouver les paires', 'Pong - Adversaire IA'],
+      editor: 'Éditeur de Texte',
+      editorDesc: 'Créer et modifier des fichiers texte.',
+      editorFeatures: ['Sauvegarder dans le système de fichiers', 'Ouvrir fichiers existants', 'Simple et léger'],
+      shortcuts: 'Raccourcis Clavier',
+      shortcutsList: ['F1 - Ouvrir l\'aide', 'Flèches - Naviguer (jeux)', 'Entrée - Exécuter (terminal)'],
+      language: 'Sélection de Langue',
+      languageDesc: 'PhoenixOS supporte 5 langues : English, Français, Italiano, Español, 中文. Cliquez sur le sélecteur dans la barre des tâches.',
+      windowManagement: 'Gestion des Fenêtres',
+      windowDesc: 'Glissez les fenêtres pour les déplacer, utilisez les boutons pour minimiser/maximiser/fermer.',
+      tips: 'Astuces',
+      tip1: 'Toutes les données sont stockées localement dans votre navigateur',
+      tip2: 'Appuyez sur F1 à tout moment pour ouvrir l\'aide',
+      tip3: 'Clic droit sur les fichiers pour plus d\'options',
+      tip4: 'Le système de fichiers persiste entre les sessions'
     }
   },
   it: {
@@ -537,6 +637,39 @@ const translations = {
       pongYou: 'Tu:',
       pongWin: '- Hai vinto!',
       pongLose: '- IA vince!'
+    },
+    help: {
+      title: 'Centro Aiuto PhoenixOS',
+      search: 'Cerca aiuto...',
+      quickStart: 'Avvio Rapido',
+      quickStartDesc: 'PhoenixOS è un sistema operativo web completo. Ecco come iniziare:',
+      features: 'Funzionalità Principali',
+      explorer: 'Esplora File',
+      explorerDesc: 'Gestisci file e cartelle con interfaccia grafica.',
+      explorerFeatures: ['Crea file e cartelle', 'Rinomina ed elimina', 'Naviga nelle directory', 'Clic destro per menu contestuale'],
+      terminal: 'Terminale',
+      terminalDesc: 'Usa comandi Unix per interagire con il file system.',
+      terminalCommands: ['ls - elenca file', 'cd - cambia directory', 'mkdir - crea cartella', 'touch - crea file', 'rm - elimina', 'cat - leggi file', 'pwd - percorso corrente', 'clear - pulisci schermo'],
+      browser: 'Browser',
+      browserDesc: 'Browser sicuro basato su iframe per accedere alle pagine web.',
+      browserFeatures: ['Naviga verso qualsiasi URL', 'Navigazione avanti/indietro', 'Aggiorna pagina', 'Protetto da sandbox'],
+      games: 'Giochi',
+      gamesDesc: 'Quattro giochi integrati:',
+      gamesList: ['Snake - Gioco classico', 'Tris - Strategia due giocatori', 'Memory - Trova le coppie', 'Pong - Avversario IA'],
+      editor: 'Editor di Testo',
+      editorDesc: 'Crea e modifica file di testo.',
+      editorFeatures: ['Salva nel file system', 'Apri file esistenti', 'Semplice e leggero'],
+      shortcuts: 'Scorciatoie da Tastiera',
+      shortcutsList: ['F1 - Apri aiuto', 'Frecce - Naviga (giochi)', 'Invio - Esegui (terminale)'],
+      language: 'Selezione Lingua',
+      languageDesc: 'PhoenixOS supporta 5 lingue: English, Français, Italiano, Español, 中文. Clicca sul selettore nella barra delle applicazioni.',
+      windowManagement: 'Gestione Finestre',
+      windowDesc: 'Trascina finestre per spostarle, usa pulsanti per minimizzare/massimizzare/chiudere.',
+      tips: 'Suggerimenti',
+      tip1: 'Tutti i dati sono archiviati localmente nel tuo browser',
+      tip2: 'Premi F1 in qualsiasi momento per aprire l\'aiuto',
+      tip3: 'Clic destro sui file per più opzioni',
+      tip4: 'Il file system persiste tra le sessioni'
     }
   },
   es: {
@@ -632,6 +765,39 @@ const translations = {
       pongYou: 'Tú:',
       pongWin: '- ¡Ganaste!',
       pongLose: '- ¡IA gana!'
+    },
+    help: {
+      title: 'Centro de Ayuda PhoenixOS',
+      search: 'Buscar ayuda...',
+      quickStart: 'Inicio Rápido',
+      quickStartDesc: 'PhoenixOS es un sistema operativo web completo. Así es como empezar:',
+      features: 'Funcionalidades Principales',
+      explorer: 'Explorador de Archivos',
+      explorerDesc: 'Gestiona archivos y carpetas con interfaz gráfica.',
+      explorerFeatures: ['Crear archivos y carpetas', 'Renombrar y eliminar', 'Navegar por directorios', 'Clic derecho para menú contextual'],
+      terminal: 'Terminal',
+      terminalDesc: 'Usa comandos Unix para interactuar con el sistema de archivos.',
+      terminalCommands: ['ls - listar archivos', 'cd - cambiar directorio', 'mkdir - crear carpeta', 'touch - crear archivo', 'rm - eliminar', 'cat - leer archivo', 'pwd - ruta actual', 'clear - limpiar pantalla'],
+      browser: 'Navegador',
+      browserDesc: 'Navegador seguro basado en iframe para acceder a páginas web.',
+      browserFeatures: ['Navegar a cualquier URL', 'Navegación atrás/adelante', 'Actualizar página', 'Protegido por sandbox'],
+      games: 'Juegos',
+      gamesDesc: 'Cuatro juegos integrados:',
+      gamesList: ['Serpiente - Juego clásico', 'Tres en Raya - Estrategia dos jugadores', 'Memoria - Encuentra parejas', 'Pong - Oponente IA'],
+      editor: 'Editor de Texto',
+      editorDesc: 'Crear y editar archivos de texto.',
+      editorFeatures: ['Guardar en sistema de archivos', 'Abrir archivos existentes', 'Simple y ligero'],
+      shortcuts: 'Atajos de Teclado',
+      shortcutsList: ['F1 - Abrir ayuda', 'Flechas - Navegar (juegos)', 'Enter - Ejecutar (terminal)'],
+      language: 'Selección de Idioma',
+      languageDesc: 'PhoenixOS soporta 5 idiomas: English, Français, Italiano, Español, 中文. Haz clic en el selector en la barra de tareas.',
+      windowManagement: 'Gestión de Ventanas',
+      windowDesc: 'Arrastra ventanas para moverlas, usa botones para minimizar/maximizar/cerrar.',
+      tips: 'Consejos',
+      tip1: 'Todos los datos se almacenan localmente en tu navegador',
+      tip2: 'Presiona F1 en cualquier momento para abrir la ayuda',
+      tip3: 'Clic derecho en archivos para más opciones',
+      tip4: 'El sistema de archivos persiste entre sesiones'
     }
   },
   zh: {
@@ -727,6 +893,39 @@ const translations = {
       pongYou: '你：',
       pongWin: '- 你赢了！',
       pongLose: '- AI获胜！'
+    },
+    help: {
+      title: 'PhoenixOS帮助中心',
+      search: '搜索帮助...',
+      quickStart: '快速入门',
+      quickStartDesc: 'PhoenixOS是一个完整的基于Web的操作系统。以下是入门指南：',
+      features: '主要功能',
+      explorer: '文件资源管理器',
+      explorerDesc: '使用图形界面管理文件和文件夹。',
+      explorerFeatures: ['创建文件和文件夹', '重命名和删除项目', '浏览目录', '右键单击查看上下文菜单'],
+      terminal: '终端',
+      terminalDesc: '使用Unix命令与文件系统交互。',
+      terminalCommands: ['ls - 列出文件', 'cd - 更改目录', 'mkdir - 创建文件夹', 'touch - 创建文件', 'rm - 删除', 'cat - 读取文件', 'pwd - 当前路径', 'clear - 清除屏幕'],
+      browser: '浏览器',
+      browserDesc: '基于iframe的安全浏览器，用于访问网页。',
+      browserFeatures: ['导航到任何URL', '前进/后退导航', '刷新页面', '沙箱保护'],
+      games: '游戏',
+      gamesDesc: '四款集成游戏：',
+      gamesList: ['贪吃蛇 - 经典游戏', '井字棋 - 双人策略', '记忆 - 找配对', '乒乓 - AI对手'],
+      editor: '文本编辑器',
+      editorDesc: '创建和编辑文本文件。',
+      editorFeatures: ['保存到文件系统', '打开现有文件', '简单轻便'],
+      shortcuts: '键盘快捷键',
+      shortcutsList: ['F1 - 打开帮助', '方向键 - 导航（游戏中）', '回车 - 执行（终端中）'],
+      language: '语言选择',
+      languageDesc: 'PhoenixOS支持5种语言：English、Français、Italiano、Español、中文。点击任务栏中的语言选择器切换。',
+      windowManagement: '窗口管理',
+      windowDesc: '拖动窗口移动，使用按钮最小化/最大化/关闭。',
+      tips: '提示',
+      tip1: '所有数据都存储在浏览器本地',
+      tip2: '随时按F1打开帮助',
+      tip3: '右键单击文件查看更多选项',
+      tip4: '文件系统在会话之间持久保存'
     }
   }
 };
@@ -809,6 +1008,10 @@ function updateAllText() {
 
   // Games
   if (currentGame === null) renderGamesGrid();
+
+  // Help
+  document.getElementById('helpTitle').textContent = '❓ ' + t('help.title');
+  if (document.getElementById('helpContent').children.length > 0) renderHelpContent();
 }
 
 function renderDesktopIcons() {
@@ -887,7 +1090,7 @@ let currentPath='/home',currentFile=null,pathHistory=['/home'],historyIndex=0;
 // ===== WINDOW MANAGEMENT =====
 const windows={};let draggedWindow=null,dragOffset={x:0,y:0};
 
-function openWindow(id){const win=document.getElementById('win-'+id);if(!win)return;win.classList.add('show');win.style.zIndex=getTopZIndex();windows[id]=true;updateTaskbar();if(id==='explorer'){renderExplorer();renderExplorerSidebar()}if(id==='terminal'){initTerminal();setTimeout(()=>document.getElementById('terminalInput').focus(),100)}if(id==='games')renderGamesGrid()}
+function openWindow(id){const win=document.getElementById('win-'+id);if(!win)return;win.classList.add('show');win.style.zIndex=getTopZIndex();windows[id]=true;updateTaskbar();if(id==='explorer'){renderExplorer();renderExplorerSidebar()}if(id==='terminal'){initTerminal();setTimeout(()=>document.getElementById('terminalInput').focus(),100)}if(id==='games')renderGamesGrid();if(id==='help')renderHelpContent()}
 
 function closeWindow(id){document.getElementById(id).classList.remove('show');delete windows[Object.keys(windows).find(k=>'win-'+k===id)];updateTaskbar()}
 
@@ -905,7 +1108,7 @@ document.addEventListener('mouseup',()=>draggedWindow=null);
 
 function updateTaskbar(){const bar=document.getElementById('taskbarApps');bar.innerHTML=Object.keys(windows).map(id=>`<button class="taskbar-btn active" onclick="focusWindow('${id}')">${getWindowTitle(id)}</button>`).join('')}
 
-function getWindowTitle(id){const titles={explorer:'📁',terminal:'⌨️',browser:'🌐',games:'🎮',editor:'📝'};return titles[id]||id}
+function getWindowTitle(id){const titles={explorer:'📁',terminal:'⌨️',browser:'🌐',games:'🎮',editor:'📝',help:'❓'};return titles[id]||id}
 
 function focusWindow(id){openWindow(id)}
 
@@ -1013,6 +1216,71 @@ ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='#fff';ctx.fillRect
 
 function resetBall(){gameState.ballX=250;gameState.ballY=250;gameState.ballDX=3*(Math.random()>.5?1:-1);gameState.ballDY=3*(Math.random()>.5?1:-1)}
 
+// ===== HELP SYSTEM =====
+function renderHelpContent(){const content=document.getElementById('helpContent');const h=t('help');content.innerHTML=`
+<h2>${h.title}</h2>
+<input type="text" class="help-search" placeholder="${h.search}" oninput="filterHelp(this.value)">
+<div id="helpSections">
+<div class="help-section">
+<h3>${h.quickStart}</h3>
+<p>${h.quickStartDesc}</p>
+</div>
+<div class="help-section">
+<h3>${h.features}</h3>
+<h4>📁 ${h.explorer}</h4>
+<p>${h.explorerDesc}</p>
+<ul class="help-list">
+${h.explorerFeatures.map(f=>`<li>${f}</li>`).join('')}
+</ul>
+<h4>⌨️ ${h.terminal}</h4>
+<p>${h.terminalDesc}</p>
+<ul class="help-list">
+${h.terminalCommands.map(c=>`<li><span class="help-kbd">${c.split(' - ')[0]}</span> - ${c.split(' - ')[1]}</li>`).join('')}
+</ul>
+<h4>🌐 ${h.browser}</h4>
+<p>${h.browserDesc}</p>
+<ul class="help-list">
+${h.browserFeatures.map(f=>`<li>${f}</li>`).join('')}
+</ul>
+<h4>🎮 ${h.games}</h4>
+<p>${h.gamesDesc}</p>
+<ul class="help-list">
+${h.gamesList.map(g=>`<li>${g}</li>`).join('')}
+</ul>
+<h4>📝 ${h.editor}</h4>
+<p>${h.editorDesc}</p>
+<ul class="help-list">
+${h.editorFeatures.map(f=>`<li>${f}</li>`).join('')}
+</ul>
+</div>
+<div class="help-section">
+<h3>⌨️ ${h.shortcuts}</h3>
+<ul class="help-list">
+${h.shortcutsList.map(s=>`<li><span class="help-kbd">${s.split(' - ')[0]}</span> - ${s.split(' - ')[1]}</li>`).join('')}
+</ul>
+</div>
+<div class="help-section">
+<h3>🌍 ${h.language}</h3>
+<p>${h.languageDesc}</p>
+</div>
+<div class="help-section">
+<h3>🪟 ${h.windowManagement}</h3>
+<p>${h.windowDesc}</p>
+</div>
+<div class="help-section">
+<h3>💡 ${h.tips}</h3>
+<ul class="help-list">
+<li>${h.tip1}</li>
+<li>${h.tip2}</li>
+<li>${h.tip3}</li>
+<li>${h.tip4}</li>
+</ul>
+</div>
+</div>
+`}
+
+function filterHelp(query){const sections=document.querySelectorAll('#helpSections .help-section');const q=query.toLowerCase();sections.forEach(section=>{const text=section.textContent.toLowerCase();section.style.display=text.includes(q)?'block':'none'})}
+
 // ===== SYSTEM =====
 function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString(currentLang,{hour:'2-digit',minute:'2-digit'})}
 
@@ -1036,7 +1304,15 @@ setTimeout(()=>{
 document.getElementById('desktop').classList.add('show');
 renderDesktopIcons();
 updateClock();
-setInterval(updateClock,1000)
+setInterval(updateClock,1000);
+
+// F1 key support for help
+document.addEventListener('keydown',(e)=>{
+if(e.key==='F1'){
+e.preventDefault();
+openWindow('help')
+}
+})
 },500)
 },3500)
 }

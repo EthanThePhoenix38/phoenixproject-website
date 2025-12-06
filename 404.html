@@ -32,7 +32,7 @@ Oups! La page que vous recherchez semble avoir disparu dans le cyberespace.
 Ne vous inquiétez pas, nous vous redirigeons vers l'accueil.
 </p>
 <p class="countdown" id="countdown">
-<span data-i18n="error.redirect">Redirection automatique dans</span> <span id="timer">5</span> <span data-i18n="error.seconds">secondes</span>...
+<span data-i18n="error.redirect">Redirection automatique dans</span> <span id="timer">2</span> <span data-i18n="error.seconds">secondes</span>...
 </p>
 <div class="error-actions">
 <a href="index.html" class="error-btn btn-home" data-i18n="error.homeButton">Retour à l'Accueil</a>
@@ -75,7 +75,7 @@ if (typeof translations !== 'undefined') {
 }
 
 // Countdown and redirect
-let timeLeft = 5;
+let timeLeft = 2;
 const timerElement = document.getElementById('timer');
 const countdown = setInterval(() => {
   timeLeft--;
