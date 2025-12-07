@@ -331,6 +331,11 @@ function changeLanguage(lang) {
   localStorage.setItem('preferredLanguage', lang);
   applyTranslations();
   updateLanguageButton();
+
+  // Update tab menu translations if it exists
+  if (typeof TabMenuManager !== 'undefined' && TabMenuManager.updateTranslations) {
+    TabMenuManager.updateTranslations();
+  }
 }
 
 // Appliquer les traductions
