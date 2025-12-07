@@ -27,7 +27,8 @@ const ThemeManager = {
   },
 
   updateThemeButton(theme) {
-    const btn = document.getElementById('themeToggle');
+    // Support both old themeToggle and new themeBtn (in header)
+    const btn = document.getElementById('themeBtn') || document.getElementById('themeToggle');
     if (btn) {
       btn.textContent = theme === 'light' ? 'Dark' : 'Light';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
@@ -35,6 +36,16 @@ const ThemeManager = {
   },
 
   createThemeToggle() {
+    // Check if themeBtn already exists in header
+    const headerBtn = document.getElementById('themeBtn');
+    if (headerBtn) {
+      // Button already exists in header, just update it
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      this.updateThemeButton(theme);
+      return;
+    }
+
+    // Fallback: create standalone button for pages without header integration
     const btn = document.createElement('button');
     btn.id = 'themeToggle';
     btn.className = 'theme-toggle';
