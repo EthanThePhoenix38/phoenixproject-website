@@ -252,8 +252,17 @@ const TemplateManager = {
   },
 
   createTemplateSelector() {
+    // Create toggle button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'template-toggle-btn';
+    toggleBtn.textContent = 'Templates';
+    toggleBtn.onclick = () => this.toggleSelector();
+    document.body.appendChild(toggleBtn);
+
+    // Create selector
     const selector = document.createElement('div');
     selector.className = 'template-selector';
+    selector.id = 'templateSelector';
     selector.innerHTML = `
       <button class="template-btn" data-template="moderne" onclick="TemplateManager.applyTemplate('moderne')">
         Moderne
@@ -272,6 +281,18 @@ const TemplateManager = {
 
     const savedTemplate = this.getPreference('template') || 'moderne';
     this.updateTemplateButtons(savedTemplate);
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!selector.contains(e.target) && !toggleBtn.contains(e.target)) {
+        selector.classList.remove('visible');
+      }
+    });
+  },
+
+  toggleSelector() {
+    const selector = document.getElementById('templateSelector');
+    selector.classList.toggle('visible');
   },
 
   savePreference(key, value) {
@@ -308,14 +329,9 @@ const TabMenuManager = {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
       tabEl.dataset.tab = tab.id;
-      tabEl.innerHTML = `
-        <span>${tab.label}</span>
-        <span class="tab-close" onclick="TabMenuManager.closeTab('${tab.id}', event)">×</span>
-      `;
+      tabEl.innerHTML = `<span>${tab.label}</span>`;
       tabEl.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('tab-close')) {
-          this.scrollToSection(tab.section);
-        }
+        this.scrollToSection(tab.section);
       });
       menu.appendChild(tabEl);
     });
@@ -350,23 +366,76 @@ const TabMenuManager = {
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+};
+
+// GESTION GLOBALE DES ERREURS
+const ErrorHandler = {
+  init() {
+    // Capture les erreurs JavaScript non gérées
+    window.addEventListener('error', (event) => {
+      this.logError({
+        type: 'JavaScript Error',
+        message: event.message,
+        file: event.filename,
+        line: event.lineno,
+        column: event.colno,
+        stack: event.error?.stack,
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    // Capture les promesses rejetées non gérées
+    window.addEventListener('unhandledrejection', (event) => {
+      this.logError({
+        type: 'Unhandled Promise Rejection',
+        message: event.reason?.message || event.reason,
+        stack: event.reason?.stack,
+        timestamp: new Date().toISOString()
+      });
+    });
   },
 
-  closeTab(tabId, event) {
-    event.stopPropagation();
-    const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
-    if (tabEl) {
-      tabEl.style.animation = 'fadeOutTab 0.3s ease-out';
-      setTimeout(() => {
-        tabEl.remove();
-        this.tabs = this.tabs.filter(t => t.id !== tabId);
-      }, 300);
+  logError(errorData) {
+    // Log en console en développement
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.error('Error logged:', errorData);
     }
+
+    // Sauvegarder dans localStorage si consentement
+    if (CookieManager.hasConsent()) {
+      try {
+        const errors = JSON.parse(localStorage.getItem('errors') || '[]');
+        errors.push(errorData);
+
+        // Garder seulement les 50 dernières erreurs
+        if (errors.length > 50) {
+          errors.shift();
+        }
+
+        localStorage.setItem('errors', JSON.stringify(errors));
+      } catch (e) {
+        console.error('Failed to log error:', e);
+      }
+    }
+  },
+
+  getErrors() {
+    try {
+      return JSON.parse(localStorage.getItem('errors') || '[]');
+    } catch (e) {
+      return [];
+    }
+  },
+
+  clearErrors() {
+    localStorage.removeItem('errors');
   }
 };
 
 // INITIALISATION GLOBALE
 document.addEventListener('DOMContentLoaded', () => {
+  ErrorHandler.init();
   ThemeManager.init();
   TemplateManager.init();
   NavigationManager.init();

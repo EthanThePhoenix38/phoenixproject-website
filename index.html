@@ -3,13 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="The Phoenix Agency - Experts en Intelligence Artificielle, NoCode, Automatisation et Cybersécurité. Solutions sur mesure pour transformer votre entreprise avec l'IA. Développement chatbots, Machine Learning, GitHub Actions, n8n, audits de sécurité.">
+<meta name="keywords" content="intelligence artificielle, IA, AI, machine learning, chatbot, agents intelligents, OpenAI, Claude AI, Cursor, VS Code, MCP, Autogravity, automation, automatisation, NoCode, n8n, Make, Airtable, Notion, cybersécurité, cybersecurity, pentesting, RGPD, GDPR, business analyse, CBAP, Python, JavaScript, TypeScript, React, Vue.js, PyTorch, LangChain, Docker, Podman, Kubernetes, containers, AWS, Azure, GitHub Actions, CI/CD, développement web, transformation digitale, consultant IA, solutions IA, API IA, analyse de données, sécurité informatique, REST API, GraphQL">
+<meta name="author" content="The Phoenix Agency">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<link rel="canonical" href="https://ethanthePhoenix38.github.io/phoenixproject-website/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ethanthePhoenix38.github.io/phoenixproject-website/">
+<meta property="og:title" content="The Phoenix Agency - Intelligence Artificielle, NoCode, Automatisation & Cybersécurité">
+<meta property="og:description" content="Transformez votre entreprise avec l'IA. Experts en développement chatbots, Machine Learning, automatisation et cybersécurité. Solutions sur mesure pour votre transformation digitale.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://ethanthePhoenix38.github.io/phoenixproject-website/">
+<meta name="twitter:title" content="The Phoenix Agency - IA, NoCode, Automatisation & Cybersécurité">
+<meta name="twitter:description" content="Experts en Intelligence Artificielle et transformation digitale. Solutions NoCode, automatisation et cybersécurité pour votre entreprise.">
+
+<!-- Security Headers -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://formspree.io https://ipapi.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io;">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-<title>The Phoenix Agency - AI, NoCode, Automation & Cybersecurity</title>
+
+<title>The Phoenix Agency - Intelligence Artificielle, NoCode, Automatisation & Cybersécurité</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="templates.css">
 <style>
@@ -116,7 +141,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 <h2 class="section-title" data-i18n="services.title">Nos Services</h2>
 <p style="text-align:center;margin-bottom:2rem" data-i18n="services.subtitle">Des solutions innovantes pour propulser votre entreprise vers le futur</p>
 <div class="services">
-<div class="service-card">
+<div class="service-card" id="service-ai">
 <h3 data-i18n="services.ai.title">Intelligence Artificielle</h3>
 <p data-i18n="services.ai.description">Développement de chatbots, analyse de données Machine Learning, et intégration d'API IA avancées.</p>
 <ul class="service-list">
@@ -127,7 +152,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </ul>
 </div>
 
-<div class="service-card">
+<div class="service-card" id="service-nocode">
 <h3 data-i18n="services.nocode.title">Solutions NoCode</h3>
 <p data-i18n="services.nocode.description">Création rapide d'applications web, automatisations intelligentes et workflows personnalisés.</p>
 <ul class="service-list">
@@ -138,7 +163,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </ul>
 </div>
 
-<div class="service-card">
+<div class="service-card" id="service-automation">
 <h3 data-i18n="services.automation.title">Automatisation</h3>
 <p data-i18n="services.automation.description">Scripts Python personnalisés, automatisation GitHub Actions, et optimisation des processus métier.</p>
 <ul class="service-list">
@@ -149,7 +174,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </ul>
 </div>
 
-<div class="service-card">
+<div class="service-card" id="service-cybersecurity">
 <h3 data-i18n="services.cybersecurity.title">Cybersécurité</h3>
 <p data-i18n="services.cybersecurity.description">Audits de sécurité, tests d'intrusion, formation des équipes, et conformité RGPD.</p>
 <ul class="service-list">
@@ -160,7 +185,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </ul>
 </div>
 
-<div class="service-card">
+<div class="service-card" id="service-business">
 <h3 data-i18n="services.business.title">Business Analyse</h3>
 <p data-i18n="services.business.description">Analyse des besoins, gestion du backlog produit, et accompagnement au changement.</p>
 <ul class="service-list">
@@ -178,16 +203,41 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 <div class="tech-stack">
 <span class="tech-badge">Python</span>
 <span class="tech-badge">JavaScript</span>
+<span class="tech-badge">TypeScript</span>
 <span class="tech-badge">React</span>
+<span class="tech-badge">Vue.js</span>
 <span class="tech-badge">Node.js</span>
-<span class="tech-badge">TensorFlow</span>
-<span class="tech-badge">OpenAI</span>
-<span class="tech-badge">Claude</span>
+<span class="tech-badge">FastAPI</span>
+<span class="tech-badge">Agents intelligents</span>
+<span class="tech-badge">PyTorch</span>
+<span class="tech-badge">OpenAI GPT-4</span>
+<span class="tech-badge">Claude AI</span>
+<span class="tech-badge">Cursor AI</span>
+<span class="tech-badge">VS Code</span>
+<span class="tech-badge">MCP</span>
+<span class="tech-badge">Autogravity</span>
+<span class="tech-badge">LangChain</span>
 <span class="tech-badge">n8n</span>
-<span class="tech-badge">Zapier</span>
+<span class="tech-badge">Make</span>
+<span class="tech-badge">Airtable</span>
+<span class="tech-badge">Notion API</span>
 <span class="tech-badge">Docker</span>
+<span class="tech-badge">Podman</span>
+<span class="tech-badge">Kubernetes</span>
+<span class="tech-badge">AWS</span>
+<span class="tech-badge">Azure</span>
+<span class="tech-badge">PostgreSQL</span>
+<span class="tech-badge">MongoDB</span>
+<span class="tech-badge">Redis</span>
 <span class="tech-badge">Linux</span>
 <span class="tech-badge">GitHub Actions</span>
+<span class="tech-badge">CI/CD</span>
+<span class="tech-badge">REST API</span>
+<span class="tech-badge">GraphQL</span>
+<span class="tech-badge">WebSockets</span>
+<span class="tech-badge">Git</span>
+<span class="tech-badge">Agile/Scrum</span>
+<span class="tech-badge">CBAP</span>
 </div>
 </section>
 
@@ -196,15 +246,15 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 <p style="text-align:center;margin-bottom:2rem" data-i18n="contact.subtitle">Contactez-nous pour discuter de votre projet</p>
 <form class="contact-form" action="https://formspree.io/f/mdklrzob" method="POST">
 <div class="form-group">
-<label for="name" data-i18n="contact.form.name">Nom Complet</label> *
+<label for="name" data-i18n="contact.form.name">Nom Complet</label>
 <input type="text" id="name" name="name" required>
 </div>
 <div class="form-group">
-<label for="email" data-i18n="contact.form.email">Email</label> *
+<label for="email" data-i18n="contact.form.email">Email</label>
 <input type="email" id="email" name="email" required>
 </div>
 <div class="form-group">
-<label for="service" data-i18n="contact.form.service">Service Souhaité</label> *
+<label for="service" data-i18n="contact.form.service">Service Souhaité</label>
 <select id="service" name="service" required>
 <option value="" data-i18n="contact.form.servicePlaceholder">Choisir un service</option>
 <option value="AI" data-i18n="contact.form.serviceOptions.ai">Intelligence Artificielle</option>
@@ -217,7 +267,7 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </select>
 </div>
 <div class="form-group">
-<label for="message" data-i18n="contact.form.message">Description du Projet</label> *
+<label for="message" data-i18n="contact.form.message">Description du Projet</label>
 <textarea id="message" name="message" required></textarea>
 </div>
 <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="contact.form.submit">Envoyer la Demande</button>
@@ -232,16 +282,17 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 </div>
 <div class="footer-section">
 <h4 data-i18n="footer.sections.services">Services</h4>
-<a href="#services" data-i18n="services.ai.title">Intelligence Artificielle</a>
-<a href="#services" data-i18n="services.nocode.title">Solutions NoCode</a>
-<a href="#services" data-i18n="services.automation.title">Automatisation</a>
-<a href="#services" data-i18n="services.cybersecurity.title">Cybersécurité</a>
-<a href="#services" data-i18n="services.business.title">Business Analyse</a>
+<a href="#service-ai" data-i18n="services.ai.title">Intelligence Artificielle</a>
+<a href="#service-nocode" data-i18n="services.nocode.title">Solutions NoCode</a>
+<a href="#service-automation" data-i18n="services.automation.title">Automatisation</a>
+<a href="#service-cybersecurity" data-i18n="services.cybersecurity.title">Cybersécurité</a>
+<a href="#service-business" data-i18n="services.business.title">Business Analyse</a>
 </div>
 <div class="footer-section">
 <h4 data-i18n="footer.sections.resources">Ressources</h4>
 <a href="https://github.com/ThePhoenixAgency" target="_blank" rel="noopener noreferrer" data-i18n="footer.links.github">GitHub</a>
 <a href="#expertise" data-i18n="footer.links.technologies">Technologies</a>
+<a href="readme.html" data-i18n="footer.links.readme">Documentation</a>
 </div>
 <div class="footer-section">
 <h4 data-i18n="footer.sections.contact">Contact</h4>
@@ -249,7 +300,11 @@ header{background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;to
 <a href="https://www.linkedin.com/company/phoenixproject-ai/" target="_blank" rel="noopener noreferrer" data-i18n="footer.links.linkedin">LinkedIn</a>
 </div>
 </div>
-<p style="margin-top:2rem;opacity:0.7" data-i18n="footer.copyright">© 2025 The Phoenix Agency. Tous droits réservés.</p>
+<p style="margin-top:2rem;opacity:0.7">
+<span data-i18n="footer.copyright">© 2025 The Phoenix Agency. Tous droits réservés.</span><br>
+<small style="opacity:0.6;font-size:0.85rem">Tout contenu, code, design et structure de ce site sont protégés sous licence commerciale propriétaire. Toute reproduction, distribution ou utilisation non autorisée est strictement interdite.</small><br>
+<small style="opacity:0.5;font-size:0.8rem;margin-top:0.5rem;display:inline-block" data-i18n="footer.lastUpdated">Dernière mise à jour: 6 décembre 2025</small>
+</p>
 </footer>
 
 <script src="locales.js"></script>
