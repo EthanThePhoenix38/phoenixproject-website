@@ -7,21 +7,937 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PhoenixOS">
 <meta name="theme-color" content="#007AFF">
-<title>PhoenixOS v1.0.0</title>
+<title>PhoenixOS v1.1.0</title>
 <style>
-:root{--os-bg:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--dock-bg:rgba(255,255,255,0.3);--window-bg:rgba(255,255,255,0.95);--window-header:rgba(246,246,246,0.98);--text:#1d1d1f;--text-secondary:#6e6e73;--blue:#007AFF;--red:#FF3B30;--green:#34C759;--yellow:#FFCC00;--border:rgba(0,0,0,0.1);--shadow:0 8px 32px rgba(0,0,0,0.15);--blur:blur(20px)}*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--os-bg);overflow:hidden;width:100vw;height:100vh;position:fixed;user-select:none;-webkit-user-select:none}#boot{position:fixed;inset:0;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;opacity:1;transition:opacity 0.5s}.boot-logo{font-size:4rem;margin-bottom:2rem;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}}.boot-progress{width:200px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden;margin-top:1rem}.boot-bar{height:100%;background:var(--blue);width:0;transition:width 0.3s}.boot-text{margin-top:1rem;font-size:0.875rem;color:#999}#desktop{position:fixed;inset:0;display:none;opacity:0;transition:opacity 0.5s}#desktop.show{display:block;opacity:1}.menubar{position:absolute;top:0;left:0;right:0;height:28px;background:rgba(255,255,255,0.8);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;gap:1rem;font-size:13px;z-index:100}.menubar-item{padding:0 0.5rem;cursor:pointer;color:var(--text);font-weight:500;transition:all 0.3s}.menubar-item:hover{background:rgba(0,0,0,0.05);border-radius:4px}.menubar-right{margin-left:auto;display:flex;gap:0.75rem;align-items:center}.menu-icon{cursor:pointer;padding:0 0.25rem}.menu-icon:hover{opacity:0.7}.dock{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:var(--dock-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:16px;border:1px solid rgba(255,255,255,0.3);padding:8px 12px;display:flex;gap:8px;box-shadow:var(--shadow);z-index:99}.dock-item{width:52px;height:52px;background:rgba(255,255,255,0.9);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.dock-item:hover{transform:translateY(-8px) scale(1.1)}.dock-item:active{transform:translateY(-4px) scale(1.05)}.window{position:absolute;background:var(--window-bg);border-radius:12px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;display:none;flex-direction:column;min-width:320px;min-height:200px;max-width:90vw;max-height:calc(100vh - 120px)}.window.show{display:flex}.window-header{height:40px;background:var(--window-header);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;cursor:move}.window-title{font-size:13px;font-weight:600;color:var(--text);flex:1;text-align:center}.window-controls{display:flex;gap:8px;position:absolute;left:12px}.window-btn{width:12px;height:12px;border-radius:50%;border:none;cursor:pointer;transition:all 0.3s}.window-btn.close{background:var(--red)}.window-btn.minimize{background:var(--yellow)}.window-btn.maximize{background:var(--green)}.window-btn:hover{opacity:0.8;transform:scale(1.1)}.window-content{flex:1;overflow:auto;padding:16px;background:#fff}.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem}.game-card{background:linear-gradient(135deg,#667eea,#764ba2);padding:1.5rem;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.3s;color:#fff}.game-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(102,126,234,0.4)}.game-icon{font-size:48px;margin-bottom:0.5rem}#gameCanvas{width:100%;max-width:400px;height:400px;background:#000;border-radius:8px;margin:1rem auto;display:block}.game-info{text-align:center;margin:1rem;font-size:16px;font-weight:600;color:var(--text)}.game-controls{display:flex;gap:1rem;justify-content:center;margin:1rem;flex-wrap:wrap}.game-btn{padding:0.75rem 1.5rem;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:all 0.3s}.game-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,122,255,0.4)}.file-list{list-style:none;padding:0}.file-item{padding:0.75rem 1rem;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;gap:0.5rem;transition:background 0.2s}.file-item:hover{background:#f5f5f5}.file-icon{font-size:20px}.terminal{background:#000;color:#0f0;font-family:'Courier New',monospace;padding:1rem;height:100%;overflow-y:auto;font-size:14px}.terminal-line{margin:4px 0}.terminal-input{display:flex;gap:0.5rem;margin-top:0.5rem}.terminal-prompt{color:#0f0}.terminal-field{flex:1;background:transparent;border:none;color:#0f0;font-family:inherit;font-size:inherit;outline:none}.editor-toolbar{background:#f5f5f5;padding:0.5rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem}.editor-btn{padding:0.4rem 0.8rem;background:#fff;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:12px;transition:background 0.2s}.editor-btn:hover{background:#e0e0e0}.editor-textarea{width:100%;height:100%;border:none;padding:1rem;font-family:'Courier New',monospace;font-size:14px;resize:none;outline:none}@media (max-width:768px){.menubar{font-size:11px;padding:0 0.5rem;gap:0.5rem}.dock{bottom:4px;padding:6px 8px;gap:6px}.dock-item{width:44px;height:44px;font-size:24px}.window{min-width:280px;max-width:95vw}}
+:root{--os-bg:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--dock-bg:rgba(255,255,255,0.3);--window-bg:rgba(255,255,255,0.95);--window-header:rgba(246,246,246,0.98);--text:#1d1d1f;--text-secondary:#6e6e73;--blue:#007AFF;--red:#FF3B30;--green:#34C759;--yellow:#FFCC00;--border:rgba(0,0,0,0.1);--shadow:0 8px 32px rgba(0,0,0,0.15);--blur:blur(20px)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--os-bg);overflow:hidden;width:100vw;height:100vh;position:fixed;user-select:none;-webkit-user-select:none}
+#boot{position:fixed;inset:0;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;opacity:1;transition:opacity 0.5s}
+.boot-logo{font-size:4rem;margin-bottom:2rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}}
+.boot-progress{width:200px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden;margin-top:1rem}
+.boot-bar{height:100%;background:var(--blue);width:0;transition:width 0.3s}
+.boot-text{margin-top:1rem;font-size:0.875rem;color:#999}
+#desktop{position:fixed;inset:0;display:none;opacity:0;transition:opacity 0.5s}
+#desktop.show{display:block;opacity:1}
+.menubar{position:absolute;top:0;left:0;right:0;height:28px;background:rgba(255,255,255,0.8);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;gap:1rem;font-size:13px;z-index:100}
+.menubar-item{padding:0 0.5rem;cursor:pointer;color:var(--text);font-weight:500;transition:all 0.3s}
+.menubar-item:hover{background:rgba(0,0,0,0.05);border-radius:4px}
+.menubar-right{margin-left:auto;display:flex;gap:0.75rem;align-items:center}
+.menu-icon{cursor:pointer;padding:0 0.25rem}
+.menu-icon:hover{opacity:0.7}
+.dock{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:var(--dock-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:16px;border:1px solid rgba(255,255,255,0.3);padding:8px 12px;display:flex;gap:8px;box-shadow:var(--shadow);z-index:99}
+.dock-item{width:52px;height:52px;background:rgba(255,255,255,0.9);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.dock-item:hover{transform:translateY(-8px) scale(1.1)}
+.dock-item:active{transform:translateY(-4px) scale(1.05)}
+.window{position:absolute;background:var(--window-bg);border-radius:12px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;display:none;flex-direction:column;min-width:320px;min-height:200px;max-width:90vw;max-height:calc(100vh - 120px)}
+.window.show{display:flex}
+.window-header{height:40px;background:var(--window-header);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;cursor:move}
+.window-title{font-size:13px;font-weight:600;color:var(--text);flex:1;text-align:center}
+.window-controls{display:flex;gap:8px;position:absolute;left:12px}
+.window-btn{width:12px;height:12px;border-radius:50%;border:none;cursor:pointer;transition:all 0.3s}
+.window-btn.close{background:var(--red)}
+.window-btn.minimize{background:var(--yellow)}
+.window-btn.maximize{background:var(--green)}
+.window-btn:hover{opacity:0.8;transform:scale(1.1)}
+.window-content{flex:1;overflow:auto;padding:16px;background:#fff}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem}
+.app-card{background:linear-gradient(135deg,#667eea,#764ba2);padding:1.5rem;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.3s;color:#fff}
+.app-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(102,126,234,0.4)}
+.app-icon{font-size:48px;margin-bottom:0.5rem}
+#gameCanvas{width:100%;max-width:400px;height:400px;background:#000;border-radius:8px;margin:1rem auto;display:block}
+.info-display{text-align:center;margin:1rem;font-size:16px;font-weight:600;color:var(--text)}
+.btn-group{display:flex;gap:1rem;justify-content:center;margin:1rem;flex-wrap:wrap}
+.btn{padding:0.75rem 1.5rem;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:all 0.3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,122,255,0.4)}
+.btn.secondary{background:var(--text-secondary)}
+.btn.success{background:var(--green)}
+.btn.danger{background:var(--red)}
+.list{list-style:none;padding:0}
+.list-item{padding:0.75rem 1rem;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;gap:0.5rem;transition:background 0.2s}
+.list-item:hover{background:#f5f5f5}
+.list-icon{font-size:20px}
+.terminal{background:#000;color:#0f0;font-family:'Courier New',monospace;padding:1rem;height:100%;overflow-y:auto;font-size:14px}
+.terminal-line{margin:4px 0}
+.terminal-input{display:flex;gap:0.5rem;margin-top:0.5rem}
+.terminal-prompt{color:#0f0}
+.terminal-field{flex:1;background:transparent;border:none;color:#0f0;font-family:inherit;font-size:inherit;outline:none}
+.toolbar{background:#f5f5f5;padding:0.5rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem;flex-wrap:wrap}
+.toolbar-btn{padding:0.4rem 0.8rem;background:#fff;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:12px;transition:background 0.2s}
+.toolbar-btn:hover{background:#e0e0e0}
+.textarea{width:100%;height:100%;border:none;padding:1rem;font-family:'Courier New',monospace;font-size:14px;resize:none;outline:none}
+.input-field{padding:0.4rem;border:1px solid var(--border);border-radius:4px;font-size:12px}
+.status-msg{padding:0.5rem 1rem;margin:0.5rem 0;border-radius:6px;font-size:13px}
+.status-success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+.status-error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+.status-info{background:#d1ecf1;color:#0c5460;border:1px solid #bee5eb}
+@media (max-width:768px){.menubar{font-size:11px;padding:0 0.5rem;gap:0.5rem}.dock{bottom:4px;padding:6px 8px;gap:6px}.dock-item{width:44px;height:44px;font-size:24px}.window{min-width:280px;max-width:95vw}}
 </style>
 </head>
 <body>
-<div id="boot"><div class="boot-logo">🔥</div><div class="boot-progress"><div class="boot-bar" id="bootBar"></div></div><div class="boot-text" id="bootText">Initializing...</div></div>
+<div id="boot">
+<div class="boot-logo">🔥</div>
+<div class="boot-progress"><div class="boot-bar" id="bootBar"></div></div>
+<div class="boot-text" id="bootText">Initializing...</div>
+</div>
 <div id="desktop">
-<div class="menubar"><div class="menubar-item" style="font-weight:700">🔥 PhoenixOS</div><div class="menubar-item" id="menuFile">File</div><div class="menubar-item" id="menuEdit">Edit</div><div class="menubar-right"><div class="menu-icon" id="langBtn" onclick="OS.i18n.toggle()">EN</div><div class="menu-icon" id="clock">00:00</div><div class="menu-icon" onclick="OS.shutdown()">⏻</div></div></div>
-<div class="dock"><div class="dock-item" onclick="OS.apps.files()" title="Files">📁</div><div class="dock-item" onclick="OS.apps.terminal()" title="Terminal">⌨️</div><div class="dock-item" onclick="OS.apps.editor()" title="Editor">📝</div><div class="dock-item" onclick="OS.apps.games()" title="Games">🎮</div></div>
+<div class="menubar">
+<div class="menubar-item" style="font-weight:700">🔥 PhoenixOS</div>
+<div class="menubar-item" id="menuFile">File</div>
+<div class="menubar-item" id="menuEdit">Edit</div>
+<div class="menubar-right">
+<div class="menu-icon" id="langBtn" onclick="PhoenixOS.modules.i18n.toggle()">EN</div>
+<div class="menu-icon" id="clock">00:00</div>
+<div class="menu-icon" onclick="PhoenixOS.core.shutdown()">⏻</div>
+</div>
+</div>
+<div class="dock">
+<div class="dock-item" onclick="PhoenixOS.apps.files()" title="Files">📁</div>
+<div class="dock-item" onclick="PhoenixOS.apps.terminal()" title="Terminal">⌨️</div>
+<div class="dock-item" onclick="PhoenixOS.apps.editor()" title="Editor">📝</div>
+<div class="dock-item" onclick="PhoenixOS.apps.bluetooth()" title="Bluetooth">📡</div>
+<div class="dock-item" onclick="PhoenixOS.apps.games()" title="Games">🎮</div>
+</div>
 </div>
 <script>
 'use strict';
-const OS={windows:new Map(),zIndex:1000,i18n:{lang:'fr',t:{en:{boot:{init:'Initializing...',loading:'Loading modules...',ready:'Ready'},menu:{file:'File',edit:'Edit'},apps:{files:'Files',terminal:'Terminal',editor:'Editor',games:'Games'},games:{snake:'Snake',tictactoe:'Tic-Tac-Toe',memory:'Memory',pong:'Pong',score:'Score',use:'Use arrows',restart:'Restart',back:'Back'},files:{new:'New File',open:'Open',save:'Save',delete:'Delete',trash:'Trash',name:'Name',empty:'No files'},terminal:{welcome:'Welcome to PhoenixOS Terminal',type:'Type "help" for commands',help:'Available commands: help, clear, ls, echo, date'},editor:{new:'New',open:'Open',save:'Save',title:'Text Editor'}},fr:{boot:{init:'Initialisation...',loading:'Chargement des modules...',ready:'Prêt'},menu:{file:'Fichier',edit:'Édition'},apps:{files:'Fichiers',terminal:'Terminal',editor:'Éditeur',games:'Jeux'},games:{snake:'Snake',tictactoe:'Morpion',memory:'Memory',pong:'Pong',score:'Score',use:'Utilisez les flèches',restart:'Rejouer',back:'Retour'},files:{new:'Nouveau',open:'Ouvrir',save:'Enregistrer',delete:'Supprimer',trash:'Corbeille',name:'Nom',empty:'Aucun fichier'},terminal:{welcome:'Bienvenue sur le Terminal PhoenixOS',type:'Tapez "help" pour les commandes',help:'Commandes disponibles: help, clear, ls, echo, date'},editor:{new:'Nouveau',open:'Ouvrir',save:'Enregistrer',title:'Éditeur de texte'}}},get(k){const keys=k.split('.');let v=this.t[this.lang];for(const key of keys)v=v?.[key];return v||k},toggle(){this.lang=this.lang==='fr'?'en':'fr';localStorage.setItem('os_lang',this.lang);document.getElementById('langBtn').textContent=this.lang==='fr'?'EN':'FR';document.getElementById('menuFile').textContent=this.get('menu.file');document.getElementById('menuEdit').textContent=this.get('menu.edit')}},fs:{files:[],trash:[],init(){const stored=localStorage.getItem('os_files');if(stored)this.files=JSON.parse(stored)},save(){localStorage.setItem('os_files',JSON.stringify(this.files))},create(name,content=''){this.files.push({name,content,date:new Date().toISOString()});this.save()},read(name){return this.files.find(f=>f.name===name)?.content||''},write(name,content){const file=this.files.find(f=>f.name===name);if(file)file.content=content;else this.create(name,content);this.save()},delete(name){const idx=this.files.findIndex(f=>f.name===name);if(idx>-1){this.trash.push(this.files[idx]);this.files.splice(idx,1);this.save()}},list(){return this.files.map(f=>f.name)}},system:{async boot(){const bar=document.getElementById('bootBar');const text=document.getElementById('bootText');const steps=[{p:30,t:OS.i18n.get('boot.init'),d:500},{p:60,t:OS.i18n.get('boot.loading'),d:800},{p:100,t:OS.i18n.get('boot.ready'),d:500}];for(const s of steps){await new Promise(r=>setTimeout(r,s.d));bar.style.width=s.p+'%';text.textContent=s.t}await new Promise(r=>setTimeout(r,300));document.getElementById('boot').style.opacity='0';setTimeout(()=>{document.getElementById('boot').style.display='none';document.getElementById('desktop').classList.add('show')},500);this.updateClock();setInterval(()=>this.updateClock(),1000)},updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString(OS.i18n.lang==='fr'?'fr-FR':'en-US',{hour:'2-digit',minute:'2-digit'})},async shutdown(){const desktop=document.getElementById('desktop');desktop.style.opacity='0';await new Promise(r=>setTimeout(r,500));location.reload()}},win:{create(id,title,content,opts={}){if(OS.windows.has(id)){const w=OS.windows.get(id);w.classList.add('show');w.style.zIndex=++OS.zIndex;return w}const w=document.createElement('div');w.className='window show';w.id=`win-${id}`;w.style.width=(opts.w||600)+'px';w.style.height=(opts.h||400)+'px';w.style.top=(opts.y||100)+'px';w.style.left=(opts.x||100)+'px';w.style.zIndex=++OS.zIndex;w.innerHTML=`<div class="window-header"><div class="window-controls"><button class="window-btn close"></button><button class="window-btn minimize"></button><button class="window-btn maximize"></button></div><div class="window-title">${title}</div></div><div class="window-content"></div>`;w.querySelector('.window-content').appendChild(content);w.querySelector('.close').onclick=()=>this.close(id);w.querySelector('.minimize').onclick=()=>this.minimize(id);w.querySelector('.maximize').onclick=()=>w.classList.toggle('maximized');this.drag(w);w.addEventListener('mousedown',()=>w.style.zIndex=++OS.zIndex);document.getElementById('desktop').appendChild(w);OS.windows.set(id,w);return w},drag(w){const h=w.querySelector('.window-header');let dragging=false,x,y,ix,iy;h.onmousedown=h.ontouchstart=e=>{if(e.target.classList.contains('window-btn'))return;dragging=true;const ev=e.touches?e.touches[0]:e;ix=ev.clientX-w.offsetLeft;iy=ev.clientY-w.offsetTop};document.onmousemove=document.ontouchmove=e=>{if(!dragging)return;e.preventDefault();const ev=e.touches?e.touches[0]:e;x=ev.clientX-ix;y=ev.clientY-iy;w.style.left=x+'px';w.style.top=y+'px'};document.onmouseup=document.ontouchend=()=>dragging=false},close(id){const w=OS.windows.get(id);if(w){w.classList.remove('show');setTimeout(()=>{w.remove();OS.windows.delete(id)},300)}},minimize(id){OS.windows.get(id)?.classList.remove('show')}},apps:{games(){const div=document.createElement('div');div.innerHTML=`<div class="games-grid"><div class="game-card" onclick="OS.games.snake()"><div class="game-icon">🐍</div><div>${OS.i18n.get('games.snake')}</div></div><div class="game-card" onclick="OS.games.tictactoe()"><div class="game-icon">⭕</div><div>${OS.i18n.get('games.tictactoe')}</div></div><div class="game-card" onclick="OS.games.memory()"><div class="game-icon">🧠</div><div>${OS.i18n.get('games.memory')}</div></div><div class="game-card" onclick="OS.games.pong()"><div class="game-icon">🏓</div><div>${OS.i18n.get('games.pong')}</div></div></div>`;OS.win.create('games',OS.i18n.get('apps.games'),div,{w:500,h:400})},files(){const div=document.createElement('div');div.innerHTML=`<div style="margin-bottom:1rem"><button class="editor-btn" onclick="OS.fs.create('new_'+Date.now()+'.txt','');OS.apps.files()">${OS.i18n.get('files.new')}</button></div><ul class="file-list" id="fileList"></ul>`;const list=div.querySelector('#fileList');OS.fs.files.forEach(f=>{const li=document.createElement('li');li.className='file-item';li.innerHTML=`<span class="file-icon">📄</span><span>${f.name}</span>`;li.onclick=()=>{OS.apps.editor(f.name)};list.appendChild(li)});if(OS.fs.files.length===0)list.innerHTML=`<li style="padding:2rem;text-align:center;color:#999">${OS.i18n.get('files.empty')}</li>`;OS.win.create('files',OS.i18n.get('apps.files'),div,{w:400,h:500})},terminal(){const div=document.createElement('div');div.className='terminal';div.innerHTML=`<div class="terminal-line">${OS.i18n.get('terminal.welcome')}</div><div class="terminal-line">${OS.i18n.get('terminal.type')}</div><div class="terminal-input"><span class="terminal-prompt">$</span><input type="text" class="terminal-field" id="termInput"></div>`;const input=div.querySelector('#termInput');const output=div;const write=t=>{const line=document.createElement('div');line.className='terminal-line';line.textContent=t;output.insertBefore(line,output.querySelector('.terminal-input'))};input.onkeydown=e=>{if(e.key!=='Enter')return;const cmd=input.value.trim();input.value='';write('$ '+cmd);if(!cmd)return;const parts=cmd.split(' ');switch(parts[0]){case 'help':write(OS.i18n.get('terminal.help'));break;case 'clear':output.querySelectorAll('.terminal-line').forEach(l=>l.remove());break;case 'ls':OS.fs.list().forEach(f=>write(f));break;case 'echo':write(parts.slice(1).join(' '));break;case 'date':write(new Date().toString());break;default:write('Command not found: '+parts[0])}};setTimeout(()=>input.focus(),100);OS.win.create('terminal',OS.i18n.get('apps.terminal'),div,{w:600,h:400})},editor(filename=''){const div=document.createElement('div');div.style.display='flex';div.style.flexDirection='column';div.style.height='100%';div.innerHTML=`<div class="editor-toolbar"><button class="editor-btn" onclick="OS.apps.editor()">${OS.i18n.get('editor.new')}</button><button class="editor-btn" id="editorSave">${OS.i18n.get('editor.save')}</button><input type="text" id="editorName" placeholder="${OS.i18n.get('files.name')}" value="${filename}" style="margin-left:auto;padding:0.4rem;border:1px solid var(--border);border-radius:4px;font-size:12px"></div><textarea class="editor-textarea" id="editorText">${filename?OS.fs.read(filename):''}</textarea>`;div.querySelector('#editorSave').onclick=()=>{const name=div.querySelector('#editorName').value.trim();const text=div.querySelector('#editorText').value;if(name){OS.fs.write(name,text);alert('Saved!')}};OS.win.create('editor'+Date.now(),OS.i18n.get('editor.title'),div,{w:700,h:500})}},games:{current:null,loop:null,ctx:null,snake(){const div=document.createElement('div');div.innerHTML=`<div class="game-info" id="info">${OS.i18n.get('games.score')}: 0 | ${OS.i18n.get('games.use')}</div><canvas id="gameCanvas" width="400" height="400"></canvas><div class="game-controls"><button class="game-btn" onclick="OS.games.snake()">${OS.i18n.get('games.restart')}</button><button class="game-btn" onclick="OS.win.close('game')">${OS.i18n.get('games.back')}</button></div>`;OS.win.create('game','🐍 '+OS.i18n.get('games.snake'),div,{w:500,h:600});if(this.loop)clearInterval(this.loop);this.ctx=document.getElementById('gameCanvas').getContext('2d');const state={snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:15,y:15},score:0};document.onkeydown=e=>{if(e.key==='ArrowUp'&&state.dir.y===0)state.dir={x:0,y:-1};else if(e.key==='ArrowDown'&&state.dir.y===0)state.dir={x:0,y:1};else if(e.key==='ArrowLeft'&&state.dir.x===0)state.dir={x:-1,y:0};else if(e.key==='ArrowRight'&&state.dir.x===0)state.dir={x:1,y:0}};this.loop=setInterval(()=>{const head={x:state.snake[0].x+state.dir.x,y:state.snake[0].y+state.dir.y};if(head.x<0||head.x>=20||head.y<0||head.y>=20||state.snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(this.loop);document.getElementById('info').textContent='Game Over! '+OS.i18n.get('games.score')+': '+state.score;return}state.snake.unshift(head);if(head.x===state.food.x&&head.y===state.food.y){state.score++;state.food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};document.getElementById('info').textContent=OS.i18n.get('games.score')+': '+state.score}else state.snake.pop();this.ctx.fillStyle='#000';this.ctx.fillRect(0,0,400,400);this.ctx.fillStyle='#0f0';state.snake.forEach(s=>this.ctx.fillRect(s.x*20,s.y*20,18,18));this.ctx.fillStyle='#f00';this.ctx.fillRect(state.food.x*20,state.food.y*20,18,18)},150)},tictactoe(){const div=document.createElement('div');div.innerHTML=`<div class="game-info" id="info">${OS.i18n.get('games.tictactoe')}</div><canvas id="gameCanvas" width="400" height="400"></canvas><div class="game-controls"><button class="game-btn" onclick="OS.games.tictactoe()">${OS.i18n.get('games.restart')}</button><button class="game-btn" onclick="OS.win.close('game')">${OS.i18n.get('games.back')}</button></div>`;OS.win.create('game','⭕ '+OS.i18n.get('games.tictactoe'),div,{w:500,h:600});const canvas=document.getElementById('gameCanvas');this.ctx=canvas.getContext('2d');const state={board:Array(9).fill(''),player:'X',over:false};const draw=()=>{this.ctx.fillStyle='#fff';this.ctx.fillRect(0,0,400,400);this.ctx.strokeStyle='#000';this.ctx.lineWidth=2;for(let i=1;i<3;i++){this.ctx.beginPath();this.ctx.moveTo(i*133,0);this.ctx.lineTo(i*133,400);this.ctx.stroke();this.ctx.beginPath();this.ctx.moveTo(0,i*133);this.ctx.lineTo(400,i*133);this.ctx.stroke()}this.ctx.font='bold 60px Arial';state.board.forEach((v,i)=>{if(!v)return;const x=i%3*133+66;const y=Math.floor(i/3)*133+90;this.ctx.fillStyle=v==='X'?'#007AFF':'#FF3B30';this.ctx.fillText(v,x-20,y)})};draw();canvas.onclick=e=>{if(state.over)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/133);const y=Math.floor((e.clientY-rect.top)/133);const idx=y*3+x;if(state.board[idx])return;state.board[idx]=state.player;draw();const win=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(l=>state.board[l[0]]&&state.board[l[0]]===state.board[l[1]]&&state.board[l[1]]===state.board[l[2]]);if(win){document.getElementById('info').textContent=state.player+' wins!';state.over=true}else if(!state.board.includes('')){document.getElementById('info').textContent='Draw!';state.over=true}else state.player=state.player==='X'?'O':'X'}},memory(){const div=document.createElement('div');div.innerHTML=`<div class="game-info" id="info">Pairs: 0/8</div><canvas id="gameCanvas" width="400" height="400"></canvas><div class="game-controls"><button class="game-btn" onclick="OS.games.memory()">${OS.i18n.get('games.restart')}</button><button class="game-btn" onclick="OS.win.close('game')">${OS.i18n.get('games.back')}</button></div>`;OS.win.create('game','🧠 '+OS.i18n.get('games.memory'),div,{w:500,h:600});const canvas=document.getElementById('gameCanvas');this.ctx=canvas.getContext('2d');const icons=['🎮','🎨','🎭','🎪','🎯','🎲','🎸','🎹'];const cards=[...icons,...icons].sort(()=>Math.random()-0.5);const state={revealed:Array(16).fill(false),found:Array(16).fill(false),first:null,locked:false,pairs:0};const draw=()=>{this.ctx.fillStyle='#f5f5f5';this.ctx.fillRect(0,0,400,400);for(let i=0;i<16;i++){const x=i%4*100;const y=Math.floor(i/4)*100;if(state.found[i]){this.ctx.fillStyle='#fff';this.ctx.fillRect(x+5,y+5,90,90)}else if(state.revealed[i]){this.ctx.fillStyle='#007AFF';this.ctx.fillRect(x+5,y+5,90,90);this.ctx.font='40px Arial';this.ctx.fillText(cards[i],x+30,y+60)}else{this.ctx.fillStyle='#007AFF';this.ctx.fillRect(x+5,y+5,90,90)}}};draw();canvas.onclick=e=>{if(state.locked)return;const rect=canvas.getBoundingClientRect();const x=Math.floor((e.clientX-rect.left)/100);const y=Math.floor((e.clientY-rect.top)/100);const idx=y*4+x;if(state.revealed[idx]||state.found[idx])return;state.revealed[idx]=true;draw();if(state.first===null){state.first=idx}else{state.locked=true;setTimeout(()=>{if(cards[state.first]===cards[idx]){state.found[state.first]=state.found[idx]=true;state.pairs++;document.getElementById('info').textContent='Pairs: '+state.pairs+'/8';if(state.pairs===8)document.getElementById('info').textContent='You won!'}state.revealed[state.first]=state.revealed[idx]=false;state.first=null;state.locked=false;draw()},1000)}}},pong(){const div=document.createElement('div');div.innerHTML=`<div class="game-info" id="info">${OS.i18n.get('games.score')}: 0 - 0</div><canvas id="gameCanvas" width="400" height="400"></canvas><div class="game-controls"><button class="game-btn" onclick="OS.games.pong()">${OS.i18n.get('games.restart')}</button><button class="game-btn" onclick="OS.win.close('game')">${OS.i18n.get('games.back')}</button></div>`;OS.win.create('game','🏓 '+OS.i18n.get('games.pong'),div,{w:500,h:600});if(this.loop)clearInterval(this.loop);const canvas=document.getElementById('gameCanvas');this.ctx=canvas.getContext('2d');const state={ball:{x:200,y:200,dx:3,dy:3},p1:{y:160,score:0},p2:{y:160,score:0}};canvas.onmousemove=e=>{const rect=canvas.getBoundingClientRect();state.p1.y=e.clientY-rect.top-40};this.loop=setInterval(()=>{state.ball.x+=state.ball.dx;state.ball.y+=state.ball.dy;if(state.ball.y<0||state.ball.y>390)state.ball.dy*=-1;if(state.ball.x<20&&state.ball.y>state.p1.y&&state.ball.y<state.p1.y+80)state.ball.dx*=-1;if(state.ball.x>370&&state.ball.y>state.p2.y&&state.ball.y<state.p2.y+80)state.ball.dx*=-1;if(state.ball.x<0){state.p2.score++;state.ball={x:200,y:200,dx:3,dy:3};document.getElementById('info').textContent=OS.i18n.get('games.score')+': '+state.p1.score+' - '+state.p2.score}if(state.ball.x>400){state.p1.score++;state.ball={x:200,y:200,dx:-3,dy:3};document.getElementById('info').textContent=OS.i18n.get('games.score')+': '+state.p1.score+' - '+state.p2.score}state.p2.y+=(state.ball.y-state.p2.y-40)*0.1;this.ctx.fillStyle='#000';this.ctx.fillRect(0,0,400,400);this.ctx.fillStyle='#fff';this.ctx.fillRect(10,state.p1.y,10,80);this.ctx.fillRect(380,state.p2.y,10,80);this.ctx.beginPath();this.ctx.arc(state.ball.x,state.ball.y,5,0,Math.PI*2);this.ctx.fill()},1000/60)}}};
-OS.fs.init();const lang=localStorage.getItem('os_lang');if(lang)OS.i18n.lang=lang;document.addEventListener('DOMContentLoaded',()=>OS.system.boot());
+
+const PhoenixOS = {
+  core: {
+    windows: new Map(),
+    zIndex: 1000,
+
+    async boot() {
+      const bar = document.getElementById('bootBar');
+      const text = document.getElementById('bootText');
+      const i18n = PhoenixOS.modules.i18n;
+      const steps = [
+        {p: 30, t: i18n.get('boot.init'), d: 500},
+        {p: 60, t: i18n.get('boot.loading'), d: 800},
+        {p: 100, t: i18n.get('boot.ready'), d: 500}
+      ];
+      for (const s of steps) {
+        await new Promise(r => setTimeout(r, s.d));
+        bar.style.width = s.p + '%';
+        text.textContent = s.t;
+      }
+      await new Promise(r => setTimeout(r, 300));
+      document.getElementById('boot').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('boot').style.display = 'none';
+        document.getElementById('desktop').classList.add('show');
+      }, 500);
+      this.updateClock();
+      setInterval(() => this.updateClock(), 1000);
+    },
+
+    updateClock() {
+      const now = new Date();
+      const lang = PhoenixOS.modules.i18n.lang;
+      document.getElementById('clock').textContent = now.toLocaleTimeString(
+        lang === 'fr' ? 'fr-FR' : 'en-US',
+        {hour: '2-digit', minute: '2-digit'}
+      );
+    },
+
+    async shutdown() {
+      document.getElementById('desktop').style.opacity = '0';
+      await new Promise(r => setTimeout(r, 500));
+      location.reload();
+    },
+
+    createWindow(id, title, content, opts = {}) {
+      if (this.windows.has(id)) {
+        const w = this.windows.get(id);
+        w.classList.add('show');
+        w.style.zIndex = ++this.zIndex;
+        return w;
+      }
+      const w = document.createElement('div');
+      w.className = 'window show';
+      w.id = `win-${id}`;
+      w.style.width = (opts.w || 600) + 'px';
+      w.style.height = (opts.h || 400) + 'px';
+      w.style.top = (opts.y || 100) + 'px';
+      w.style.left = (opts.x || 100) + 'px';
+      w.style.zIndex = ++this.zIndex;
+      w.innerHTML = `
+        <div class="window-header">
+          <div class="window-controls">
+            <button class="window-btn close"></button>
+            <button class="window-btn minimize"></button>
+            <button class="window-btn maximize"></button>
+          </div>
+          <div class="window-title">${title}</div>
+        </div>
+        <div class="window-content"></div>
+      `;
+      w.querySelector('.window-content').appendChild(content);
+      w.querySelector('.close').onclick = () => this.closeWindow(id);
+      w.querySelector('.minimize').onclick = () => this.minimizeWindow(id);
+      w.querySelector('.maximize').onclick = () => w.classList.toggle('maximized');
+      this.makeDraggable(w);
+      w.addEventListener('mousedown', () => w.style.zIndex = ++this.zIndex);
+      document.getElementById('desktop').appendChild(w);
+      this.windows.set(id, w);
+      return w;
+    },
+
+    makeDraggable(w) {
+      const h = w.querySelector('.window-header');
+      let dragging = false, x, y, ix, iy;
+      h.onmousedown = h.ontouchstart = e => {
+        if (e.target.classList.contains('window-btn')) return;
+        dragging = true;
+        const ev = e.touches ? e.touches[0] : e;
+        ix = ev.clientX - w.offsetLeft;
+        iy = ev.clientY - w.offsetTop;
+      };
+      document.onmousemove = document.ontouchmove = e => {
+        if (!dragging) return;
+        e.preventDefault();
+        const ev = e.touches ? e.touches[0] : e;
+        x = ev.clientX - ix;
+        y = ev.clientY - iy;
+        w.style.left = x + 'px';
+        w.style.top = y + 'px';
+      };
+      document.onmouseup = document.ontouchend = () => dragging = false;
+    },
+
+    closeWindow(id) {
+      const w = this.windows.get(id);
+      if (w) {
+        w.classList.remove('show');
+        setTimeout(() => {
+          w.remove();
+          this.windows.delete(id);
+        }, 300);
+      }
+    },
+
+    minimizeWindow(id) {
+      this.windows.get(id)?.classList.remove('show');
+    }
+  },
+
+  modules: {
+    i18n: {
+      lang: 'fr',
+      translations: {
+        en: {
+          boot: {init: 'Initializing...', loading: 'Loading modules...', ready: 'Ready'},
+          menu: {file: 'File', edit: 'Edit'},
+          apps: {files: 'Files', terminal: 'Terminal', editor: 'Editor', bluetooth: 'Bluetooth', games: 'Games'},
+          games: {snake: 'Snake', tictactoe: 'Tic-Tac-Toe', memory: 'Memory', pong: 'Pong', score: 'Score', use: 'Use arrows', restart: 'Restart', back: 'Back'},
+          files: {new: 'New File', open: 'Open', save: 'Save', delete: 'Delete', trash: 'Trash', name: 'Name', empty: 'No files'},
+          terminal: {welcome: 'Welcome to PhoenixOS Terminal', type: 'Type "help" for commands', help: 'Available commands: help, clear, ls, echo, date, ble'},
+          editor: {new: 'New', open: 'Open', save: 'Save', title: 'Text Editor'},
+          bluetooth: {title: 'Bluetooth Scanner', scan: 'Scan Devices', connect: 'Connect', disconnect: 'Disconnect', esp32: 'ESP32 Sensor', notSupported: 'Web Bluetooth not supported', scanning: 'Scanning...', connected: 'Connected', disconnected: 'Disconnected', error: 'Error', distance: 'Distance'}
+        },
+        fr: {
+          boot: {init: 'Initialisation...', loading: 'Chargement des modules...', ready: 'Prêt'},
+          menu: {file: 'Fichier', edit: 'Édition'},
+          apps: {files: 'Fichiers', terminal: 'Terminal', editor: 'Éditeur', bluetooth: 'Bluetooth', games: 'Jeux'},
+          games: {snake: 'Snake', tictactoe: 'Morpion', memory: 'Memory', pong: 'Pong', score: 'Score', use: 'Utilisez les flèches', restart: 'Rejouer', back: 'Retour'},
+          files: {new: 'Nouveau', open: 'Ouvrir', save: 'Enregistrer', delete: 'Supprimer', trash: 'Corbeille', name: 'Nom', empty: 'Aucun fichier'},
+          terminal: {welcome: 'Bienvenue sur le Terminal PhoenixOS', type: 'Tapez "help" pour les commandes', help: 'Commandes disponibles: help, clear, ls, echo, date, ble'},
+          editor: {new: 'Nouveau', open: 'Ouvrir', save: 'Enregistrer', title: 'Éditeur de texte'},
+          bluetooth: {title: 'Scanner Bluetooth', scan: 'Scanner', connect: 'Connecter', disconnect: 'Déconnecter', esp32: 'Capteur ESP32', notSupported: 'Web Bluetooth non supporté', scanning: 'Scan en cours...', connected: 'Connecté', disconnected: 'Déconnecté', error: 'Erreur', distance: 'Distance'}
+        }
+      },
+
+      get(key) {
+        const keys = key.split('.');
+        let value = this.translations[this.lang];
+        for (const k of keys) value = value?.[k];
+        return value || key;
+      },
+
+      toggle() {
+        this.lang = this.lang === 'fr' ? 'en' : 'fr';
+        localStorage.setItem('os_lang', this.lang);
+        document.getElementById('langBtn').textContent = this.lang === 'fr' ? 'EN' : 'FR';
+        document.getElementById('menuFile').textContent = this.get('menu.file');
+        document.getElementById('menuEdit').textContent = this.get('menu.edit');
+      }
+    },
+
+    filesystem: {
+      files: [],
+      trash: [],
+
+      init() {
+        const stored = localStorage.getItem('os_files');
+        if (stored) this.files = JSON.parse(stored);
+      },
+
+      save() {
+        localStorage.setItem('os_files', JSON.stringify(this.files));
+      },
+
+      create(name, content = '') {
+        this.files.push({name, content, date: new Date().toISOString()});
+        this.save();
+      },
+
+      read(name) {
+        return this.files.find(f => f.name === name)?.content || '';
+      },
+
+      write(name, content) {
+        const file = this.files.find(f => f.name === name);
+        if (file) file.content = content;
+        else this.create(name, content);
+        this.save();
+      },
+
+      delete(name) {
+        const idx = this.files.findIndex(f => f.name === name);
+        if (idx > -1) {
+          this.trash.push(this.files[idx]);
+          this.files.splice(idx, 1);
+          this.save();
+        }
+      },
+
+      list() {
+        return this.files.map(f => f.name);
+      }
+    },
+
+    bluetooth: {
+      device: null,
+      characteristic: null,
+
+      isSupported() {
+        return typeof navigator.bluetooth !== 'undefined';
+      },
+
+      async scan(filters = []) {
+        if (!this.isSupported()) {
+          throw new Error('Web Bluetooth not supported');
+        }
+        const device = await navigator.bluetooth.requestDevice({
+          filters: filters.length > 0 ? filters : [{acceptAllDevices: true}],
+          optionalServices: filters.map(f => f.services).flat()
+        });
+        return device;
+      },
+
+      async connect(device, serviceUUID, charUUID) {
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService(serviceUUID);
+        const characteristic = await service.getCharacteristic(charUUID);
+        this.device = device;
+        this.characteristic = characteristic;
+        return characteristic;
+      },
+
+      async read(characteristic) {
+        const value = await characteristic.readValue();
+        return new TextDecoder().decode(value);
+      },
+
+      async write(characteristic, data) {
+        const encoder = new TextEncoder();
+        await characteristic.writeValue(encoder.encode(data));
+      },
+
+      async startNotifications(characteristic, callback) {
+        await characteristic.startNotifications();
+        characteristic.addEventListener('characteristicvaluechanged', event => {
+          const value = new TextDecoder().decode(event.target.value);
+          callback(value);
+        });
+      },
+
+      disconnect() {
+        if (this.device?.gatt?.connected) {
+          this.device.gatt.disconnect();
+        }
+        this.device = null;
+        this.characteristic = null;
+      }
+    },
+
+    esp32: {
+      SERVICE_UUID: '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+      CHARACTERISTIC_UUID: 'beb5483e-36c1-4688-b7f5-ea07361b26a8',
+      characteristic: null,
+      onData: null,
+
+      async connect(onDataCallback) {
+        const bt = PhoenixOS.modules.bluetooth;
+        if (!bt.isSupported()) {
+          throw new Error('Web Bluetooth not supported');
+        }
+        const device = await bt.scan([{services: [this.SERVICE_UUID]}]);
+        const char = await bt.connect(device, this.SERVICE_UUID, this.CHARACTERISTIC_UUID);
+        this.characteristic = char;
+        this.onData = onDataCallback;
+        await bt.startNotifications(char, data => {
+          if (this.onData) this.onData(data);
+        });
+        return device;
+      },
+
+      disconnect() {
+        PhoenixOS.modules.bluetooth.disconnect();
+        this.characteristic = null;
+        this.onData = null;
+      },
+
+      parseSensorData(data) {
+        const match = data.match(/\d+/);
+        return match ? parseFloat(match[0]) : 0;
+      }
+    },
+
+    games: {
+      snake: {
+        state: null,
+        ctx: null,
+        loop: null,
+
+        init(canvas) {
+          this.ctx = canvas.getContext('2d');
+          this.state = {
+            snake: [{x: 10, y: 10}],
+            dir: {x: 1, y: 0},
+            food: {x: 15, y: 15},
+            score: 0,
+            running: false
+          };
+        },
+
+        start(onScoreUpdate) {
+          if (this.loop) clearInterval(this.loop);
+          this.state.running = true;
+          document.onkeydown = e => {
+            if (!this.state.running) return;
+            if (e.key === 'ArrowUp' && this.state.dir.y === 0) this.state.dir = {x: 0, y: -1};
+            else if (e.key === 'ArrowDown' && this.state.dir.y === 0) this.state.dir = {x: 0, y: 1};
+            else if (e.key === 'ArrowLeft' && this.state.dir.x === 0) this.state.dir = {x: -1, y: 0};
+            else if (e.key === 'ArrowRight' && this.state.dir.x === 0) this.state.dir = {x: 1, y: 0};
+          };
+          this.loop = setInterval(() => {
+            const s = this.state;
+            const head = {x: s.snake[0].x + s.dir.x, y: s.snake[0].y + s.dir.y};
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || s.snake.some(p => p.x === head.x && p.y === head.y)) {
+              this.stop();
+              onScoreUpdate(s.score, true);
+              return;
+            }
+            s.snake.unshift(head);
+            if (head.x === s.food.x && head.y === s.food.y) {
+              s.score++;
+              s.food = {x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20)};
+              onScoreUpdate(s.score, false);
+            } else {
+              s.snake.pop();
+            }
+            this.draw();
+          }, 150);
+        },
+
+        draw() {
+          const s = this.state;
+          this.ctx.fillStyle = '#000';
+          this.ctx.fillRect(0, 0, 400, 400);
+          this.ctx.fillStyle = '#0f0';
+          s.snake.forEach(p => this.ctx.fillRect(p.x * 20, p.y * 20, 18, 18));
+          this.ctx.fillStyle = '#f00';
+          this.ctx.fillRect(s.food.x * 20, s.food.y * 20, 18, 18);
+        },
+
+        stop() {
+          if (this.loop) clearInterval(this.loop);
+          this.state.running = false;
+        }
+      },
+
+      tictactoe: {
+        state: null,
+        ctx: null,
+
+        init(canvas) {
+          this.ctx = canvas.getContext('2d');
+          this.state = {
+            board: Array(9).fill(''),
+            player: 'X',
+            over: false
+          };
+        },
+
+        draw() {
+          this.ctx.fillStyle = '#fff';
+          this.ctx.fillRect(0, 0, 400, 400);
+          this.ctx.strokeStyle = '#000';
+          this.ctx.lineWidth = 2;
+          for (let i = 1; i < 3; i++) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(i * 133, 0);
+            this.ctx.lineTo(i * 133, 400);
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, i * 133);
+            this.ctx.lineTo(400, i * 133);
+            this.ctx.stroke();
+          }
+          this.ctx.font = 'bold 60px Arial';
+          this.state.board.forEach((v, i) => {
+            if (!v) return;
+            const x = i % 3 * 133 + 66;
+            const y = Math.floor(i / 3) * 133 + 90;
+            this.ctx.fillStyle = v === 'X' ? '#007AFF' : '#FF3B30';
+            this.ctx.fillText(v, x - 20, y);
+          });
+        },
+
+        play(idx, onGameEnd) {
+          if (this.state.over || this.state.board[idx]) return;
+          this.state.board[idx] = this.state.player;
+          this.draw();
+          const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+            .some(l => this.state.board[l[0]] && this.state.board[l[0]] === this.state.board[l[1]] && this.state.board[l[1]] === this.state.board[l[2]]);
+          if (win) {
+            this.state.over = true;
+            onGameEnd(this.state.player + ' wins!');
+          } else if (!this.state.board.includes('')) {
+            this.state.over = true;
+            onGameEnd('Draw!');
+          } else {
+            this.state.player = this.state.player === 'X' ? 'O' : 'X';
+          }
+        }
+      },
+
+      memory: {
+        state: null,
+        ctx: null,
+        icons: ['🎮','🎨','🎭','🎪','🎯','🎲','🎸','🎹'],
+        cards: [],
+
+        init(canvas) {
+          this.ctx = canvas.getContext('2d');
+          this.cards = [...this.icons, ...this.icons].sort(() => Math.random() - 0.5);
+          this.state = {
+            revealed: Array(16).fill(false),
+            found: Array(16).fill(false),
+            first: null,
+            locked: false,
+            pairs: 0
+          };
+        },
+
+        draw() {
+          this.ctx.fillStyle = '#f5f5f5';
+          this.ctx.fillRect(0, 0, 400, 400);
+          for (let i = 0; i < 16; i++) {
+            const x = i % 4 * 100;
+            const y = Math.floor(i / 4) * 100;
+            if (this.state.found[i]) {
+              this.ctx.fillStyle = '#fff';
+              this.ctx.fillRect(x + 5, y + 5, 90, 90);
+            } else if (this.state.revealed[i]) {
+              this.ctx.fillStyle = '#007AFF';
+              this.ctx.fillRect(x + 5, y + 5, 90, 90);
+              this.ctx.font = '40px Arial';
+              this.ctx.fillText(this.cards[i], x + 30, y + 60);
+            } else {
+              this.ctx.fillStyle = '#007AFF';
+              this.ctx.fillRect(x + 5, y + 5, 90, 90);
+            }
+          }
+        },
+
+        play(idx, onPairsUpdate) {
+          if (this.state.locked || this.state.revealed[idx] || this.state.found[idx]) return;
+          this.state.revealed[idx] = true;
+          this.draw();
+          if (this.state.first === null) {
+            this.state.first = idx;
+          } else {
+            this.state.locked = true;
+            setTimeout(() => {
+              if (this.cards[this.state.first] === this.cards[idx]) {
+                this.state.found[this.state.first] = this.state.found[idx] = true;
+                this.state.pairs++;
+                onPairsUpdate(this.state.pairs);
+              }
+              this.state.revealed[this.state.first] = this.state.revealed[idx] = false;
+              this.state.first = null;
+              this.state.locked = false;
+              this.draw();
+            }, 1000);
+          }
+        }
+      },
+
+      pong: {
+        state: null,
+        ctx: null,
+        loop: null,
+
+        init(canvas) {
+          this.ctx = canvas.getContext('2d');
+          this.state = {
+            ball: {x: 200, y: 200, dx: 3, dy: 3},
+            p1: {y: 160, score: 0},
+            p2: {y: 160, score: 0}
+          };
+        },
+
+        start(canvas, onScoreUpdate) {
+          if (this.loop) clearInterval(this.loop);
+          canvas.onmousemove = e => {
+            const rect = canvas.getBoundingClientRect();
+            this.state.p1.y = e.clientY - rect.top - 40;
+          };
+          this.loop = setInterval(() => {
+            const s = this.state;
+            s.ball.x += s.ball.dx;
+            s.ball.y += s.ball.dy;
+            if (s.ball.y < 0 || s.ball.y > 390) s.ball.dy *= -1;
+            if (s.ball.x < 20 && s.ball.y > s.p1.y && s.ball.y < s.p1.y + 80) s.ball.dx *= -1;
+            if (s.ball.x > 370 && s.ball.y > s.p2.y && s.ball.y < s.p2.y + 80) s.ball.dx *= -1;
+            if (s.ball.x < 0) {
+              s.p2.score++;
+              s.ball = {x: 200, y: 200, dx: 3, dy: 3};
+              onScoreUpdate(s.p1.score, s.p2.score);
+            }
+            if (s.ball.x > 400) {
+              s.p1.score++;
+              s.ball = {x: 200, y: 200, dx: -3, dy: 3};
+              onScoreUpdate(s.p1.score, s.p2.score);
+            }
+            s.p2.y += (s.ball.y - s.p2.y - 40) * 0.1;
+            this.draw();
+          }, 1000 / 60);
+        },
+
+        draw() {
+          const s = this.state;
+          this.ctx.fillStyle = '#000';
+          this.ctx.fillRect(0, 0, 400, 400);
+          this.ctx.fillStyle = '#fff';
+          this.ctx.fillRect(10, s.p1.y, 10, 80);
+          this.ctx.fillRect(380, s.p2.y, 10, 80);
+          this.ctx.beginPath();
+          this.ctx.arc(s.ball.x, s.ball.y, 5, 0, Math.PI * 2);
+          this.ctx.fill();
+        },
+
+        stop() {
+          if (this.loop) clearInterval(this.loop);
+        }
+      }
+    }
+  },
+
+  apps: {
+    games() {
+      const i18n = PhoenixOS.modules.i18n;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="apps-grid">
+          <div class="app-card" onclick="PhoenixOS.apps.playSnake()">
+            <div class="app-icon">🐍</div>
+            <div>${i18n.get('games.snake')}</div>
+          </div>
+          <div class="app-card" onclick="PhoenixOS.apps.playTicTacToe()">
+            <div class="app-icon">⭕</div>
+            <div>${i18n.get('games.tictactoe')}</div>
+          </div>
+          <div class="app-card" onclick="PhoenixOS.apps.playMemory()">
+            <div class="app-icon">🧠</div>
+            <div>${i18n.get('games.memory')}</div>
+          </div>
+          <div class="app-card" onclick="PhoenixOS.apps.playPong()">
+            <div class="app-icon">🏓</div>
+            <div>${i18n.get('games.pong')}</div>
+          </div>
+        </div>
+      `;
+      PhoenixOS.core.createWindow('games', i18n.get('apps.games'), div, {w: 500, h: 400});
+    },
+
+    playSnake() {
+      const i18n = PhoenixOS.modules.i18n;
+      const game = PhoenixOS.modules.games.snake;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="info-display" id="snakeInfo">${i18n.get('games.score')}: 0 | ${i18n.get('games.use')}</div>
+        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+        <div class="btn-group">
+          <button class="btn" onclick="PhoenixOS.apps.playSnake()">${i18n.get('games.restart')}</button>
+          <button class="btn secondary" onclick="PhoenixOS.core.closeWindow('snake')">${i18n.get('games.back')}</button>
+        </div>
+      `;
+      PhoenixOS.core.createWindow('snake', '🐍 ' + i18n.get('games.snake'), div, {w: 500, h: 600});
+      const canvas = document.getElementById('snakeCanvas');
+      game.init(canvas);
+      game.start((score, gameOver) => {
+        const info = document.getElementById('snakeInfo');
+        if (gameOver) {
+          info.textContent = 'Game Over! ' + i18n.get('games.score') + ': ' + score;
+        } else {
+          info.textContent = i18n.get('games.score') + ': ' + score;
+        }
+      });
+    },
+
+    playTicTacToe() {
+      const i18n = PhoenixOS.modules.i18n;
+      const game = PhoenixOS.modules.games.tictactoe;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="info-display" id="tttInfo">${i18n.get('games.tictactoe')}</div>
+        <canvas id="tttCanvas" width="400" height="400"></canvas>
+        <div class="btn-group">
+          <button class="btn" onclick="PhoenixOS.apps.playTicTacToe()">${i18n.get('games.restart')}</button>
+          <button class="btn secondary" onclick="PhoenixOS.core.closeWindow('tictactoe')">${i18n.get('games.back')}</button>
+        </div>
+      `;
+      PhoenixOS.core.createWindow('tictactoe', '⭕ ' + i18n.get('games.tictactoe'), div, {w: 500, h: 600});
+      const canvas = document.getElementById('tttCanvas');
+      game.init(canvas);
+      game.draw();
+      canvas.onclick = e => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / 133);
+        const y = Math.floor((e.clientY - rect.top) / 133);
+        game.play(y * 3 + x, msg => {
+          document.getElementById('tttInfo').textContent = msg;
+        });
+      };
+    },
+
+    playMemory() {
+      const i18n = PhoenixOS.modules.i18n;
+      const game = PhoenixOS.modules.games.memory;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="info-display" id="memInfo">Pairs: 0/8</div>
+        <canvas id="memCanvas" width="400" height="400"></canvas>
+        <div class="btn-group">
+          <button class="btn" onclick="PhoenixOS.apps.playMemory()">${i18n.get('games.restart')}</button>
+          <button class="btn secondary" onclick="PhoenixOS.core.closeWindow('memory')">${i18n.get('games.back')}</button>
+        </div>
+      `;
+      PhoenixOS.core.createWindow('memory', '🧠 ' + i18n.get('games.memory'), div, {w: 500, h: 600});
+      const canvas = document.getElementById('memCanvas');
+      game.init(canvas);
+      game.draw();
+      canvas.onclick = e => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / 100);
+        const y = Math.floor((e.clientY - rect.top) / 100);
+        game.play(y * 4 + x, pairs => {
+          const info = document.getElementById('memInfo');
+          info.textContent = 'Pairs: ' + pairs + '/8';
+          if (pairs === 8) info.textContent = 'You won!';
+        });
+      };
+    },
+
+    playPong() {
+      const i18n = PhoenixOS.modules.i18n;
+      const game = PhoenixOS.modules.games.pong;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="info-display" id="pongInfo">${i18n.get('games.score')}: 0 - 0</div>
+        <canvas id="pongCanvas" width="400" height="400"></canvas>
+        <div class="btn-group">
+          <button class="btn" onclick="PhoenixOS.apps.playPong()">${i18n.get('games.restart')}</button>
+          <button class="btn secondary" onclick="PhoenixOS.core.closeWindow('pong')">${i18n.get('games.back')}</button>
+        </div>
+      `;
+      PhoenixOS.core.createWindow('pong', '🏓 ' + i18n.get('games.pong'), div, {w: 500, h: 600});
+      const canvas = document.getElementById('pongCanvas');
+      game.init(canvas);
+      game.start(canvas, (p1, p2) => {
+        document.getElementById('pongInfo').textContent = i18n.get('games.score') + ': ' + p1 + ' - ' + p2;
+      });
+    },
+
+    files() {
+      const i18n = PhoenixOS.modules.i18n;
+      const fs = PhoenixOS.modules.filesystem;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="toolbar">
+          <button class="toolbar-btn" onclick="PhoenixOS.modules.filesystem.create('new_'+Date.now()+'.txt','');PhoenixOS.apps.files()">
+            ${i18n.get('files.new')}
+          </button>
+        </div>
+        <ul class="list" id="fileList"></ul>
+      `;
+      const list = div.querySelector('#fileList');
+      fs.files.forEach(f => {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.innerHTML = `<span class="list-icon">📄</span><span>${f.name}</span>`;
+        li.onclick = () => PhoenixOS.apps.editor(f.name);
+        list.appendChild(li);
+      });
+      if (fs.files.length === 0) {
+        list.innerHTML = `<li style="padding:2rem;text-align:center;color:#999">${i18n.get('files.empty')}</li>`;
+      }
+      PhoenixOS.core.createWindow('files', i18n.get('apps.files'), div, {w: 400, h: 500});
+    },
+
+    terminal() {
+      const i18n = PhoenixOS.modules.i18n;
+      const fs = PhoenixOS.modules.filesystem;
+      const div = document.createElement('div');
+      div.className = 'terminal';
+      div.innerHTML = `
+        <div class="terminal-line">${i18n.get('terminal.welcome')}</div>
+        <div class="terminal-line">${i18n.get('terminal.type')}</div>
+        <div class="terminal-input">
+          <span class="terminal-prompt">$</span>
+          <input type="text" class="terminal-field" id="termInput">
+        </div>
+      `;
+      const input = div.querySelector('#termInput');
+      const write = text => {
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.textContent = text;
+        div.insertBefore(line, div.querySelector('.terminal-input'));
+      };
+      input.onkeydown = e => {
+        if (e.key !== 'Enter') return;
+        const cmd = input.value.trim();
+        input.value = '';
+        write('$ ' + cmd);
+        if (!cmd) return;
+        const parts = cmd.split(' ');
+        switch (parts[0]) {
+          case 'help':
+            write(i18n.get('terminal.help'));
+            break;
+          case 'clear':
+            div.querySelectorAll('.terminal-line').forEach(l => l.remove());
+            break;
+          case 'ls':
+            fs.list().forEach(f => write(f));
+            break;
+          case 'echo':
+            write(parts.slice(1).join(' '));
+            break;
+          case 'date':
+            write(new Date().toString());
+            break;
+          case 'ble':
+            write('Opening Bluetooth Scanner...');
+            setTimeout(() => PhoenixOS.apps.bluetooth(), 500);
+            break;
+          default:
+            write('Command not found: ' + parts[0]);
+        }
+      };
+      PhoenixOS.core.createWindow('terminal', i18n.get('apps.terminal'), div, {w: 600, h: 400});
+      setTimeout(() => input.focus(), 100);
+    },
+
+    editor(filename = '') {
+      const i18n = PhoenixOS.modules.i18n;
+      const fs = PhoenixOS.modules.filesystem;
+      const div = document.createElement('div');
+      div.style.display = 'flex';
+      div.style.flexDirection = 'column';
+      div.style.height = '100%';
+      div.innerHTML = `
+        <div class="toolbar">
+          <button class="toolbar-btn" onclick="PhoenixOS.apps.editor()">${i18n.get('editor.new')}</button>
+          <button class="toolbar-btn" id="editorSave">${i18n.get('editor.save')}</button>
+          <input type="text" class="input-field" id="editorName" placeholder="${i18n.get('files.name')}" value="${filename}" style="margin-left:auto">
+        </div>
+        <textarea class="textarea" id="editorText">${filename ? fs.read(filename) : ''}</textarea>
+      `;
+      div.querySelector('#editorSave').onclick = () => {
+        const name = div.querySelector('#editorName').value.trim();
+        const text = div.querySelector('#editorText').value;
+        if (name) {
+          fs.write(name, text);
+          alert('Saved!');
+        }
+      };
+      PhoenixOS.core.createWindow('editor' + Date.now(), i18n.get('editor.title'), div, {w: 700, h: 500});
+    },
+
+    bluetooth() {
+      const i18n = PhoenixOS.modules.i18n;
+      const bt = PhoenixOS.modules.bluetooth;
+      const esp32 = PhoenixOS.modules.esp32;
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div class="toolbar">
+          <button class="toolbar-btn" id="btnScan">${i18n.get('bluetooth.scan')}</button>
+          <button class="toolbar-btn" id="btnESP32">${i18n.get('bluetooth.esp32')}</button>
+          <button class="toolbar-btn danger" id="btnDisconnect">${i18n.get('bluetooth.disconnect')}</button>
+        </div>
+        <div id="btStatus"></div>
+        <div id="btData" style="padding:1rem;font-family:monospace;font-size:14px"></div>
+      `;
+
+      const status = div.querySelector('#btStatus');
+      const data = div.querySelector('#btData');
+
+      const showStatus = (msg, type = 'info') => {
+        status.innerHTML = `<div class="status-msg status-${type}">${msg}</div>`;
+      };
+
+      div.querySelector('#btnScan').onclick = async () => {
+        if (!bt.isSupported()) {
+          showStatus(i18n.get('bluetooth.notSupported'), 'error');
+          return;
+        }
+        try {
+          showStatus(i18n.get('bluetooth.scanning'), 'info');
+          const device = await bt.scan([]);
+          showStatus(i18n.get('bluetooth.connected') + ': ' + device.name, 'success');
+          data.textContent = 'Device: ' + device.name + '\nID: ' + device.id;
+        } catch (err) {
+          showStatus(i18n.get('bluetooth.error') + ': ' + err.message, 'error');
+        }
+      };
+
+      div.querySelector('#btnESP32').onclick = async () => {
+        if (!bt.isSupported()) {
+          showStatus(i18n.get('bluetooth.notSupported'), 'error');
+          return;
+        }
+        try {
+          showStatus(i18n.get('bluetooth.scanning'), 'info');
+          const device = await esp32.connect(sensorData => {
+            const distance = esp32.parseSensorData(sensorData);
+            data.textContent = i18n.get('bluetooth.distance') + ': ' + distance + ' cm\n' + sensorData;
+          });
+          showStatus(i18n.get('bluetooth.connected') + ': ' + device.name, 'success');
+        } catch (err) {
+          showStatus(i18n.get('bluetooth.error') + ': ' + err.message, 'error');
+        }
+      };
+
+      div.querySelector('#btnDisconnect').onclick = () => {
+        esp32.disconnect();
+        showStatus(i18n.get('bluetooth.disconnected'), 'info');
+        data.textContent = '';
+      };
+
+      PhoenixOS.core.createWindow('bluetooth', '📡 ' + i18n.get('bluetooth.title'), div, {w: 600, h: 500});
+    }
+  }
+};
+
+PhoenixOS.modules.filesystem.init();
+const lang = localStorage.getItem('os_lang');
+if (lang) PhoenixOS.modules.i18n.lang = lang;
+document.addEventListener('DOMContentLoaded', () => PhoenixOS.core.boot());
 </script>
 </body>
 </html>
