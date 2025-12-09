@@ -1,5 +1,4 @@
-# Phoenix Project - Professional Website
-# Phoenix Project - Site Web Professionnel
+# Phoenix Project
 
 ![WCAG AA](https://img.shields.io/badge/WCAG-AA%20Compliant-green?style=flat-square&logo=w3c)
 ![RGPD](https://img.shields.io/badge/RGPD-Compliant-blue?style=flat-square)
@@ -83,7 +82,7 @@ Python, JavaScript, TypeScript, React, Vue.js, Node.js, FastAPI, AI Agents, PyTo
 ├── templates.css        # 4 template styles
 ├── theme.js            # Interactive features
 ├── locales.js          # Translation system
-├── os-demo.html        # PhoenixOS interactive demo
+├── phoenix-os.html     # PhoenixOS interactive demo
 ├── statistiques.html   # Visitor statistics dashboard
 └── robots.txt          # SEO and bot control
 ```
@@ -171,7 +170,7 @@ Python, JavaScript, TypeScript, React, Vue.js, Node.js, FastAPI, Agents intellig
 ├── templates.css        # Styles des 4 templates
 ├── theme.js            # Fonctionnalités interactives
 ├── locales.js          # Système de traduction
-├── os-demo.html        # Démo interactive PhoenixOS
+├── phoenix-os.html     # Démo interactive PhoenixOS
 ├── statistiques.html   # Tableau de bord statistiques
 └── robots.txt          # Contrôle SEO et bots
 ```
