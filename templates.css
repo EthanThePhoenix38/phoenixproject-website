@@ -311,6 +311,31 @@
   border: 1px solid var(--border-color);
   max-width: 90vw;
   overflow-x: auto;
+  transition: transform 0.3s ease, bottom 0.3s ease;
+}
+
+.tab-menu.hidden {
+  transform: translateX(-50%) translateY(calc(100% + 40px));
+}
+
+.tab-menu-toggle {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px 20px 0 0;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 -5px 15px var(--shadow);
+}
+
+.tab-menu-toggle:hover {
+  background: var(--primary);
+  color: white;
 }
 
 .tab-item {

@@ -352,6 +352,13 @@ const TabMenuManager = {
     menu.className = 'tab-menu';
     menu.id = 'tabMenu';
 
+    // Bouton toggle pour cacher/montrer le menu
+    const toggleBtn = document.createElement('div');
+    toggleBtn.className = 'tab-menu-toggle';
+    toggleBtn.textContent = '▼';
+    toggleBtn.onclick = () => this.toggleMenu();
+    menu.appendChild(toggleBtn);
+
     this.tabs.forEach(tab => {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
@@ -367,6 +374,27 @@ const TabMenuManager = {
     });
 
     document.body.appendChild(menu);
+
+    // Restaurer l'état sauvegardé
+    const savedState = localStorage.getItem('tabMenuHidden');
+    if (savedState === 'true') {
+      menu.classList.add('hidden');
+      toggleBtn.textContent = '▲';
+    }
+  },
+
+  toggleMenu() {
+    const menu = document.getElementById('tabMenu');
+    const toggleBtn = menu.querySelector('.tab-menu-toggle');
+    menu.classList.toggle('hidden');
+
+    if (menu.classList.contains('hidden')) {
+      toggleBtn.textContent = '▲';
+      localStorage.setItem('tabMenuHidden', 'true');
+    } else {
+      toggleBtn.textContent = '▼';
+      localStorage.setItem('tabMenuHidden', 'false');
+    }
   },
 
   updateTranslations() {
