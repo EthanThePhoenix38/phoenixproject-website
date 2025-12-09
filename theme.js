@@ -30,7 +30,7 @@ const ThemeManager = {
     // Support both old themeToggle and new themeBtn (in header)
     const btn = document.getElementById('themeBtn') || document.getElementById('themeToggle');
     if (btn) {
-      btn.textContent = theme === 'light' ? 'Dark' : 'Light';
+      btn.textContent = theme === 'light' ? '🌙' : '☀️';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
     }
   },
