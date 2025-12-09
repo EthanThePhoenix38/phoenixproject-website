@@ -360,6 +360,7 @@ const TabMenuManager = {
       const label = this.getTranslation(tab.i18nKey);
       tabEl.innerHTML = `<span>${label}</span>`;
       tabEl.addEventListener('click', (e) => {
+        this.setActiveTab(tab.id);
         this.scrollToSection(tab.section);
       });
       menu.appendChild(tabEl);
