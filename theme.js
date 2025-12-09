@@ -27,7 +27,8 @@ const ThemeManager = {
   },
 
   updateThemeButton(theme) {
-    const btn = document.getElementById('themeToggle');
+    // Support both old themeToggle and new themeBtn (in header)
+    const btn = document.getElementById('themeBtn') || document.getElementById('themeToggle');
     if (btn) {
       btn.textContent = theme === 'light' ? 'Dark' : 'Light';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
@@ -35,6 +36,16 @@ const ThemeManager = {
   },
 
   createThemeToggle() {
+    // Check if themeBtn already exists in header
+    const headerBtn = document.getElementById('themeBtn');
+    if (headerBtn) {
+      // Button already exists in header, just update it
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      this.updateThemeButton(theme);
+      return;
+    }
+
+    // Fallback: create standalone button for pages without header integration
     const btn = document.createElement('button');
     btn.id = 'themeToggle';
     btn.className = 'theme-toggle';
@@ -309,15 +320,31 @@ const TemplateManager = {
 // MENU À ONGLETS FLUIDE
 const TabMenuManager = {
   tabs: [
-    { id: 'home', label: 'Accueil', section: 'home' },
-    { id: 'services', label: 'Services', section: 'services' },
-    { id: 'expertise', label: 'Expertise', section: 'expertise' },
-    { id: 'contact', label: 'Contact', section: 'contact' }
+    { id: 'home', i18nKey: 'nav.home', section: 'home' },
+    { id: 'services', i18nKey: 'nav.services', section: 'services' },
+    { id: 'expertise', i18nKey: 'nav.expertise', section: 'expertise' },
+    { id: 'contact', i18nKey: 'nav.contact', section: 'contact' }
   ],
 
   init() {
     this.createTabMenu();
     this.setupTabInteractions();
+  },
+
+  getTranslation(i18nKey) {
+    if (typeof translations === 'undefined' || typeof currentLang === 'undefined') {
+      return i18nKey;
+    }
+    const keys = i18nKey.split('.');
+    let value = translations[currentLang];
+    for (const k of keys) {
+      if (value && value[k]) {
+        value = value[k];
+      } else {
+        return i18nKey;
+      }
+    }
+    return value;
   },
 
   createTabMenu() {
@@ -329,7 +356,9 @@ const TabMenuManager = {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
       tabEl.dataset.tab = tab.id;
-      tabEl.innerHTML = `<span>${tab.label}</span>`;
+      tabEl.dataset.i18n = tab.i18nKey;
+      const label = this.getTranslation(tab.i18nKey);
+      tabEl.innerHTML = `<span>${label}</span>`;
       tabEl.addEventListener('click', (e) => {
         this.scrollToSection(tab.section);
       });
@@ -337,6 +366,16 @@ const TabMenuManager = {
     });
 
     document.body.appendChild(menu);
+  },
+
+  updateTranslations() {
+    document.querySelectorAll('.tab-item').forEach(tabEl => {
+      const i18nKey = tabEl.dataset.i18n;
+      if (i18nKey) {
+        const label = this.getTranslation(i18nKey);
+        tabEl.querySelector('span').textContent = label;
+      }
+    });
   },
 
   setupTabInteractions() {
