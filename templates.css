@@ -293,6 +293,198 @@
 }
 
 /* ===================================
+   TEMPLATE 5 : GLASS (Glassmorphism)
+   =================================== */
+
+[data-template="glass"] {
+  --primary: #667eea;
+  --secondary: #764ba2;
+  --accent: #f093fb;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-template="glass"] body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+}
+
+[data-template="glass"] header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+[data-template="glass"] .hero {
+  background: transparent;
+  padding: 8rem 2rem 5rem;
+}
+
+[data-template="glass"] .service-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: white;
+}
+
+[data-template="glass"] .service-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-template="glass"] .service-card h3 {
+  color: white;
+}
+
+[data-template="glass"] .section {
+  background: transparent;
+}
+
+[data-template="glass"] .contact-form {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  color: white;
+}
+
+[data-template="glass"] .form-group label {
+  color: white;
+}
+
+[data-template="glass"] .form-group input,
+[data-template="glass"] .form-group textarea,
+[data-template="glass"] .form-group select {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+[data-template="glass"] .form-group input:focus,
+[data-template="glass"] .form-group textarea:focus,
+[data-template="glass"] .form-group select:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+[data-template="glass"] .form-group input::placeholder,
+[data-template="glass"] .form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-template="glass"] .btn {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-template="glass"] .btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+[data-template="glass"] .btn-primary {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-template="glass"] .btn-primary:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+}
+
+[data-template="glass"] .tech-badge {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+[data-template="glass"] .tech-badge:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+[data-template="glass"] .stat-num {
+  color: white;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  font-weight: 900;
+}
+
+[data-template="glass"] .stat-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-template="glass"] footer {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+[data-template="glass"] .footer-section a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-template="glass"] .footer-section a:hover {
+  color: white;
+}
+
+[data-template="glass"] h1,
+[data-template="glass"] h2,
+[data-template="glass"] h3 {
+  color: white;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-template="glass"] .section-title {
+  color: white;
+}
+
+/* Effet de blur animé sur hover */
+[data-template="glass"] .service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+[data-template="glass"] .service-card:hover::before {
+  opacity: 1;
+}
+
+/* ===================================
    MENU À ONGLETS FLUIDE
    =================================== */
 

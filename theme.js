@@ -242,7 +242,7 @@ const VisitTracker = {
 
 // GESTION DES TEMPLATES
 const TemplateManager = {
-  templates: ['moderne', 'professionnel', 'fluide', 'epure'],
+  templates: ['moderne', 'professionnel', 'fluide', 'epure', 'glass'],
 
   init() {
     const savedTemplate = this.getPreference('template') || 'moderne';
