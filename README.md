@@ -1,12 +1,21 @@
-# Phoenix Project - Professional Website
-# Phoenix Project - Site Web Professionnel
+# Phoenix Project
 
+![GitHub stars](https://img.shields.io/github/stars/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github)
+![GitHub forks](https://img.shields.io/github/forks/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github)
+![GitHub last commit](https://img.shields.io/github/last-commit/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github)
 ![WCAG AA](https://img.shields.io/badge/WCAG-AA%20Compliant-green?style=flat-square&logo=w3c)
 ![RGPD](https://img.shields.io/badge/RGPD-Compliant-blue?style=flat-square)
+![HTML5](https://img.shields.io/badge/HTML5-Semantic-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-Modern-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![Responsive](https://img.shields.io/badge/Responsive-Mobile%20First-orange?style=flat-square)
 ![i18n](https://img.shields.io/badge/i18n-FR%20%7C%20EN-purple?style=flat-square)
-![Dark Mode](https://img.shields.io/badge/Dark%20Mode-Supported-black?style=flat-square)
+![Dark Mode](https://img.shields.io/badge/Dark%20Mode-Optimized-black?style=flat-square)
+![SEO](https://img.shields.io/badge/SEO-Optimized-success?style=flat-square)
+![Accessibility](https://img.shields.io/badge/A11y-AAA-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-Commercial-red?style=flat-square)
+
+**Last Updated:** December 9, 2025
 
 [🇫🇷 Français](#-version-française) | [🇬🇧 English](#-english-version)
 
@@ -14,7 +23,7 @@
 
 ## 🇬🇧 English Version
 
-Modern multilingual website for The Phoenix Agency - AI, NoCode, Automation & Cybersecurity services.
+Modern multilingual website for The Phoenix Agency - AI, NoCode, and Automation services.
 
 ### 🌐 View the Site
 
@@ -28,8 +37,9 @@ Modern multilingual website for The Phoenix Agency - AI, NoCode, Automation & Cy
 - 🔘 Language switcher button (iOS style)
 
 #### Themes & Templates
-- 🌓 Light/Dark mode (WCAG AA compliant)
-- 🎨 4 visual templates:
+- 🌓 Light/Dark mode with icon toggle (🌙/☀️)
+- 🎨 Optimized WCAG AA dark mode colors
+- 🎭 4 visual templates:
   - **Modern** - Contemporary design with gradients
   - **Professional** - Elegant corporate style
   - **Fluid** - Dynamic animations
@@ -37,8 +47,9 @@ Modern multilingual website for The Phoenix Agency - AI, NoCode, Automation & Cy
 
 #### User Experience
 - 📱 Responsive design (Mobile First)
-- 🧭 Dynamic navigation menu
-- 📑 Smooth tab navigation
+- 🧭 Dynamic navigation menu with active state
+- 📑 Collapsible tab navigation (slide to hide/show)
+- 🎯 Persistent menu state (saved in localStorage)
 - ♿ WCAG AA compliant
 
 #### Compliance & Data
@@ -52,6 +63,7 @@ Modern multilingual website for The Phoenix Agency - AI, NoCode, Automation & Cy
 
 #### SEO & Security
 - 🔍 Complete SEO meta tags (Open Graph, Twitter Cards)
+- 🗺️ XML sitemap for search engines
 - 🤖 robots.txt with AI bot protection
 - 🔒 Commercial proprietary license
 - 🛡️ Anti-scraping measures
@@ -83,9 +95,10 @@ Python, JavaScript, TypeScript, React, Vue.js, Node.js, FastAPI, AI Agents, PyTo
 ├── templates.css        # 4 template styles
 ├── theme.js            # Interactive features
 ├── locales.js          # Translation system
-├── os-demo.html        # PhoenixOS interactive demo
+├── phoenix-os.html     # PhoenixOS interactive demo
 ├── statistiques.html   # Visitor statistics dashboard
-└── robots.txt          # SEO and bot control
+├── robots.txt          # SEO and bot control
+└── sitemap.xml         # XML sitemap for search engines
 ```
 
 ### 🚀 Deployment
@@ -102,7 +115,7 @@ Commercial proprietary license - Unauthorized reproduction strictly prohibited.
 
 ## 🇫🇷 Version Française
 
-Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode, Automatisation & Cybersécurité.
+Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode et Automatisation.
 
 ### 🌐 Voir le Site
 
@@ -116,8 +129,9 @@ Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode,
 - 🔘 Bouton de changement de langue (style iOS)
 
 #### Thèmes & Templates
-- 🌓 Mode clair/sombre (WCAG AA compliant)
-- 🎨 4 templates visuels au choix :
+- 🌓 Mode clair/sombre avec bouton icône (🌙/☀️)
+- 🎨 Couleurs dark mode optimisées WCAG AA
+- 🎭 4 templates visuels au choix :
   - **Moderne** - Design actuel avec dégradés
   - **Professionnel** - Style corporatif élégant
   - **Fluide** - Animations dynamiques
@@ -125,8 +139,9 @@ Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode,
 
 #### Expérience Utilisateur
 - 📱 Responsive design (Mobile First)
-- 🧭 Menu de navigation dynamique
-- 📑 Navigation par onglets fluides
+- 🧭 Menu de navigation dynamique avec état actif
+- 📑 Navigation par onglets escamotable (glisser pour cacher/montrer)
+- 🎯 État du menu persistant (sauvegardé en localStorage)
 - ♿ Conforme WCAG AA
 
 #### Conformité & Données
@@ -140,6 +155,7 @@ Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode,
 
 #### SEO & Sécurité
 - 🔍 Meta tags SEO complets (Open Graph, Twitter Cards)
+- 🗺️ Sitemap XML pour les moteurs de recherche
 - 🤖 robots.txt avec protection contre les bots IA
 - 🔒 Licence commerciale propriétaire
 - 🛡️ Mesures anti-scraping
@@ -171,9 +187,10 @@ Python, JavaScript, TypeScript, React, Vue.js, Node.js, FastAPI, Agents intellig
 ├── templates.css        # Styles des 4 templates
 ├── theme.js            # Fonctionnalités interactives
 ├── locales.js          # Système de traduction
-├── os-demo.html        # Démo interactive PhoenixOS
+├── phoenix-os.html     # Démo interactive PhoenixOS
 ├── statistiques.html   # Tableau de bord statistiques
-└── robots.txt          # Contrôle SEO et bots
+├── robots.txt          # Contrôle SEO et bots
+└── sitemap.xml         # Sitemap XML pour moteurs de recherche
 ```
 
 ### 🚀 Déploiement
