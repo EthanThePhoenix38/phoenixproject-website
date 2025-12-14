@@ -30,7 +30,7 @@ const ThemeManager = {
     // Support both old themeToggle and new themeBtn (in header)
     const btn = document.getElementById('themeBtn') || document.getElementById('themeToggle');
     if (btn) {
-      btn.textContent = theme === 'light' ? 'Dark' : 'Light';
+      btn.textContent = theme === 'light' ? '🌙' : '☀️';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
     }
   },
@@ -242,7 +242,7 @@ const VisitTracker = {
 
 // GESTION DES TEMPLATES
 const TemplateManager = {
-  templates: ['moderne', 'professionnel', 'fluide', 'epure'],
+  templates: ['moderne', 'professionnel', 'fluide', 'epure', 'glass'],
 
   init() {
     const savedTemplate = this.getPreference('template') || 'moderne';
@@ -352,6 +352,13 @@ const TabMenuManager = {
     menu.className = 'tab-menu';
     menu.id = 'tabMenu';
 
+    // Bouton toggle pour cacher/montrer le menu
+    const toggleBtn = document.createElement('div');
+    toggleBtn.className = 'tab-menu-toggle';
+    toggleBtn.textContent = '▼';
+    toggleBtn.onclick = () => this.toggleMenu();
+    menu.appendChild(toggleBtn);
+
     this.tabs.forEach(tab => {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
@@ -360,12 +367,34 @@ const TabMenuManager = {
       const label = this.getTranslation(tab.i18nKey);
       tabEl.innerHTML = `<span>${label}</span>`;
       tabEl.addEventListener('click', (e) => {
+        this.setActiveTab(tab.id);
         this.scrollToSection(tab.section);
       });
       menu.appendChild(tabEl);
     });
 
     document.body.appendChild(menu);
+
+    // Restaurer l'état sauvegardé
+    const savedState = localStorage.getItem('tabMenuHidden');
+    if (savedState === 'true') {
+      menu.classList.add('hidden');
+      toggleBtn.textContent = '▲';
+    }
+  },
+
+  toggleMenu() {
+    const menu = document.getElementById('tabMenu');
+    const toggleBtn = menu.querySelector('.tab-menu-toggle');
+    menu.classList.toggle('hidden');
+
+    if (menu.classList.contains('hidden')) {
+      toggleBtn.textContent = '▲';
+      localStorage.setItem('tabMenuHidden', 'true');
+    } else {
+      toggleBtn.textContent = '▼';
+      localStorage.setItem('tabMenuHidden', 'false');
+    }
   },
 
   updateTranslations() {
