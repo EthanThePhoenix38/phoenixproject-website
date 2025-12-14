@@ -23,7 +23,7 @@
 
 ## 🇬🇧 English Version
 
-Modern multilingual website for The Phoenix Agency - AI, NoCode, Automation & Cybersecurity services.
+Modern multilingual website for The Phoenix Agency - AI, NoCode, and Automation services.
 
 ### 🌐 View the Site
 
@@ -115,7 +115,7 @@ Commercial proprietary license - Unauthorized reproduction strictly prohibited.
 
 ## 🇫🇷 Version Française
 
-Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode, Automatisation & Cybersécurité.
+Site web moderne et multilingue pour The Phoenix Agency - Services d'IA, NoCode et Automatisation.
 
 ### 🌐 Voir le Site
 
