@@ -580,7 +580,7 @@
    SÉLECTEUR DE TEMPLATE
    =================================== */
 
-.template-selector 
+.template-selector  {
   position: fixed;
   top: 140px;
   right: 20px;
