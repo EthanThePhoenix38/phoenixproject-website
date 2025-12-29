@@ -588,7 +588,9 @@ top: 140px;
   background: var(--bg-card);
   padding: 0.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 15px var(--shadow);
+  box-shadow: 0 4px 15px var(--shadow)
+     max-height: 250px;
+  overflow-y: auto;;
   border: 1px solid var(--border-color);
   display: none;
   transition: all 0.3s ease;
