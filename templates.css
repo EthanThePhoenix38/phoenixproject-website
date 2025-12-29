@@ -580,23 +580,30 @@
    SÉLECTEUR DE TEMPLATE
    =================================== */
 
-.template-selector {
-      position: fixed;
-top: 140px;
+.template-selector 
+  position: fixed;
+  top: 140px;
   right: 20px;
   z-index: 2000;
+  width: 160px;
+  min-width: 140px;
   background: var(--bg-card);
   padding: 0.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 15px var(--shadow);
+  max-height: 0;
+  overflow: hidden;
   border: 1px solid var(--border-color);
-  display: none;
-  transition: all 0.3s ease;
+  opacity: 0;
 }
 
 .template-selector.visible {
-  display: block;
-}
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(0) scale(1);
+  padding: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}}
 
 .template-toggle-btn {
   position: fixed;
@@ -659,11 +666,22 @@ top: 140px;
   }
 }
 
-@media (max-width: 768px) {
-  .template-selector {
-    top: 130px;
-    right: 10px;
-    font-size: 0.9rem;
+.template-selector {
+  position: fixed;
+  top: 140px;
+  right: 50%;
+  transform: translateX(50%) translateY(-10px) scale(0.95);
+  z-index: 2000;
+  width: 180px;
+  background: var(--bg-card);
+  padding: 0;
+  border-radius: 14px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}   font-size: 0.9rem;
   }
 
   .tab-menu {
