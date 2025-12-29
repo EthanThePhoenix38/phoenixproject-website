@@ -594,13 +594,11 @@
   max-height: 0;
   overflow: hidden;
   border: 1px solid var(--border-color);
-  transition: max-height 0.3s ease, opacity 0.3s ease;
   opacity: 0;
 }
 
   .template-selector.visible {
   max-height: 250px;
-}opacity: 1;
 }
 .template-toggle-btn {
   position: fixed;
