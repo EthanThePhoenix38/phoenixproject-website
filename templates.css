@@ -581,8 +581,8 @@
    =================================== */
 
 .template-selector {
-  position: fixed;
-  top: 90px;
+      position: fixed;
+top: 140px;
   right: 20px;
   z-index: 2000;
   background: var(--bg-card);
