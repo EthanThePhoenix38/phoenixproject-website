@@ -1,4 +1,4 @@
-# Phoenix Project
+# PhoenixProject
 
 ![GitHub stars](https://img.shields.io/github/stars/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github)
 ![GitHub forks](https://img.shields.io/github/forks/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github)
@@ -15,7 +15,7 @@
 ![Accessibility](https://img.shields.io/badge/A11y-AAA-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-Commercial-red?style=flat-square)
 
-**Last Updated:** December 9, 2025
+**Last Updated:** January 26, 2026
 
 [🇫🇷 Français](#-version-française) | [🇬🇧 English](#-english-version)
 
@@ -200,5 +200,5 @@ Le site est automatiquement déployé sur GitHub Pages :
 
 ### 📄 Licence
 
-Tous droits réservés © 2025 The Phoenix Agency
+Tous droits réservés © 2025 - 2026 ThePhoenixAgency
 Licence commerciale propriétaire - Reproduction non autorisée strictement interdite.
