@@ -20,8 +20,8 @@ export class AlertService {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'alerts@phoenixproject.dev',
-          to: 'admin@phoenixproject.dev',
+          from: 'phoenix.project@outlook.fr',
+          to: 'phoenix.project@outlook.fr',
           subject: 'Usage Limit Reached',
           html: `
             <h2>Usage Limit Alert</h2>
@@ -52,8 +52,8 @@ export class AlertService {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'alerts@phoenixproject.dev',
-          to: 'admin@phoenixproject.dev',
+          from: 'phoenix.project@outlook.fr',
+          to: 'phoenix.project@outlook.fr',
           subject: 'Scale Alert - Action Required',
           html: `
             <h2>Infrastructure Scaling Required</h2>
