@@ -154,7 +154,7 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
 </head>
 <body>
 
-<!-- Boot Screen -->
+<!-- BOOT SCREEN -->
 <div id="bootScreen">
   <div class="boot-logo">🔥</div>
   <div class="boot-text">PhoenixOS v2.1.0</div>
@@ -162,30 +162,53 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
   <div class="boot-text" id="bootProgress">Loading...</div>
 </div>
 
-<!-- Login Screen -->
+<!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div style="font-size:60px;margin-bottom:20px">🔥</div>
-    <h2>PhoenixOS</h2>
-    <p style="color:#666;margin-bottom:20px;font-size:14px">Enter password to continue</p>
-    <input type="password" class="login-input" id="loginPassword" placeholder="Password">
-    <button class="login-btn" onclick="handleLogin()">Login</button>
-    <div id="loginError" style="color:#FF3B30;margin-top:10px;font-size:13px"></div>
+    <div class="login-logo">🔥</div>
+    <h2 style="margin-bottom:20px">PhoenixOS</h2>
+    <input type="password" id="loginPassword" class="login-input" placeholder="Enter password" autocomplete="off">
+    <button class="login-btn" onclick="attemptLogin()">Login</button>
+    <p style="margin-top:15px;font-size:12px;color:#666">Default: phoenix</p>
   </div>
 </div>
 
-<!-- Desktop -->
+<!-- SHUTDOWN SCREEN -->
+<div id="shutdownScreen">
+  <div class="shutdown-icon">🔥</div>
+  <div style="font-size:24px">Shutting down...</div>
+</div>
+
+<!-- DESKTOP -->
 <div id="desktop">
   <div class="menubar">
-    <div class="menubar-item" style="font-weight:700">🔥 PhoenixOS</div>
-    <div class="menubar-item" onclick="openAbout()">About</div>
+    <div class="menubar-left">
+      <div class="menubar-item" style="font-weight:700;font-size:14px" onclick="toggleStartMenu()">🔥</div>
+      <div class="menubar-item" onclick="toggleStartMenu()">Apps</div>
+    </div>
     <div class="menubar-right">
+      <div class="menubar-item">🔔</div>
+      <div class="menubar-item">📶</div>
+      <div class="menubar-item">🔋</div>
       <div class="menubar-item" id="clock">00:00</div>
-      <div class="menubar-item" style="cursor:pointer" onclick="handleShutdown()">⏻</div>
+      <div class="menubar-item" onclick="openSettings()">⚙️</div>
     </div>
   </div>
 
-  <div class="desktop-content">
+  <div class="menu-dropdown" id="startMenu">
+    <div class="menu-item" onclick="openFiles();closeStartMenu()"><span>📁</span> Files</div>
+    <div class="menu-item" onclick="openEditor();closeStartMenu()"><span>📝</span> Editor</div>
+    <div class="menu-item" onclick="openTerminal();closeStartMenu()"><span>⌨️</span> Terminal</div>
+    <div class="menu-item" onclick="openCalculator();closeStartMenu()"><span>🔢</span> Calculator</div>
+    <div class="menu-item" onclick="openBrowser();closeStartMenu()"><span>🌐</span> Browser</div>
+    <div class="menu-item" onclick="openPaint();closeStartMenu()"><span>🎨</span> Paint</div>
+    <div class="menu-item" onclick="openGames();closeStartMenu()"><span>🎮</span> Games</div>
+    <div class="menu-separator"></div>
+    <div class="menu-item" onclick="openSettings();closeStartMenu()"><span>⚙️</span> Settings</div>
+    <div class="menu-item" onclick="shutdown()"><span>⏻</span> Shutdown</div>
+  </div>
+
+  <div class="desktop-area" id="desktopArea">
     <div class="desktop-icons">
       <div class="desktop-icon" ondblclick="openFiles()">
         <div class="desktop-icon-img">📁</div>
@@ -195,21 +218,17 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
         <div class="desktop-icon-img">⌨️</div>
         <div class="desktop-icon-label">Terminal</div>
       </div>
-      <div class="desktop-icon" ondblclick="openEditor()">
-        <div class="desktop-icon-img">📝</div>
-        <div class="desktop-icon-label">Notepad</div>
-      </div>
       <div class="desktop-icon" ondblclick="openCalculator()">
         <div class="desktop-icon-img">🔢</div>
         <div class="desktop-icon-label">Calculator</div>
       </div>
+      <div class="desktop-icon" ondblclick="openBrowser()">
+        <div class="desktop-icon-img">🌐</div>
+        <div class="desktop-icon-label">Browser</div>
+      </div>
       <div class="desktop-icon" ondblclick="openPaint()">
         <div class="desktop-icon-img">🎨</div>
         <div class="desktop-icon-label">Paint</div>
-      </div>
-      <div class="desktop-icon" ondblclick="openSettings()">
-        <div class="desktop-icon-img">⚙️</div>
-        <div class="desktop-icon-label">Settings</div>
       </div>
       <div class="desktop-icon" ondblclick="openGames()">
         <div class="desktop-icon-img">🎮</div>
@@ -219,16 +238,16 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
   </div>
 
   <div class="taskbar">
-    <div class="taskbar-item" onclick="openFiles()" title="Files">📁</div>
-    <div class="taskbar-item" onclick="openTerminal()" title="Terminal">⌨️</div>
-    <div class="taskbar-item" onclick="openEditor()" title="Notepad">📝</div>
-    <div class="taskbar-item" onclick="openCalculator()" title="Calculator">🔢</div>
-    <div class="taskbar-item" onclick="openPaint()" title="Paint">🎨</div>
-    <div class="taskbar-item" onclick="openGames()" title="Games">🎮</div>
+    <div class="taskbar-item" onclick="openFiles()">📁</div>
+    <div class="taskbar-item" onclick="openTerminal()">⌨️</div>
+    <div class="taskbar-item" onclick="openCalculator()">🔢</div>
+    <div class="taskbar-item" onclick="openBrowser()">🌐</div>
+    <div class="taskbar-item" onclick="openPaint()">🎨</div>
+    <div class="taskbar-item" onclick="openGames()">🎮</div>
   </div>
 </div>
 
-<!-- On-Screen Keyboard -->
+<!-- ON-SCREEN KEYBOARD -->
 <div id="osk">
   <div class="osk-row">
     <div class="osk-key" onclick="oskType('1')">1</div>
@@ -241,7 +260,6 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
     <div class="osk-key" onclick="oskType('8')">8</div>
     <div class="osk-key" onclick="oskType('9')">9</div>
     <div class="osk-key" onclick="oskType('0')">0</div>
-    <div class="osk-key" onclick="oskBackspace()">⌫</div>
   </div>
   <div class="osk-row">
     <div class="osk-key" onclick="oskType('q')">q</div>
@@ -267,7 +285,7 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
     <div class="osk-key" onclick="oskType('l')">l</div>
   </div>
   <div class="osk-row">
-    <div class="osk-key shift" onclick="oskShift()">⇧</div>
+    <div class="osk-key wide" onclick="oskShift()">⇧</div>
     <div class="osk-key" onclick="oskType('z')">z</div>
     <div class="osk-key" onclick="oskType('x')">x</div>
     <div class="osk-key" onclick="oskType('c')">c</div>
@@ -275,41 +293,36 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
     <div class="osk-key" onclick="oskType('b')">b</div>
     <div class="osk-key" onclick="oskType('n')">n</div>
     <div class="osk-key" onclick="oskType('m')">m</div>
+    <div class="osk-key wide" onclick="oskBackspace()">⌫</div>
   </div>
   <div class="osk-row">
     <div class="osk-key" onclick="oskType('.')">.</div>
-    <div class="osk-key" onclick="oskType('@')">@</div>
     <div class="osk-key space" onclick="oskType(' ')">space</div>
-    <div class="osk-key" onclick="oskType('-')">-</div>
-    <div class="osk-key" onclick="oskType('_')">_</div>
     <div class="osk-key wide" onclick="oskEnter()">↵</div>
     <div class="osk-key" onclick="toggleOSK()">✕</div>
   </div>
 </div>
 
-<script>
-// System State
-let currentOskTarget = null;
-let oskShiftActive = false;
-let isMobile = window.innerWidth <= 768;
-let zIndex = 100;
+<div class="context-menu" id="contextMenu">
+  <div class="context-item" onclick="hideContextMenu()"><span>✕</span> Close</div>
+</div>
 
-// File System - Hierarchical with folders
+<script>
+// FILE SYSTEM with folders
 const FS = {
   getData() {
     const data = localStorage.getItem('phoenixos_fs');
-    return data ? JSON.parse(data) : {'/': {type: 'folder', items: {}, date: new Date().toISOString()}};
+    return data ? JSON.parse(data) : {'/': {type: 'folder', items: {}}};
   },
   saveData(data) {
     localStorage.setItem('phoenixos_fs', JSON.stringify(data));
   },
-  getPathObj(data, path) {
-    if (path === '/') return data['/'];
+  getPath(path) {
     const parts = path.split('/').filter(p => p);
-    let current = data['/'];
+    let current = this.getData();
     for (const part of parts) {
-      if (!current.items || !current.items[part]) return null;
-      current = current.items[part];
+      if (!current[part] || current[part].type !== 'folder') return null;
+      current = current[part].items;
     }
     return current;
   },
@@ -330,21 +343,6 @@ const FS = {
     this.saveData(data);
     return true;
   },
-  read(path, name) {
-    const data = this.getData();
-    const parent = this.getPathObj(data, path);
-    if (!parent || !parent.items || !parent.items[name]) return null;
-    return parent.items[name].content || '';
-  },
-  update(path, name, content) {
-    const data = this.getData();
-    const parent = this.getPathObj(data, path);
-    if (!parent || !parent.items || !parent.items[name]) return false;
-    parent.items[name].content = content;
-    parent.items[name].date = new Date().toISOString();
-    this.saveData(data);
-    return true;
-  },
   delete(path, name) {
     const data = this.getData();
     const parent = this.getPathObj(data, path);
@@ -353,30 +351,59 @@ const FS = {
     this.saveData(data);
     return true;
   },
-  list(path) {
-    const data = this.getData();
-    const dir = this.getPathObj(data, path);
-    if (!dir || !dir.items) return [];
-    return Object.keys(dir.items).map(name => ({
-      name,
-      type: dir.items[name].type,
-      date: dir.items[name].date
-    }));
-  },
-  exists(path, name) {
+  read(path, name) {
     const data = this.getData();
     const parent = this.getPathObj(data, path);
-    return parent && parent.items && !!parent.items[name];
+    if (!parent || !parent.items || !parent.items[name]) return null;
+    return parent.items[name].type === 'file' ? parent.items[name].content : null;
+  },
+  update(path, name, content) {
+    const data = this.getData();
+    const parent = this.getPathObj(data, path);
+    if (!parent || !parent.items || !parent.items[name] || parent.items[name].type !== 'file') return false;
+    parent.items[name].content = content;
+    parent.items[name].date = new Date().toISOString();
+    this.saveData(data);
+    return true;
+  },
+  list(path = '/') {
+    const data = this.getData();
+    const folder = this.getPathObj(data, path);
+    if (!folder || !folder.items) return [];
+    return Object.entries(folder.items).map(([name, item]) => ({
+      name,
+      type: item.type,
+      date: item.date,
+      size: item.type === 'file' ? (item.content?.length || 0) : null
+    }));
+  },
+  getPathObj(data, path) {
+    if (path === '/') return data['/'];
+    const parts = path.split('/').filter(p => p);
+    let current = data['/'];
+    for (const part of parts) {
+      if (!current.items || !current.items[part]) return null;
+      current = current.items[part];
+    }
+    return current;
   }
 };
 
-// Boot Sequence
+// Initialize default structure
+if (!localStorage.getItem('phoenixos_fs')) {
+  FS.mkdir('/', 'Documents');
+  FS.mkdir('/', 'Downloads');
+  FS.createFile('/Documents', 'welcome.txt', 'Welcome to PhoenixOS!');
+}
+
+let currentPath = '/';
+
+// BOOT SEQUENCE
 window.onload = function() {
   const bootTexts = [
     'Loading kernel...',
     'Mounting file system...',
     'Starting services...',
-    'Initializing hardware...',
     'Ready!'
   ];
 
@@ -390,143 +417,49 @@ window.onload = function() {
       setTimeout(() => {
         document.getElementById('bootScreen').classList.add('hidden');
         document.getElementById('loginScreen').classList.add('show');
-        document.getElementById('loginPassword').focus();
       }, 500);
     }
   }, 600);
-
-  // Login on Enter key
-  document.getElementById('loginPassword').addEventListener('keypress', e => {
-    if (e.key === 'Enter') handleLogin();
-  });
 };
 
-function handleLogin() {
-  const password = document.getElementById('loginPassword').value;
-  const errorDiv = document.getElementById('loginError');
-
-  if (password === 'phoenix') {
-    document.getElementById('loginScreen').style.display = 'none';
+// LOGIN
+function attemptLogin() {
+  const pwd = document.getElementById('loginPassword').value;
+  if (pwd === 'phoenix' || pwd === '') {
+    document.getElementById('loginScreen').classList.remove('show');
     document.getElementById('desktop').classList.add('show');
-    startClock();
+    showNotification('Welcome', 'PhoenixOS v2.1.0');
+    updateClock();
   } else {
-    errorDiv.textContent = 'Incorrect password. Hint: phoenix';
+    showNotification('Error', 'Incorrect password');
     document.getElementById('loginPassword').value = '';
-    setTimeout(() => errorDiv.textContent = '', 3000);
   }
 }
 
-function handleShutdown() {
-  if (!confirm('Shutdown PhoenixOS?')) return;
+document.getElementById('loginPassword')?.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') attemptLogin();
+});
 
-  document.getElementById('desktop').style.opacity = '0';
-  document.getElementById('desktop').style.transition = 'opacity 1s';
-
+// SHUTDOWN
+function shutdown() {
+  closeStartMenu();
+  document.getElementById('desktop').classList.remove('show');
+  document.getElementById('shutdownScreen').classList.add('show');
   setTimeout(() => {
-    document.getElementById('desktop').style.display = 'none';
-    document.getElementById('bootScreen').classList.remove('hidden');
-    document.getElementById('bootProgress').textContent = 'Shutting down...';
-
-    setTimeout(() => {
-      document.body.innerHTML = '<div style="background:#000;color:#fff;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column"><div style="font-size:80px">🔥</div><div style="margin-top:20px;font-size:20px">PhoenixOS has been shut down</div><div style="margin-top:10px;color:#666;font-size:14px">You can close this window</div></div>';
-    }, 2000);
-  }, 1000);
+    document.getElementById('shutdownScreen').classList.remove('show');
+    document.getElementById('loginScreen').classList.add('show');
+  }, 3000);
 }
 
-function startClock() {
-  updateClock();
-  setInterval(updateClock, 1000);
-}
+// WINDOW MANAGER
+let zIndex = 100;
+let activeWindow = null;
+let isMobile = window.innerWidth <= 768;
 
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-}
+window.addEventListener('resize', () => {
+  isMobile = window.innerWidth <= 768;
+});
 
-// On-Screen Keyboard
-function toggleOSK() {
-  const osk = document.getElementById('osk');
-  osk.classList.toggle('show');
-}
-
-function showOSK(target) {
-  currentOskTarget = target;
-  document.getElementById('osk').classList.add('show');
-}
-
-function hideOSK() {
-  document.getElementById('osk').classList.remove('show');
-  currentOskTarget = null;
-}
-
-function oskType(char) {
-  if (!currentOskTarget) return;
-  const start = currentOskTarget.selectionStart;
-  const end = currentOskTarget.selectionEnd;
-  const text = currentOskTarget.value;
-  const before = text.substring(0, start);
-  const after = text.substring(end);
-
-  if (oskShiftActive && char.length === 1) {
-    char = char.toUpperCase();
-    oskShiftActive = false;
-  }
-
-  currentOskTarget.value = before + char + after;
-  currentOskTarget.selectionStart = currentOskTarget.selectionEnd = start + char.length;
-  currentOskTarget.focus();
-}
-
-function oskBackspace() {
-  if (!currentOskTarget) return;
-  const start = currentOskTarget.selectionStart;
-  const end = currentOskTarget.selectionEnd;
-  const text = currentOskTarget.value;
-
-  if (start !== end) {
-    currentOskTarget.value = text.substring(0, start) + text.substring(end);
-    currentOskTarget.selectionStart = currentOskTarget.selectionEnd = start;
-  } else if (start > 0) {
-    currentOskTarget.value = text.substring(0, start - 1) + text.substring(start);
-    currentOskTarget.selectionStart = currentOskTarget.selectionEnd = start - 1;
-  }
-  currentOskTarget.focus();
-}
-
-function oskEnter() {
-  if (!currentOskTarget) return;
-  if (currentOskTarget.tagName === 'INPUT') {
-    const event = new KeyboardEvent('keypress', {key: 'Enter', code: 'Enter', keyCode: 13});
-    currentOskTarget.dispatchEvent(event);
-  } else {
-    oskType('\n');
-  }
-}
-
-function oskShift() {
-  oskShiftActive = !oskShiftActive;
-}
-
-// Auto-show OSK on mobile when input focused
-if (isMobile) {
-  document.addEventListener('focusin', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      setTimeout(() => showOSK(e.target), 100);
-    }
-  });
-
-  document.addEventListener('focusout', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      setTimeout(() => {
-        if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
-          hideOSK();
-        }
-      }, 200);
-    }
-  });
-}
-
-// Window Management
 function createWindow(title, content, width = 600, height = 400) {
   const win = document.createElement('div');
   win.className = 'window show';
@@ -558,337 +491,410 @@ function createWindow(title, content, width = 600, height = 400) {
     <div class="window-resize"></div>
   `;
 
-  // Window controls
   win.querySelector('.close').onclick = () => win.remove();
-  win.querySelector('.minimize').onclick = () => win.style.display = 'none';
+  win.querySelector('.minimize').onclick = () => {
+    win.style.display = 'none';
+    setTimeout(() => win.style.display = 'flex', 100);
+  };
   win.querySelector('.maximize').onclick = () => {
     win.classList.toggle('maximized');
   };
 
-  // Draggable
-  const header = win.querySelector('.window-header');
-  let isDragging = false, startX, startY, startLeft, startTop;
-
-  const startDrag = (clientX, clientY) => {
-    if (win.classList.contains('maximized')) return;
-    isDragging = true;
-    startX = clientX;
-    startY = clientY;
-    startLeft = win.offsetLeft;
-    startTop = win.offsetTop;
-    win.style.zIndex = ++zIndex;
-  };
-
-  const doDrag = (clientX, clientY) => {
-    if (!isDragging) return;
-    win.style.left = (startLeft + clientX - startX) + 'px';
-    win.style.top = (startTop + clientY - startY) + 'px';
-  };
-
-  const endDrag = () => {
-    isDragging = false;
-  };
-
-  header.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
-  header.addEventListener('touchstart', e => {
-    const touch = e.touches[0];
-    startDrag(touch.clientX, touch.clientY);
-  }, {passive: true});
-
-  document.addEventListener('mousemove', e => doDrag(e.clientX, e.clientY));
-  document.addEventListener('touchmove', e => {
-    if (isDragging) {
-      const touch = e.touches[0];
-      doDrag(touch.clientX, touch.clientY);
+  // Focus management
+  win.addEventListener('mousedown', () => {
+    if (activeWindow && activeWindow !== win) {
+      activeWindow.style.opacity = '0.95';
     }
-  }, {passive: true});
-
-  document.addEventListener('mouseup', endDrag);
-  document.addEventListener('touchend', endDrag);
-
-  // Resizable
-  const resizeHandle = win.querySelector('.window-resize');
-  let isResizing = false;
-
-  const startResize = (clientX, clientY) => {
-    if (win.classList.contains('maximized')) return;
-    isResizing = true;
-    startX = clientX;
-    startY = clientY;
-    startLeft = win.offsetWidth;
-    startTop = win.offsetHeight;
-  };
-
-  const doResize = (clientX, clientY) => {
-    if (!isResizing) return;
-    const newWidth = startLeft + (clientX - startX);
-    const newHeight = startTop + (clientY - startY);
-    if (newWidth > 300) win.style.width = newWidth + 'px';
-    if (newHeight > 200) win.style.height = newHeight + 'px';
-  };
-
-  const endResize = () => {
-    isResizing = false;
-  };
-
-  resizeHandle.addEventListener('mousedown', e => {
-    e.stopPropagation();
-    startResize(e.clientX, e.clientY);
+    activeWindow = win;
+    win.style.zIndex = ++zIndex;
+    win.style.opacity = '1';
+  });
+  win.addEventListener('touchstart', () => {
+    if (activeWindow && activeWindow !== win) {
+      activeWindow.style.opacity = '0.95';
+    }
+    activeWindow = win;
+    win.style.zIndex = ++zIndex;
+    win.style.opacity = '1';
   });
 
-  resizeHandle.addEventListener('touchstart', e => {
-    e.stopPropagation();
-    const touch = e.touches[0];
-    startResize(touch.clientX, touch.clientY);
-  }, {passive: true});
+  // Draggable (desktop only)
+  if (!isMobile) {
+    const header = win.querySelector('.window-header');
+    let isDragging = false, startX, startY, startLeft, startTop;
 
-  document.addEventListener('mousemove', e => doResize(e.clientX, e.clientY));
-  document.addEventListener('touchmove', e => {
-    if (isResizing) {
+    header.addEventListener('mousedown', e => {
+      if (win.classList.contains('maximized')) return;
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = win.offsetLeft;
+      startTop = win.offsetTop;
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging || win.classList.contains('maximized')) return;
+      win.style.left = (startLeft + e.clientX - startX) + 'px';
+      win.style.top = (startTop + e.clientY - startY) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => isDragging = false);
+
+    // Resizable
+    const resizeHandle = win.querySelector('.window-resize');
+    let isResizing = false;
+
+    resizeHandle.addEventListener('mousedown', e => {
+      if (win.classList.contains('maximized')) return;
+      isResizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = win.offsetWidth;
+      startTop = win.offsetHeight;
+      e.stopPropagation();
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isResizing) return;
+      const newWidth = startLeft + (e.clientX - startX);
+      const newHeight = startTop + (e.clientY - startY);
+      if (newWidth > 300) win.style.width = newWidth + 'px';
+      if (newHeight > 200) win.style.height = newHeight + 'px';
+    });
+
+    document.addEventListener('mouseup', () => isResizing = false);
+  }
+
+  // Touch drag for mobile
+  if (isMobile) {
+    const header = win.querySelector('.window-header');
+    let touchStartX, touchStartY, touchStartLeft, touchStartTop;
+
+    header.addEventListener('touchstart', e => {
+      if (win.classList.contains('maximized')) return;
       const touch = e.touches[0];
-      doResize(touch.clientX, touch.clientY);
-    }
-  }, {passive: true});
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartLeft = win.offsetLeft;
+      touchStartTop = win.offsetTop;
+    });
 
-  document.addEventListener('mouseup', endResize);
-  document.addEventListener('touchend', endResize);
+    header.addEventListener('touchmove', e => {
+      if (win.classList.contains('maximized')) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      win.style.left = (touchStartLeft + touch.clientX - touchStartX) + 'px';
+      win.style.top = (touchStartTop + touch.clientY - touchStartY) + 'px';
+    });
+  }
 
-  document.querySelector('.desktop-content').appendChild(win);
+  document.getElementById('desktopArea').appendChild(win);
   return win.querySelector('.window-body');
 }
 
-// Applications
-function openAbout() {
-  const body = createWindow('About PhoenixOS', '', 500, 300);
-  body.innerHTML = `
-    <div style="padding:30px;text-align:center">
-      <div style="font-size:80px;margin-bottom:20px">🔥</div>
-      <h2 style="margin-bottom:10px">PhoenixOS v2.1.0</h2>
-      <p style="color:#666;margin:10px 0">A modern web-based operating system</p>
-      <p style="color:#999;font-size:12px;margin-top:20px">Built with HTML, CSS, and JavaScript</p>
-      <p style="color:#999;font-size:12px">Features hierarchical file system, OSK, and responsive design</p>
-    </div>
-  `;
+// START MENU
+function toggleStartMenu() {
+  document.getElementById('startMenu').classList.toggle('show');
 }
 
-// File Browser with hierarchical navigation
-function openFiles(startPath = '/') {
-  const body = createWindow('Files', '', 700, 500);
-  body.innerHTML = `
-    <div class="file-browser">
-      <div style="margin-bottom:15px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn" onclick="createNewFile()">New File</button>
-        <button class="btn" onclick="createNewFolder()">New Folder</button>
-        <button class="btn" onclick="window.currentFilePath && navigateToPath(window.currentFilePath.split('/').slice(0,-1).join('/') || '/')">Up</button>
-      </div>
-      <div id="fileBreadcrumb"></div>
-      <ul class="file-list" id="fileList"></ul>
-    </div>
-  `;
+function closeStartMenu() {
+  document.getElementById('startMenu').classList.remove('show');
+}
 
-  window.currentFilePath = startPath;
-  renderFileList(body.querySelector('#fileList'), startPath);
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('startMenu');
+  if (!menu.contains(e.target) && !e.target.closest('.menubar-item')) {
+    closeStartMenu();
+  }
+});
+
+// NOTIFICATIONS
+function showNotification(title, message) {
+  const notif = document.createElement('div');
+  notif.className = 'notification';
+  notif.innerHTML = `<strong>${title}</strong><div>${message}</div>`;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.remove(), 3000);
+}
+
+// CONTEXT MENU
+function hideContextMenu() {
+  document.getElementById('contextMenu').classList.remove('show');
+}
+
+document.getElementById('desktopArea').addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  const menu = document.getElementById('contextMenu');
+  menu.style.left = e.clientX + 'px';
+  menu.style.top = e.clientY + 'px';
+  menu.classList.add('show');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.context-menu')) hideContextMenu();
+});
+
+// ON-SCREEN KEYBOARD
+let oskTarget = null;
+let oskShiftActive = false;
+
+function showOSK(target) {
+  oskTarget = target;
+  document.getElementById('osk').classList.add('show');
+}
+
+function toggleOSK() {
+  document.getElementById('osk').classList.toggle('show');
+  oskTarget = null;
+}
+
+function oskType(char) {
+  if (!oskTarget) {
+    oskTarget = document.activeElement;
+  }
+  if (oskTarget && (oskTarget.tagName === 'INPUT' || oskTarget.tagName === 'TEXTAREA')) {
+    const start = oskTarget.selectionStart;
+    const end = oskTarget.selectionEnd;
+    const text = oskTarget.value;
+    const finalChar = oskShiftActive ? char.toUpperCase() : char;
+    oskTarget.value = text.substring(0, start) + finalChar + text.substring(end);
+    oskTarget.selectionStart = oskTarget.selectionEnd = start + 1;
+    oskShiftActive = false;
+  }
+}
+
+function oskBackspace() {
+  if (oskTarget && (oskTarget.tagName === 'INPUT' || oskTarget.tagName === 'TEXTAREA')) {
+    const start = oskTarget.selectionStart;
+    const end = oskTarget.selectionEnd;
+    const text = oskTarget.value;
+    if (start > 0 && start === end) {
+      oskTarget.value = text.substring(0, start - 1) + text.substring(end);
+      oskTarget.selectionStart = oskTarget.selectionEnd = start - 1;
+    } else if (start !== end) {
+      oskTarget.value = text.substring(0, start) + text.substring(end);
+      oskTarget.selectionStart = oskTarget.selectionEnd = start;
+    }
+  }
+}
+
+function oskEnter() {
+  if (oskTarget) {
+    const event = new KeyboardEvent('keypress', {key: 'Enter', keyCode: 13});
+    oskTarget.dispatchEvent(event);
+  }
+}
+
+function oskShift() {
+  oskShiftActive = !oskShiftActive;
+}
+
+// Auto-show OSK on mobile
+if (isMobile) {
+  document.addEventListener('focusin', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      setTimeout(() => showOSK(e.target), 100);
+    }
+  });
+}
+
+// FILES APP
+function openFiles() {
+  const body = createWindow('Files', '', 700, 500);
+  body.style.padding = '0';
+  renderFileList(body, currentPath);
 }
 
 function renderFileList(container, path) {
   const items = FS.list(path);
-  window.currentFilePath = path;
+  const pathParts = path.split('/').filter(p => p);
 
-  // Breadcrumb
-  const breadcrumb = document.getElementById('fileBreadcrumb');
-  if (breadcrumb) {
-    const pathParts = path.split('/').filter(p => p);
-    let html = '<div class="breadcrumb">';
-    html += '<span class="breadcrumb-item" onclick="navigateToPath(\'/\')">🏠</span>';
-
-    let buildPath = '';
-    pathParts.forEach((part, i) => {
-      buildPath += '/' + part;
-      const thisPath = buildPath;
-      html += '<span class="breadcrumb-separator">/</span>';
-      html += `<span class="breadcrumb-item" onclick="navigateToPath('${thisPath}')">${part}</span>`;
-    });
-
-    html += '</div>';
-    breadcrumb.innerHTML = html;
-  }
-
-  // File list
-  container.innerHTML = '';
-
-  if (items.length === 0) {
-    container.innerHTML = '<div style="padding:40px;text-align:center;color:#999">Empty folder</div>';
-    return;
-  }
-
-  items.sort((a, b) => {
-    if (a.type !== b.type) return a.type === 'folder' ? -1 : 1;
-    return a.name.localeCompare(b.name);
+  let html = '<div class="breadcrumb">';
+  html += '<span class="breadcrumb-item" onclick="navigateToPath(\'/\')">🏠</span>';
+  let buildPath = '';
+  pathParts.forEach((part, i) => {
+    buildPath += '/' + part;
+    const thisPath = buildPath;
+    html += '<span class="breadcrumb-separator">/</span>';
+    html += `<span class="breadcrumb-item" onclick="navigateToPath('${thisPath}')">${part}</span>`;
   });
+  html += '</div>';
+
+  html += '<div style="padding:12px;background:#f8f8f8;border-bottom:1px solid #ddd;display:flex;gap:8px;flex-wrap:wrap">';
+  html += '<button class="btn" style="padding:8px 12px;margin:0;font-size:13px" onclick="createNewFolder()">+ Folder</button>';
+  html += '<button class="btn" style="padding:8px 12px;margin:0;font-size:13px" onclick="createNewFile()">+ File</button>';
+  if (path !== '/') {
+    html += '<button class="btn btn-secondary" style="padding:8px 12px;margin:0;font-size:13px" onclick="navigateUp()">↑ Up</button>';
+  }
+  html += '</div>';
+
+  html += '<ul class="file-list">';
 
   items.forEach(item => {
-    const li = document.createElement('li');
-    li.className = 'file-item';
-
     const icon = item.type === 'folder' ? '📁' : '📄';
-    const date = new Date(item.date).toLocaleDateString('fr-FR');
+    const size = item.type === 'file' ? `${item.size} bytes` : 'Folder';
+    const date = new Date(item.date).toLocaleDateString();
 
-    li.innerHTML = `
-      <div class="file-icon">${icon}</div>
-      <div class="file-info">
-        <div class="file-name">${item.name}</div>
-        <div class="file-date">${date}</div>
-      </div>
-      <div class="file-actions">
-        ${item.type === 'folder'
-          ? `<button class="btn" onclick="navigateToPath('${path === '/' ? '/' + item.name : path + '/' + item.name}')">Open</button>`
-          : `<button class="btn" onclick="openFileEditor('${path}', '${item.name}')">Edit</button>`
-        }
-        <button class="btn danger" onclick="deleteItem('${path}', '${item.name}')">Delete</button>
-      </div>
+    html += `
+      <li class="file-item" ${item.type === 'folder' ? `ondblclick="openFolder('${item.name}')"` : ''}>
+        <div class="file-item-icon">${icon}</div>
+        <div class="file-item-info">
+          <div class="file-item-name">${item.name}</div>
+          <div class="file-item-meta">${size} • ${date}</div>
+        </div>
+        <div class="file-item-actions">
+          ${item.type === 'file' ? `<button class="btn" style="padding:6px 10px;margin:0;font-size:12px" onclick="openFileInEditor('${item.name}')">Open</button>` : ''}
+          <button class="btn btn-danger" style="padding:6px 10px;margin:0;font-size:12px" onclick="deleteItem('${item.name}')">Del</button>
+        </div>
+      </li>
     `;
+  });
 
-    if (item.type === 'folder') {
-      li.ondblclick = () => navigateToPath(path === '/' ? '/' + item.name : path + '/' + item.name);
-    } else {
-      li.ondblclick = () => openFileEditor(path, item.name);
+  if (items.length === 0) {
+    html += '<div style="text-align:center;padding:40px;color:#999">Empty folder</div>';
+  }
+
+  html += '</ul>';
+  container.innerHTML = html;
+}
+
+window.navigateToPath = function(path) {
+  currentPath = path;
+  const fileWindows = document.querySelectorAll('.window');
+  fileWindows.forEach(win => {
+    if (win.querySelector('.window-title')?.textContent === 'Files') {
+      renderFileList(win.querySelector('.window-body'), currentPath);
     }
-
-    container.appendChild(li);
   });
-}
+};
 
-function navigateToPath(path) {
-  const container = document.getElementById('fileList');
-  if (container) {
-    renderFileList(container, path);
-  }
-}
+window.navigateUp = function() {
+  const parts = currentPath.split('/').filter(p => p);
+  parts.pop();
+  currentPath = parts.length ? '/' + parts.join('/') : '/';
+  navigateToPath(currentPath);
+};
 
-function createNewFile() {
-  const name = prompt('File name:');
-  if (!name) return;
+window.openFolder = function(name) {
+  currentPath = currentPath === '/' ? '/' + name : currentPath + '/' + name;
+  navigateToPath(currentPath);
+};
 
-  const path = window.currentFilePath || '/';
-  if (FS.exists(path, name)) {
-    alert('File already exists!');
-    return;
-  }
-
-  FS.createFile(path, name, '');
-  refreshFileList();
-}
-
-function createNewFolder() {
+window.createNewFolder = function() {
   const name = prompt('Folder name:');
-  if (!name) return;
+  if (name && name.trim()) {
+    if (FS.mkdir(currentPath, name.trim())) {
+      showNotification('Success', `Folder "${name}" created`);
+      navigateToPath(currentPath);
+    } else {
+      showNotification('Error', 'Could not create folder');
+    }
+  }
+};
 
-  const path = window.currentFilePath || '/';
-  if (FS.exists(path, name)) {
-    alert('Folder already exists!');
+window.createNewFile = function() {
+  const name = prompt('File name:');
+  if (name && name.trim()) {
+    if (FS.createFile(currentPath, name.trim(), '')) {
+      showNotification('Success', `File "${name}" created`);
+      navigateToPath(currentPath);
+    } else {
+      showNotification('Error', 'Could not create file');
+    }
+  }
+};
+
+window.deleteItem = function(name) {
+  if (confirm(`Delete "${name}"?`)) {
+    if (FS.delete(currentPath, name)) {
+      showNotification('Deleted', `"${name}" removed`);
+      navigateToPath(currentPath);
+    }
+  }
+};
+
+window.openFileInEditor = function(name) {
+  const content = FS.read(currentPath, name);
+  if (content !== null) {
+    openEditorWithFile(name, content);
+  }
+};
+
+// TEXT EDITOR
+function openEditor() {
+  openEditorWithFile('', '');
+}
+
+function openEditorWithFile(filename, content) {
+  const body = createWindow('Editor', '', 700, 500);
+  body.style.padding = '0';
+  const uniqueId = Date.now();
+  body.innerHTML = `
+    <div style="padding:12px;background:#f8f8f8;border-bottom:1px solid #ddd">
+      <input type="text" id="editorName${uniqueId}" placeholder="Filename" value="${filename}" style="margin:0">
+    </div>
+    <textarea id="editorText${uniqueId}" style="height:calc(100% - 110px);border:none;border-radius:0;margin:0;resize:none;font-family:monospace;font-size:13px;padding:15px" onfocus="showOSK(this)">${content}</textarea>
+    <div style="padding:12px;background:#f8f8f8;border-top:1px solid #ddd">
+      <button class="btn btn-success" style="padding:8px 16px;margin:0" onclick="saveFile(${uniqueId})">💾 Save</button>
+    </div>
+  `;
+}
+
+window.saveFile = function(id) {
+  const nameInput = document.getElementById('editorName' + id);
+  const textArea = document.getElementById('editorText' + id);
+  const name = nameInput.value.trim();
+  const content = textArea.value;
+
+  if (!name) {
+    showNotification('Error', 'Enter filename');
     return;
   }
 
-  FS.mkdir(path, name);
-  refreshFileList();
-}
-
-function deleteItem(path, name) {
-  if (!confirm(`Delete ${name}?`)) return;
-  FS.delete(path, name);
-  refreshFileList();
-}
-
-function refreshFileList() {
-  const container = document.getElementById('fileList');
-  if (container) {
-    renderFileList(container, window.currentFilePath || '/');
+  const existing = FS.list(currentPath).find(f => f.name === name);
+  if (existing && existing.type === 'file') {
+    FS.update(currentPath, name, content);
+  } else {
+    FS.createFile(currentPath, name, content);
   }
-}
 
-function openFileEditor(path, filename) {
-  const content = FS.read(path, filename) || '';
-  const body = createWindow('Edit: ' + filename, '', 700, 500);
-  body.innerHTML = `
-    <div class="notepad">
-      <div style="padding:10px;background:#f5f5f5;border-bottom:1px solid #ddd;display:flex;gap:10px">
-        <button class="btn success" onclick="saveCurrentFile()">Save</button>
-        <span style="flex:1;display:flex;align-items:center;color:#666;font-size:13px">${path}/${filename}</span>
-      </div>
-      <textarea id="fileEditorContent" style="flex:1;border:none;padding:15px;font-family:monospace;font-size:14px">${content}</textarea>
-    </div>
-  `;
+  showNotification('Saved', `File "${name}" saved`);
+};
 
-  window.currentEditFile = {path, filename};
-}
-
-function saveCurrentFile() {
-  if (!window.currentEditFile) return;
-
-  const content = document.getElementById('fileEditorContent').value;
-  const {path, filename} = window.currentEditFile;
-
-  FS.update(path, filename, content);
-  alert('Saved!');
-  refreshFileList();
-}
-
-// Terminal with cd, mkdir, ls
+// TERMINAL
 function openTerminal() {
-  const body = createWindow('Terminal', '', 700, 500);
+  const body = createWindow('Terminal', '', 700, 400);
+  body.style.padding = '0';
+  const uniqueId = Date.now();
   body.innerHTML = `
-    <div style="display:flex;flex-direction:column;height:100%">
-      <div class="terminal" id="termOutput">
-        <div class="terminal-line">PhoenixOS Terminal v2.1.0</div>
-        <div class="terminal-line">Type 'help' for available commands</div>
-        <div class="terminal-line"></div>
-      </div>
-      <div style="background:#1a1a1a;padding:5px;display:flex;align-items:center">
-        <span style="color:#00ff00;font-family:monospace;margin-right:5px" id="termPrompt">$ </span>
-        <input type="text" class="terminal-input" id="termInput" style="flex:1">
-      </div>
+    <div class="terminal" id="termOutput${uniqueId}">
+      <div class="terminal-line">PhoenixOS Terminal v2.1.0</div>
+      <div class="terminal-line">Type 'help' for commands</div>
+      <div class="terminal-line" style="margin-top:8px">$ <input type="text" class="terminal-input" id="termInput${uniqueId}" autocomplete="off" onfocus="showOSK(this)"></div>
     </div>
   `;
 
-  window.termCurrentPath = '/';
-  updateTermPrompt();
-
-  const input = document.getElementById('termInput');
-  const output = document.getElementById('termOutput');
-
-  input.addEventListener('keypress', e => {
-    if (e.key !== 'Enter') return;
-    const cmd = input.value.trim();
-    input.value = '';
-
-    const promptText = document.getElementById('termPrompt').textContent;
-    addTermLine(promptText + cmd);
-
-    if (!cmd) return;
-    executeTerminalCommand(cmd, output);
-    output.scrollTop = output.scrollHeight;
-  });
+  const input = document.getElementById('termInput' + uniqueId);
+  const output = document.getElementById('termOutput' + uniqueId);
 
   input.focus();
+  input.addEventListener('keypress', (e) => {
+    if (e.key !== 'Enter') return;
+    const cmd = input.value.trim();
+
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+    line.textContent = '$ ' + cmd;
+    output.insertBefore(line, output.lastElementChild);
+
+    if (cmd) executeTerminalCommand(cmd, output);
+
+    input.value = '';
+    output.scrollTop = output.scrollHeight;
+  });
 }
 
-function updateTermPrompt() {
-  const prompt = document.getElementById('termPrompt');
-  if (prompt) {
-    prompt.textContent = window.termCurrentPath + ' $ ';
-  }
-}
-
-function addTermLine(text, color = '#00ff00') {
-  const output = document.getElementById('termOutput');
-  if (!output) return;
-
-  const line = document.createElement('div');
-  line.className = 'terminal-line';
-  line.style.color = color;
-  line.textContent = text;
-  output.appendChild(line);
-}
+window.termCurrentPath = '/';
 
 function executeTerminalCommand(cmd, output) {
   const parts = cmd.split(' ');
@@ -896,339 +902,341 @@ function executeTerminalCommand(cmd, output) {
 
   switch(parts[0]) {
     case 'help':
-      response = 'Available commands:\n  help - Show this help\n  clear - Clear screen\n  ls - List files\n  pwd - Print working directory\n  cd <dir> - Change directory\n  mkdir <name> - Create folder\n  cat <file> - Read file\n  rm <name> - Delete file/folder\n  echo <text> - Print text\n  date - Show date\n  whoami - Current user';
+      response = 'Commands: help, clear, ls, pwd, cd, mkdir, cat, rm, echo, date, whoami';
       break;
-
     case 'clear':
-      output.innerHTML = '';
+      output.innerHTML = '<div class="terminal-line">$ <input type="text" class="terminal-input" autocomplete="off"></div>';
+      output.querySelector('.terminal-input').focus();
       return;
-
     case 'ls':
       const items = FS.list(window.termCurrentPath || '/');
-      if (items.length === 0) {
-        response = 'Empty';
-      } else {
-        response = items.map(f => (f.type === 'folder' ? '📁 ' : '📄 ') + f.name).join('\n');
-      }
+      response = items.length ? items.map(f => (f.type === 'folder' ? '📁 ' : '📄 ') + f.name).join('\n') : 'Empty';
       break;
-
     case 'pwd':
       response = window.termCurrentPath || '/';
       break;
-
     case 'cd':
       if (!parts[1]) {
         window.termCurrentPath = '/';
-        updateTermPrompt();
-        return;
-      }
-
-      if (parts[1] === '..') {
-        const pathParts = window.termCurrentPath.split('/').filter(p => p);
-        pathParts.pop();
-        window.termCurrentPath = pathParts.length > 0 ? '/' + pathParts.join('/') : '/';
-        updateTermPrompt();
-        return;
-      }
-
-      const newPath = window.termCurrentPath === '/' ? '/' + parts[1] : window.termCurrentPath + '/' + parts[1];
-      const data = FS.getData();
-      const dir = FS.getPathObj(data, newPath);
-
-      if (dir && dir.type === 'folder') {
-        window.termCurrentPath = newPath;
-        updateTermPrompt();
-        return;
+        response = 'Changed to /';
+      } else if (parts[1] === '..') {
+        const p = (window.termCurrentPath || '/').split('/').filter(x => x);
+        p.pop();
+        window.termCurrentPath = p.length ? '/' + p.join('/') : '/';
+        response = 'Changed to ' + window.termCurrentPath;
       } else {
-        response = 'Directory not found: ' + parts[1];
-      }
-      break;
-
-    case 'mkdir':
-      if (!parts[1]) {
-        response = 'Usage: mkdir <folder_name>';
-      } else {
-        if (FS.mkdir(window.termCurrentPath || '/', parts[1])) {
-          response = 'Created folder: ' + parts[1];
+        const items = FS.list(window.termCurrentPath || '/');
+        const folder = items.find(f => f.name === parts[1] && f.type === 'folder');
+        if (folder) {
+          window.termCurrentPath = (window.termCurrentPath === '/' ? '' : window.termCurrentPath) + '/' + parts[1];
+          response = 'Changed to ' + window.termCurrentPath;
         } else {
-          response = 'Failed to create folder';
+          response = 'Folder not found';
         }
       }
       break;
-
-    case 'cat':
-      if (!parts[1]) {
-        response = 'Usage: cat <filename>';
+    case 'mkdir':
+      if (parts[1]) {
+        if (FS.mkdir(window.termCurrentPath || '/', parts[1])) {
+          response = `Created folder: ${parts[1]}`;
+        } else {
+          response = 'Error creating folder';
+        }
       } else {
+        response = 'Usage: mkdir <name>';
+      }
+      break;
+    case 'cat':
+      if (parts[1]) {
         const content = FS.read(window.termCurrentPath || '/', parts[1]);
         response = content !== null ? content : 'File not found';
-      }
-      break;
-
-    case 'rm':
-      if (!parts[1]) {
-        response = 'Usage: rm <name>';
       } else {
-        if (FS.delete(window.termCurrentPath || '/', parts[1])) {
-          response = 'Deleted: ' + parts[1];
-        } else {
-          response = 'Not found: ' + parts[1];
-        }
+        response = 'Usage: cat <filename>';
       }
       break;
-
+    case 'rm':
+      if (parts[1]) {
+        if (FS.delete(window.termCurrentPath || '/', parts[1])) {
+          response = `Deleted: ${parts[1]}`;
+        } else {
+          response = 'Error deleting';
+        }
+      } else {
+        response = 'Usage: rm <name>';
+      }
+      break;
     case 'echo':
       response = parts.slice(1).join(' ');
       break;
-
     case 'date':
       response = new Date().toString();
       break;
-
     case 'whoami':
-      response = 'phoenix';
+      response = 'phoenix-user';
       break;
-
     default:
-      response = 'Command not found: ' + parts[0] + '\nType "help" for available commands';
+      response = `Command not found: ${parts[0]}`;
   }
 
-  if (response) {
-    response.split('\n').forEach(line => addTermLine(line));
-  }
+  const respLine = document.createElement('div');
+  respLine.className = 'terminal-line';
+  respLine.style.whiteSpace = 'pre-wrap';
+  respLine.textContent = response;
+  output.insertBefore(respLine, output.lastElementChild);
 }
 
-// Notepad
-function openEditor() {
-  const body = createWindow('Notepad', '', 600, 500);
-  body.innerHTML = `
-    <div class="notepad">
-      <div style="padding:10px;background:#f5f5f5;border-bottom:1px solid #ddd;display:flex;gap:10px">
-        <button class="btn" onclick="saveNote()">Save as...</button>
-        <button class="btn" onclick="clearNote()">Clear</button>
-      </div>
-      <textarea id="notepadContent" placeholder="Start typing..."></textarea>
-    </div>
-  `;
-}
-
-function saveNote() {
-  const content = document.getElementById('notepadContent').value;
-  const filename = prompt('Save as:');
-  if (!filename) return;
-
-  FS.createFile('/', filename, content);
-  alert('Saved!');
-}
-
-function clearNote() {
-  document.getElementById('notepadContent').value = '';
-}
-
-// Calculator
+// CALCULATOR
 function openCalculator() {
-  const body = createWindow('Calculator', '', 400, 550);
+  const body = createWindow('Calculator', '', 350, 500);
+  body.style.padding = '15px';
+
   body.innerHTML = `
-    <div class="calculator">
-      <div class="calculator-display" id="calcDisplay">0</div>
-      <div class="calc-buttons">
-        <div class="calc-btn" onclick="calcClear()">C</div>
-        <div class="calc-btn" onclick="calcInput('(')">(</div>
-        <div class="calc-btn" onclick="calcInput(')')">)</div>
-        <div class="calc-btn operator" onclick="calcInput('/')">÷</div>
-
-        <div class="calc-btn" onclick="calcInput('7')">7</div>
-        <div class="calc-btn" onclick="calcInput('8')">8</div>
-        <div class="calc-btn" onclick="calcInput('9')">9</div>
-        <div class="calc-btn operator" onclick="calcInput('*')">×</div>
-
-        <div class="calc-btn" onclick="calcInput('4')">4</div>
-        <div class="calc-btn" onclick="calcInput('5')">5</div>
-        <div class="calc-btn" onclick="calcInput('6')">6</div>
-        <div class="calc-btn operator" onclick="calcInput('-')">−</div>
-
-        <div class="calc-btn" onclick="calcInput('1')">1</div>
-        <div class="calc-btn" onclick="calcInput('2')">2</div>
-        <div class="calc-btn" onclick="calcInput('3')">3</div>
-        <div class="calc-btn operator" onclick="calcInput('+')">+</div>
-
-        <div class="calc-btn" onclick="calcInput('0')">0</div>
-        <div class="calc-btn" onclick="calcInput('.')">.</div>
-        <div class="calc-btn equals" onclick="calcEquals()">=</div>
-      </div>
+    <div class="calculator-display" id="calcDisplay${Date.now()}">0</div>
+    <div class="calculator-buttons">
+      <button class="calc-btn clear" onclick="calcClear(this)">AC</button>
+      <button class="calc-btn" onclick="calcDel(this)">⌫</button>
+      <button class="calc-btn operator" onclick="calcOp(this, '%')">%</button>
+      <button class="calc-btn operator" onclick="calcOp(this, '/')">÷</button>
+      <button class="calc-btn" onclick="calcNum(this, '7')">7</button>
+      <button class="calc-btn" onclick="calcNum(this, '8')">8</button>
+      <button class="calc-btn" onclick="calcNum(this, '9')">9</button>
+      <button class="calc-btn operator" onclick="calcOp(this, '*')">×</button>
+      <button class="calc-btn" onclick="calcNum(this, '4')">4</button>
+      <button class="calc-btn" onclick="calcNum(this, '5')">5</button>
+      <button class="calc-btn" onclick="calcNum(this, '6')">6</button>
+      <button class="calc-btn operator" onclick="calcOp(this, '-')">−</button>
+      <button class="calc-btn" onclick="calcNum(this, '1')">1</button>
+      <button class="calc-btn" onclick="calcNum(this, '2')">2</button>
+      <button class="calc-btn" onclick="calcNum(this, '3')">3</button>
+      <button class="calc-btn operator" onclick="calcOp(this, '+')">+</button>
+      <button class="calc-btn" onclick="calcNum(this, '0')" style="grid-column:span 2">0</button>
+      <button class="calc-btn" onclick="calcNum(this, '.')">.</button>
+      <button class="calc-btn equals" onclick="calcEq(this)">=</button>
     </div>
   `;
-
-  window.calcExpression = '';
 }
 
-function calcInput(val) {
-  const display = document.getElementById('calcDisplay');
-  if (!window.calcExpression && display.textContent === '0') {
-    window.calcExpression = val;
+window.calcClear = function(btn) {
+  const win = btn.closest('.window-body');
+  const display = win.querySelector('[id^="calcDisplay"]');
+  win.dataset.value = '0';
+  win.dataset.operator = '';
+  win.dataset.prev = '0';
+  win.dataset.waiting = 'false';
+  display.textContent = '0';
+};
+
+window.calcNum = function(btn, num) {
+  const win = btn.closest('.window-body');
+  const display = win.querySelector('[id^="calcDisplay"]');
+  let val = win.dataset.value || '0';
+  const waiting = win.dataset.waiting === 'true';
+
+  if (waiting) {
+    val = num;
+    win.dataset.waiting = 'false';
   } else {
-    window.calcExpression += val;
+    if (num === '.' && val.includes('.')) return;
+    val = val === '0' && num !== '.' ? num : val + num;
   }
-  display.textContent = window.calcExpression || '0';
-}
 
-function calcClear() {
-  window.calcExpression = '';
-  document.getElementById('calcDisplay').textContent = '0';
-}
+  win.dataset.value = val;
+  display.textContent = val;
+};
 
-function calcEquals() {
-  try {
-    const result = eval(window.calcExpression);
-    document.getElementById('calcDisplay').textContent = result;
-    window.calcExpression = result.toString();
-  } catch (e) {
-    document.getElementById('calcDisplay').textContent = 'Error';
-    window.calcExpression = '';
+window.calcOp = function(btn, op) {
+  const win = btn.closest('.window-body');
+  const display = win.querySelector('[id^="calcDisplay"]');
+  const val = parseFloat(win.dataset.value || '0');
+  const prevOp = win.dataset.operator;
+  const prev = parseFloat(win.dataset.prev || '0');
+
+  if (prevOp && win.dataset.waiting !== 'true') {
+    const result = calcExec(prev, val, prevOp);
+    win.dataset.value = String(result);
+    win.dataset.prev = String(result);
+    display.textContent = result;
+  } else {
+    win.dataset.prev = String(val);
+  }
+
+  win.dataset.operator = op;
+  win.dataset.waiting = 'true';
+};
+
+window.calcEq = function(btn) {
+  const win = btn.closest('.window-body');
+  const display = win.querySelector('[id^="calcDisplay"]');
+  const val = parseFloat(win.dataset.value || '0');
+  const op = win.dataset.operator;
+  const prev = parseFloat(win.dataset.prev || '0');
+
+  if (op) {
+    const result = calcExec(prev, val, op);
+    win.dataset.value = String(result);
+    win.dataset.operator = '';
+    win.dataset.prev = '0';
+    win.dataset.waiting = 'true';
+    display.textContent = result;
+  }
+};
+
+window.calcDel = function(btn) {
+  const win = btn.closest('.window-body');
+  const display = win.querySelector('[id^="calcDisplay"]');
+  let val = win.dataset.value || '0';
+  val = val.length > 1 ? val.slice(0, -1) : '0';
+  win.dataset.value = val;
+  display.textContent = val;
+};
+
+function calcExec(a, b, op) {
+  switch(op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b !== 0 ? a / b : 0;
+    case '%': return a % b;
+    default: return b;
   }
 }
 
-// Paint
-function openPaint() {
-  const body = createWindow('Paint', '', 700, 600);
+// BROWSER
+function openBrowser() {
+  const body = createWindow('Browser', '', 800, 600);
+  body.style.padding = '0';
+  const uniqueId = Date.now();
   body.innerHTML = `
-    <div style="display:flex;flex-direction:column;height:100%">
-      <div class="paint-controls">
-        <div>
-          <div class="color-btn active" style="background:#000" onclick="selectColor('#000', this)"></div>
-          <div class="color-btn" style="background:#FF3B30" onclick="selectColor('#FF3B30', this)"></div>
-          <div class="color-btn" style="background:#34C759" onclick="selectColor('#34C759', this)"></div>
-          <div class="color-btn" style="background:#007AFF" onclick="selectColor('#007AFF', this)"></div>
-          <div class="color-btn" style="background:#FFCC00" onclick="selectColor('#FFCC00', this)"></div>
-          <div class="color-btn" style="background:#FF9500" onclick="selectColor('#FF9500', this)"></div>
-          <div class="color-btn" style="background:#AF52DE" onclick="selectColor('#AF52DE', this)"></div>
-        </div>
-        <button class="btn" onclick="clearCanvas()">Clear</button>
-      </div>
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#f5f5f5;padding:10px">
-        <canvas id="paintCanvas" class="paint-canvas" width="600" height="400"></canvas>
-      </div>
+    <div style="display:flex;gap:8px;padding:12px;background:#f8f8f8;border-bottom:1px solid #ddd">
+      <input type="text" id="browserUrl${uniqueId}" placeholder="Enter URL..." value="https://example.com" style="flex:1;margin:0" onfocus="showOSK(this)">
+      <button class="btn btn-success" style="padding:8px 16px;margin:0" onclick="browserGo(${uniqueId})">Go</button>
     </div>
+    <iframe id="browserFrame${uniqueId}" style="width:100%;height:calc(100% - 60px);border:none" sandbox="allow-same-origin allow-scripts"></iframe>
+  `;
+}
+
+window.browserGo = function(id) {
+  const input = document.getElementById('browserUrl' + id);
+  const frame = document.getElementById('browserFrame' + id);
+  let url = input.value.trim();
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  frame.src = url;
+};
+
+// PAINT
+function openPaint() {
+  const body = createWindow('Paint', '', 700, 550);
+  body.style.padding = '0';
+  const uniqueId = Date.now();
+  body.innerHTML = `
+    <div style="display:flex;gap:6px;padding:10px;background:#f8f8f8;border-bottom:1px solid #ddd;flex-wrap:wrap">
+      <button class="btn" style="padding:6px 12px;margin:0;font-size:12px" onclick="setPaintTool(${uniqueId}, 'brush')">🖌️</button>
+      <button class="btn" style="padding:6px 12px;margin:0;font-size:12px" onclick="setPaintTool(${uniqueId}, 'eraser')">🧹</button>
+      <button class="btn btn-danger" style="padding:6px 12px;margin:0;font-size:12px" onclick="clearPaint(${uniqueId})">Clear</button>
+      <div style="flex:1"></div>
+      ${['#000', '#f00', '#0f0', '#00f', '#ff0'].map(c =>
+        `<div style="width:30px;height:30px;background:${c};border:2px solid #ddd;border-radius:4px;cursor:pointer" onclick="setPaintColor(${uniqueId}, '${c}')"></div>`
+      ).join('')}
+    </div>
+    <canvas id="paintCanvas${uniqueId}" width="700" height="480" style="display:block;cursor:crosshair;background:#fff;touch-action:none"></canvas>
   `;
 
-  setupPaint();
-}
-
-function setupPaint() {
-  const canvas = document.getElementById('paintCanvas');
+  const canvas = document.getElementById('paintCanvas' + uniqueId);
   const ctx = canvas.getContext('2d');
-  let isDrawing = false;
-  let currentColor = '#000';
+  let painting = false;
+  canvas.dataset.color = '#000';
+  canvas.dataset.tool = 'brush';
 
-  window.paintColor = currentColor;
-
-  const startDrawing = (x, y) => {
-    isDrawing = true;
+  // Mouse
+  canvas.addEventListener('mousedown', () => painting = true);
+  canvas.addEventListener('mouseup', () => painting = false);
+  canvas.addEventListener('mouseleave', () => painting = false);
+  canvas.addEventListener('mousemove', (e) => {
+    if (!painting) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ctx.lineWidth = canvas.dataset.tool === 'eraser' ? 20 : 3;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = canvas.dataset.tool === 'eraser' ? '#fff' : canvas.dataset.color;
+    ctx.lineTo(x, y);
+    ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(x, y);
-  };
-
-  const draw = (x, y) => {
-    if (!isDrawing) return;
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = window.paintColor || '#000';
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-  };
-
-  const stopDrawing = () => {
-    isDrawing = false;
-  };
-
-  canvas.addEventListener('mousedown', e => {
-    const rect = canvas.getBoundingClientRect();
-    startDrawing(e.clientX - rect.left, e.clientY - rect.top);
   });
 
-  canvas.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    draw(e.clientX - rect.left, e.clientY - rect.top);
-  });
-
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseleave', stopDrawing);
-
-  // Touch support
-  canvas.addEventListener('touchstart', e => {
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    startDrawing(touch.clientX - rect.left, touch.clientY - rect.top);
-  });
-
-  canvas.addEventListener('touchmove', e => {
+  // Touch
+  canvas.addEventListener('touchstart', (e) => {
+    painting = true;
     e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    draw(touch.clientX - rect.left, touch.clientY - rect.top);
   });
-
-  canvas.addEventListener('touchend', stopDrawing);
+  canvas.addEventListener('touchend', () => painting = false);
+  canvas.addEventListener('touchmove', (e) => {
+    if (!painting) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    ctx.lineWidth = canvas.dataset.tool === 'eraser' ? 20 : 3;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = canvas.dataset.tool === 'eraser' ? '#fff' : canvas.dataset.color;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  });
 }
 
-function selectColor(color, element) {
-  window.paintColor = color;
-  document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
-  element.classList.add('active');
-}
+window.setPaintColor = function(id, color) {
+  const canvas = document.getElementById('paintCanvas' + id);
+  canvas.dataset.color = color;
+};
 
-function clearCanvas() {
-  const canvas = document.getElementById('paintCanvas');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+window.setPaintTool = function(id, tool) {
+  const canvas = document.getElementById('paintCanvas' + id);
+  canvas.dataset.tool = tool;
+};
 
-// Settings
+window.clearPaint = function(id) {
+  if (confirm('Clear canvas?')) {
+    const canvas = document.getElementById('paintCanvas' + id);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+};
+
+// SETTINGS
 function openSettings() {
+  closeStartMenu();
   const body = createWindow('Settings', '', 500, 400);
   body.innerHTML = `
     <div style="padding:20px">
-      <h3 style="margin-bottom:20px">System Settings</h3>
-
-      <div style="margin:15px 0;padding:15px;background:#f5f5f5;border-radius:8px">
-        <div style="font-weight:600;margin-bottom:5px">File System</div>
-        <div style="color:#666;font-size:13px;margin-bottom:10px">Manage stored files and folders</div>
-        <button class="btn danger" onclick="clearFileSystem()">Clear All Files</button>
-      </div>
-
-      <div style="margin:15px 0;padding:15px;background:#f5f5f5;border-radius:8px">
-        <div style="font-weight:600;margin-bottom:5px">Display</div>
-        <div style="color:#666;font-size:13px;margin-bottom:10px">Current resolution: ${window.innerWidth}x${window.innerHeight}</div>
-        <div style="color:#666;font-size:13px">Mobile mode: ${isMobile ? 'Yes' : 'No'}</div>
-      </div>
-
-      <div style="margin:15px 0;padding:15px;background:#f5f5f5;border-radius:8px">
-        <div style="font-weight:600;margin-bottom:5px">About</div>
-        <div style="color:#666;font-size:13px">PhoenixOS v2.1.0</div>
-        <div style="color:#666;font-size:13px">Build: 2025</div>
-      </div>
+      <h3 style="margin-bottom:15px">System Info</h3>
+      <p><strong>OS:</strong> PhoenixOS v2.1.0</p>
+      <p><strong>Platform:</strong> ${navigator.platform}</p>
+      <p><strong>Storage:</strong> ${(JSON.stringify(localStorage).length / 1024).toFixed(2)} KB</p>
+      <hr style="margin:20px 0">
+      <button class="btn btn-danger" onclick="if(confirm('Clear all data?')){localStorage.clear();location.reload()}">Clear Data</button>
+      <button class="btn" onclick="shutdown()">Shutdown</button>
     </div>
   `;
 }
 
-function clearFileSystem() {
-  if (!confirm('Delete all files and folders? This cannot be undone!')) return;
-  localStorage.removeItem('phoenixos_fs');
-  alert('File system cleared!');
-  refreshFileList();
-}
-
-// Games Menu
+// GAMES
 function openGames() {
-  const body = createWindow('Games', '', 500, 400);
+  const body = createWindow('Games', '', 400, 350);
   body.innerHTML = `
-    <div style="padding:30px">
-      <h3 style="margin-bottom:20px;text-align:center">Select a Game</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
-        <button class="btn" style="padding:30px;font-size:18px" onclick="playSnake()">🐍<br>Snake</button>
-        <button class="btn" style="padding:30px;font-size:18px" onclick="playTicTacToe()">⭕<br>Tic-Tac-Toe</button>
-        <button class="btn" style="padding:30px;font-size:18px" onclick="playMemory()">🧠<br>Memory</button>
-        <button class="btn" style="padding:30px;font-size:18px" onclick="playPong()">🏓<br>Pong</button>
+    <div style="padding:20px">
+      <h2 style="margin-bottom:15px;text-align:center">🎮 Games</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <button class="btn" style="padding:25px;font-size:16px" onclick="playSnake()">🐍 Snake</button>
+        <button class="btn" style="padding:25px;font-size:16px" onclick="playPong()">🏓 Pong</button>
+        <button class="btn" style="padding:25px;font-size:16px" onclick="playTicTacToe()">⭕ Tic-Tac-Toe</button>
+        <button class="btn" style="padding:25px;font-size:16px" onclick="playMemory()">🃏 Memory</button>
       </div>
     </div>
   `;
@@ -1236,16 +1244,17 @@ function openGames() {
 
 // Snake Game
 function playSnake() {
-  const body = createWindow('Snake', '', 500, 600);
+  const body = createWindow('Snake', '', 420, 520);
+  const uniqueId = Date.now();
   body.innerHTML = `
-    <div class="game-container">
-      <div class="game-score" id="snakeScore">Score: 0</div>
-      <canvas id="snakeCanvas" class="game-canvas" width="400" height="400"></canvas>
-      <div class="game-info">Swipe or use arrow keys to move</div>
+    <div style="text-align:center;padding:15px">
+      <div id="snakeScore${uniqueId}" style="font-size:20px;font-weight:600;margin-bottom:12px">Score: 0</div>
+      <canvas id="snakeCanvas${uniqueId}" width="400" height="400" style="border:2px solid #ddd;background:#000;border-radius:6px"></canvas>
+      <div style="margin-top:12px;color:#666;font-size:13px">Arrow keys or swipe</div>
     </div>
   `;
 
-  const canvas = document.getElementById('snakeCanvas');
+  const canvas = document.getElementById('snakeCanvas' + uniqueId);
   const ctx = canvas.getContext('2d');
   const grid = 20;
   let snake = [{x: 10, y: 10}];
@@ -1268,15 +1277,13 @@ function playSnake() {
   canvas.addEventListener('touchstart', e => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-  }, {passive: true});
-
+  });
   canvas.addEventListener('touchend', e => {
-    if (!gameActive || !touchStartX || !touchStartY) return;
+    if (!touchStartX || !touchStartY) return;
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
     const dx = touchEndX - touchStartX;
     const dy = touchEndY - touchStartY;
-
     if (Math.abs(dx) > Math.abs(dy)) {
       if (dx > 0 && dir.x === 0) dir = {x: 1, y: 0};
       if (dx < 0 && dir.x === 0) dir = {x: -1, y: 0};
@@ -1284,7 +1291,7 @@ function playSnake() {
       if (dy > 0 && dir.y === 0) dir = {x: 0, y: 1};
       if (dy < 0 && dir.y === 0) dir = {x: 0, y: -1};
     }
-  }, {passive: true});
+  });
 
   const gameLoop = setInterval(() => {
     if (!gameActive) return;
@@ -1295,7 +1302,7 @@ function playSnake() {
         snake.some(s => s.x === head.x && s.y === head.y)) {
       gameActive = false;
       clearInterval(gameLoop);
-      setTimeout(() => alert('Game Over! Score: ' + score), 100);
+      showNotification('Game Over', `Score: ${score}`);
       return;
     }
 
@@ -1303,11 +1310,8 @@ function playSnake() {
 
     if (head.x === food.x && head.y === food.y) {
       score++;
-      document.getElementById('snakeScore').textContent = 'Score: ' + score;
-      food = {
-        x: Math.floor(Math.random() * 20),
-        y: Math.floor(Math.random() * 20)
-      };
+      document.getElementById('snakeScore' + uniqueId).textContent = 'Score: ' + score;
+      food = {x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20)};
     } else {
       snake.pop();
     }
@@ -1432,16 +1436,17 @@ function memoryFlip(i) {
 
 // Pong
 function playPong() {
-  const body = createWindow('Pong', '', 500, 600);
+  const body = createWindow('Pong', '', 420, 520);
+  const uniqueId = Date.now();
   body.innerHTML = `
-    <div class="game-container">
-      <div class="game-score" id="pongScore">0 - 0</div>
-      <canvas id="pongCanvas" class="game-canvas" width="400" height="400"></canvas>
-      <div class="game-info">Move mouse/finger to control</div>
+    <div style="text-align:center;padding:15px">
+      <div id="pongScore${uniqueId}" style="font-size:20px;font-weight:600;margin-bottom:12px">0 - 0</div>
+      <canvas id="pongCanvas${uniqueId}" width="400" height="400" style="border:2px solid #ddd;background:#000;border-radius:6px;touch-action:none"></canvas>
+      <div style="margin-top:12px;color:#666;font-size:13px">Touch/mouse to control</div>
     </div>
   `;
 
-  const canvas = document.getElementById('pongCanvas');
+  const canvas = document.getElementById('pongCanvas' + uniqueId);
   const ctx = canvas.getContext('2d');
   let ball = {x: 200, y: 200, dx: 3, dy: 3};
   let p1 = {y: 160, score: 0};
@@ -1458,6 +1463,12 @@ function playPong() {
     e.preventDefault();
     updatePaddle(e.touches[0].clientY);
   }, {passive: false});
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    p1.y = e.touches[0].clientY - rect.top - 40;
+  });
 
   const gameLoop = setInterval(() => {
     ball.x += ball.dx;
@@ -1476,12 +1487,12 @@ function playPong() {
     if (ball.x < 0) {
       p2.score++;
       ball = {x: 200, y: 200, dx: 3, dy: 3};
-      document.getElementById('pongScore').textContent = p1.score + ' - ' + p2.score;
+      document.getElementById('pongScore' + uniqueId).textContent = p1.score + ' - ' + p2.score;
     }
     if (ball.x > 400) {
       p1.score++;
       ball = {x: 200, y: 200, dx: -3, dy: 3};
-      document.getElementById('pongScore').textContent = p1.score + ' - ' + p2.score;
+      document.getElementById('pongScore' + uniqueId).textContent = p1.score + ' - ' + p2.score;
     }
 
     p2.y += (ball.y - p2.y - 40) * 0.1;
@@ -1496,6 +1507,140 @@ function playPong() {
     ctx.fill();
   }, 1000/60);
 }
+
+function playTicTacToe() {
+  const body = createWindow('Tic-Tac-Toe', '', 400, 500);
+  const uniqueId = Date.now();
+  body.innerHTML = `
+    <div style="text-align:center;padding:15px">
+      <div id="tttStatus${uniqueId}" style="font-size:18px;font-weight:600;margin-bottom:15px">Player X's turn</div>
+      <div id="tttBoard${uniqueId}" style="display:grid;grid-template-columns:repeat(3,100px);gap:8px;justify-content:center"></div>
+      <button class="btn btn-success" style="margin-top:15px" onclick="playTicTacToe()">New Game</button>
+    </div>
+  `;
+
+  const statusEl = document.getElementById('tttStatus' + uniqueId);
+  const boardEl = document.getElementById('tttBoard' + uniqueId);
+
+  let board = Array(9).fill('');
+  let currentPlayer = 'X';
+  let gameOver = false;
+
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.style.cssText = 'width:100px;height:100px;background:#f8f8f8;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer;font-weight:bold;border-radius:8px';
+    cell.onclick = () => {
+      if (gameOver || board[i]) return;
+
+      board[i] = currentPlayer;
+      cell.textContent = currentPlayer;
+      cell.style.color = currentPlayer === 'X' ? '#007AFF' : '#FF3B30';
+
+      const winner = checkWinner();
+      if (winner) {
+        gameOver = true;
+        statusEl.textContent = winner === 'TIE' ? "Tie!" : `${winner} wins!`;
+        return;
+      }
+
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      statusEl.textContent = `Player ${currentPlayer}'s turn`;
+    };
+    boardEl.appendChild(cell);
+  }
+
+  function checkWinner() {
+    const lines = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+    for (const [a,b,c] of lines) {
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
+      }
+    }
+    if (board.every(cell => cell)) return 'TIE';
+    return null;
+  }
+}
+
+function playMemory() {
+  const body = createWindow('Memory', '', 450, 550);
+  const uniqueId = Date.now();
+  body.innerHTML = `
+    <div style="text-align:center;padding:15px">
+      <div id="memoryScore${uniqueId}" style="font-size:18px;font-weight:600;margin-bottom:15px">Moves: 0 | Pairs: 0/8</div>
+      <div id="memoryBoard${uniqueId}" style="display:grid;grid-template-columns:repeat(4,90px);gap:10px;justify-content:center"></div>
+      <button class="btn btn-success" style="margin-top:15px" onclick="playMemory()">New Game</button>
+    </div>
+  `;
+
+  const scoreEl = document.getElementById('memoryScore' + uniqueId);
+  const boardEl = document.getElementById('memoryBoard' + uniqueId);
+
+  const emojis = ['🍎','🍌','🍒','🍇','🍊','🍋','🍉','🥝'];
+  let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+  let flipped = [];
+  let matched = [];
+  let moves = 0;
+
+  cards.forEach((emoji, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = 'width:90px;height:90px;background:#007AFF;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:42px;cursor:pointer;color:#fff';
+    card.dataset.index = i;
+    card.dataset.emoji = emoji;
+    card.textContent = '?';
+
+    card.onclick = () => {
+      if (flipped.length === 2 || flipped.includes(i) || matched.includes(i)) return;
+
+      card.textContent = emoji;
+      card.style.background = '#f8f8f8';
+      card.style.color = '#000';
+      flipped.push(i);
+
+      if (flipped.length === 2) {
+        moves++;
+        scoreEl.textContent = `Moves: ${moves} | Pairs: ${matched.length/2}/8`;
+
+        const [i1, i2] = flipped;
+        const card1 = boardEl.children[i1];
+        const card2 = boardEl.children[i2];
+
+        if (card1.dataset.emoji === card2.dataset.emoji) {
+          matched.push(i1, i2);
+          card1.style.background = '#34C759';
+          card2.style.background = '#34C759';
+          card1.style.color = '#fff';
+          card2.style.color = '#fff';
+          flipped = [];
+          scoreEl.textContent = `Moves: ${moves} | Pairs: ${matched.length/2}/8`;
+          if (matched.length === 16) {
+            setTimeout(() => showNotification('You Won!', `${moves} moves!`), 500);
+          }
+        } else {
+          setTimeout(() => {
+            card1.textContent = '?';
+            card2.textContent = '?';
+            card1.style.background = '#007AFF';
+            card2.style.background = '#007AFF';
+            card1.style.color = '#fff';
+            card2.style.color = '#fff';
+            flipped = [];
+          }, 1000);
+        }
+      }
+    };
+
+    boardEl.appendChild(card);
+  });
+}
+
+// CLOCK
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
