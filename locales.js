@@ -140,6 +140,7 @@ const translations = {
         linkedin: "LinkedIn"
       },
       copyright: "© 2025 The Phoenix Agency. All rights reserved.",
+      license: "All content, code, design and structure of this site are protected under commercial proprietary license. Any unauthorized reproduction, distribution or use is strictly prohibited.",
       lastUpdated: "Last updated: December 6, 2025"
     },
 
@@ -288,6 +289,7 @@ const translations = {
         linkedin: "LinkedIn"
       },
       copyright: "© 2025 The Phoenix Agency. Tous droits réservés.",
+      license: "Tout contenu, code, design et structure de ce site sont protégés sous licence commerciale propriétaire. Toute reproduction, distribution ou utilisation non autorisée est strictement interdite.",
       lastUpdated: "Dernière mise à jour: 6 décembre 2025"
     },
 
@@ -331,6 +333,11 @@ function changeLanguage(lang) {
   localStorage.setItem('preferredLanguage', lang);
   applyTranslations();
   updateLanguageButton();
+
+  // Update tab menu translations if it exists
+  if (typeof TabMenuManager !== 'undefined' && TabMenuManager.updateTranslations) {
+    TabMenuManager.updateTranslations();
+  }
 }
 
 // Appliquer les traductions
@@ -435,6 +442,8 @@ function applyTranslations() {
   document.querySelector('[data-i18n="footer.links.email"]').textContent = t.footer.links.email;
   document.querySelector('[data-i18n="footer.links.linkedin"]').textContent = t.footer.links.linkedin;
   document.querySelector('[data-i18n="footer.copyright"]').textContent = t.footer.copyright;
+  document.querySelector('[data-i18n="footer.license"]').textContent = t.footer.license;
+  document.querySelector('[data-i18n="footer.lastUpdated"]').textContent = t.footer.lastUpdated;
 
   // Cookie Banner (if exists)
   const cookieMessage = document.querySelector('[data-i18n="cookie.message"]');
@@ -447,13 +456,16 @@ function applyTranslations() {
 
 // Mettre à jour l'apparence du bouton de langue
 function updateLanguageButton() {
-  const langBtn = document.getElementById('langSwitcher');
-  if (currentLang === 'fr') {
-    langBtn.textContent = 'EN';
-    langBtn.setAttribute('aria-label', 'Switch to English');
-  } else {
-    langBtn.textContent = 'FR';
-    langBtn.setAttribute('aria-label', 'Passer au français');
+  // Support both old langSwitcher and new langBtn
+  const langBtn = document.getElementById('langBtn') || document.getElementById('langSwitcher');
+  if (langBtn) {
+    if (currentLang === 'fr') {
+      langBtn.textContent = '🇬🇧';
+      langBtn.setAttribute('aria-label', 'Switch to English');
+    } else {
+      langBtn.textContent = '🇫🇷';
+      langBtn.setAttribute('aria-label', 'Passer au français');
+    }
   }
 }
 

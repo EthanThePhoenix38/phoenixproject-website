@@ -27,14 +27,25 @@ const ThemeManager = {
   },
 
   updateThemeButton(theme) {
-    const btn = document.getElementById('themeToggle');
+    // Support both old themeToggle and new themeBtn (in header)
+    const btn = document.getElementById('themeBtn') || document.getElementById('themeToggle');
     if (btn) {
-      btn.textContent = theme === 'light' ? 'Dark' : 'Light';
+      btn.textContent = theme === 'light' ? '🌙' : '☀️';
       btn.setAttribute('aria-label', theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair');
     }
   },
 
   createThemeToggle() {
+    // Check if themeBtn already exists in header
+    const headerBtn = document.getElementById('themeBtn');
+    if (headerBtn) {
+      // Button already exists in header, just update it
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      this.updateThemeButton(theme);
+      return;
+    }
+
+    // Fallback: create standalone button for pages without header integration
     const btn = document.createElement('button');
     btn.id = 'themeToggle';
     btn.className = 'theme-toggle';
@@ -231,7 +242,7 @@ const VisitTracker = {
 
 // GESTION DES TEMPLATES
 const TemplateManager = {
-  templates: ['moderne', 'professionnel', 'fluide', 'epure'],
+  templates: ['moderne', 'professionnel', 'fluide', 'epure', 'glass'],
 
   init() {
     const savedTemplate = this.getPreference('template') || 'moderne';
@@ -309,10 +320,10 @@ const TemplateManager = {
 // MENU À ONGLETS FLUIDE
 const TabMenuManager = {
   tabs: [
-    { id: 'home', label: 'Accueil', section: 'home' },
-    { id: 'services', label: 'Services', section: 'services' },
-    { id: 'expertise', label: 'Expertise', section: 'expertise' },
-    { id: 'contact', label: 'Contact', section: 'contact' }
+    { id: 'home', i18nKey: 'nav.home', section: 'home' },
+    { id: 'services', i18nKey: 'nav.services', section: 'services' },
+    { id: 'expertise', i18nKey: 'nav.expertise', section: 'expertise' },
+    { id: 'contact', i18nKey: 'nav.contact', section: 'contact' }
   ],
 
   init() {
@@ -320,23 +331,80 @@ const TabMenuManager = {
     this.setupTabInteractions();
   },
 
+  getTranslation(i18nKey) {
+    if (typeof translations === 'undefined' || typeof currentLang === 'undefined') {
+      return i18nKey;
+    }
+    const keys = i18nKey.split('.');
+    let value = translations[currentLang];
+    for (const k of keys) {
+      if (value && value[k]) {
+        value = value[k];
+      } else {
+        return i18nKey;
+      }
+    }
+    return value;
+  },
+
   createTabMenu() {
     const menu = document.createElement('div');
     menu.className = 'tab-menu';
     menu.id = 'tabMenu';
 
+    // Bouton toggle pour cacher/montrer le menu
+    const toggleBtn = document.createElement('div');
+    toggleBtn.className = 'tab-menu-toggle';
+    toggleBtn.textContent = '▼';
+    toggleBtn.onclick = () => this.toggleMenu();
+    menu.appendChild(toggleBtn);
+
     this.tabs.forEach(tab => {
       const tabEl = document.createElement('div');
       tabEl.className = 'tab-item';
       tabEl.dataset.tab = tab.id;
-      tabEl.innerHTML = `<span>${tab.label}</span>`;
+      tabEl.dataset.i18n = tab.i18nKey;
+      const label = this.getTranslation(tab.i18nKey);
+      tabEl.innerHTML = `<span>${label}</span>`;
       tabEl.addEventListener('click', (e) => {
+        this.setActiveTab(tab.id);
         this.scrollToSection(tab.section);
       });
       menu.appendChild(tabEl);
     });
 
     document.body.appendChild(menu);
+
+    // Restaurer l'état sauvegardé
+    const savedState = localStorage.getItem('tabMenuHidden');
+    if (savedState === 'true') {
+      menu.classList.add('hidden');
+      toggleBtn.textContent = '▲';
+    }
+  },
+
+  toggleMenu() {
+    const menu = document.getElementById('tabMenu');
+    const toggleBtn = menu.querySelector('.tab-menu-toggle');
+    menu.classList.toggle('hidden');
+
+    if (menu.classList.contains('hidden')) {
+      toggleBtn.textContent = '▲';
+      localStorage.setItem('tabMenuHidden', 'true');
+    } else {
+      toggleBtn.textContent = '▼';
+      localStorage.setItem('tabMenuHidden', 'false');
+    }
+  },
+
+  updateTranslations() {
+    document.querySelectorAll('.tab-item').forEach(tabEl => {
+      const i18nKey = tabEl.dataset.i18n;
+      if (i18nKey) {
+        const label = this.getTranslation(i18nKey);
+        tabEl.querySelector('span').textContent = label;
+      }
+    });
   },
 
   setupTabInteractions() {
