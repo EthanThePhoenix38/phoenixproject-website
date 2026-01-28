@@ -8,134 +8,76 @@
 <title>PhoenixOS v2.1.0</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100vh;touch-action:manipulation}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100vh;background:#000}
 
-/* BOOT SCREEN */
-#bootScreen{position:fixed;inset:0;background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:monospace}
-#bootScreen.hidden{display:none}
-.boot-logo{font-size:80px;margin-bottom:30px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.boot-text{font-size:14px;margin:5px 0}
+/* Boot Screen */
+#bootScreen{position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s}
+#bootScreen.hidden{opacity:0;pointer-events:none}
+.boot-logo{font-size:80px;animation:pulse 2s infinite}
+.boot-text{color:#fff;font-size:18px;margin:10px;font-weight:300;opacity:0.8}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+#bootProgress{color:#00ff00;font-family:monospace;margin-top:20px}
 
-/* LOGIN SCREEN */
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#667eea,#764ba2);display:none;align-items:center;justify-content:center;z-index:99998}
+/* Login Screen */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#667eea,#764ba2);display:none;align-items:center;justify-content:center;z-index:9999}
 #loginScreen.show{display:flex}
-.login-box{background:rgba(255,255,255,0.95);padding:40px;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;min-width:320px}
-.login-logo{font-size:60px;margin-bottom:20px}
-.login-input{width:100%;padding:15px;margin:10px 0;border:2px solid #ddd;border-radius:10px;font-size:16px}
-.login-btn{width:100%;padding:15px;background:#007AFF;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
-.login-btn:hover{background:#0051D5}
+.login-box{background:rgba(255,255,255,0.95);padding:40px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;max-width:350px;width:90%}
+.login-box h2{margin-bottom:20px;color:#333}
+.login-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:16px;margin:10px 0;transition:border 0.3s}
+.login-input:focus{border-color:#667eea;outline:none}
+.login-btn{width:100%;padding:12px;background:#667eea;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px;transition:background 0.3s}
+.login-btn:hover{background:#5568d3}
 
-/* SHUTDOWN SCREEN */
-#shutdownScreen{position:fixed;inset:0;background:#000;color:#fff;display:none;align-items:center;justify-content:center;z-index:99997;flex-direction:column}
-#shutdownScreen.show{display:flex}
-.shutdown-icon{font-size:100px;margin-bottom:30px;animation:fadeOut 2s forwards}
-@keyframes fadeOut{to{opacity:0}}
-
-/* DESKTOP */
-#desktop{height:100%;display:flex;flex-direction:column;background:linear-gradient(135deg,#667eea,#764ba2);background-size:cover;position:relative;display:none}
+/* Desktop */
+#desktop{height:100vh;display:none;flex-direction:column;background:linear-gradient(135deg,#667eea,#764ba2)}
 #desktop.show{display:flex}
-.desktop-area{flex:1;position:relative;overflow:hidden;padding-bottom:70px}
-.desktop-icons{position:absolute;top:20px;left:20px;display:grid;grid-template-columns:repeat(auto-fill,90px);gap:15px;max-width:calc(100% - 40px)}
-.desktop-icon{width:80px;text-align:center;cursor:pointer;padding:8px;border-radius:8px;transition:background 0.2s}
-.desktop-icon:hover,.desktop-icon:active{background:rgba(255,255,255,0.2)}
-.desktop-icon-img{font-size:40px;margin-bottom:5px;pointer-events:none}
-.desktop-icon-label{color:#fff;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,0.5);pointer-events:none}
 
-/* MENUBAR */
-.menubar{height:32px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);display:flex;align-items:center;padding:0 10px;gap:10px;font-size:13px;border-bottom:1px solid rgba(0,0,0,0.1);z-index:9999}
-.menubar-left{display:flex;gap:10px;align-items:center}
-.menubar-item{cursor:pointer;padding:6px 10px;border-radius:4px;transition:background 0.2s;white-space:nowrap}
+/* Menubar */
+.menubar{height:32px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 12px;gap:12px;font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,0.1);z-index:1000}
+.menubar-item{cursor:pointer;padding:6px 10px;border-radius:4px;transition:background 0.2s;user-select:none}
 .menubar-item:hover{background:rgba(0,0,0,0.05)}
-.menubar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.menu-dropdown{position:absolute;top:32px;left:10px;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.2);padding:5px;min-width:180px;display:none;z-index:10000;max-height:80vh;overflow-y:auto}
-.menu-dropdown.show{display:block}
-.menu-item{padding:8px 12px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:8px;font-size:13px}
-.menu-item:hover{background:#f0f0f0}
-.menu-separator{height:1px;background:#ddd;margin:3px 0}
+.menubar-right{margin-left:auto;display:flex;gap:12px;align-items:center}
 
-/* WINDOWS */
-.window{position:absolute;background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.3);display:none;flex-direction:column;min-width:300px;min-height:200px;z-index:100;max-width:95vw;max-height:90vh}
+/* Desktop Icons */
+.desktop-content{flex:1;padding:20px;overflow:hidden;position:relative}
+.desktop-icons{display:grid;grid-template-columns:repeat(auto-fill,90px);gap:15px;align-content:start}
+.desktop-icon{width:80px;text-align:center;cursor:pointer;padding:10px;border-radius:8px;transition:background 0.2s;user-select:none}
+.desktop-icon:hover{background:rgba(255,255,255,0.2)}
+.desktop-icon-img{font-size:48px;margin-bottom:5px}
+.desktop-icon-label{color:#fff;font-size:12px;text-shadow:0 1px 2px rgba(0,0,0,0.5)}
+
+/* Taskbar */
+.taskbar{height:60px;background:rgba(255,255,255,0.3);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;border-top:1px solid rgba(255,255,255,0.2)}
+.taskbar-item{width:50px;height:50px;background:rgba(255,255,255,0.9);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:transform 0.2s,background 0.2s;user-select:none}
+.taskbar-item:hover{transform:translateY(-5px);background:#fff}
+.taskbar-item.active{background:#667eea;transform:translateY(-5px)}
+
+/* Windows */
+.window{position:absolute;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);display:none;flex-direction:column;min-width:400px;min-height:300px;overflow:hidden}
 .window.show{display:flex}
-.window.maximized{top:32px!important;left:0!important;width:100%!important;height:calc(100vh - 32px - 70px)!important;border-radius:0!important;max-width:100vw!important;max-height:100vh!important}
-.window-header{background:linear-gradient(180deg,#f8f8f8,#e8e8e8);padding:10px 12px;border-bottom:1px solid #ccc;display:flex;justify-content:space-between;align-items:center;cursor:move;border-radius:10px 10px 0 0;touch-action:none}
-.window.maximized .window-header{border-radius:0;cursor:default}
-.window-title{font-weight:600;flex:1;text-align:center;font-size:13px}
-.window-controls{display:flex;gap:6px;position:absolute;left:12px}
-.window-btn{width:12px;height:12px;border-radius:50%;cursor:pointer;border:1px solid rgba(0,0,0,0.15);transition:all 0.2s}
-.window-btn:hover{border-color:rgba(0,0,0,0.3)}
-.window-btn.close{background:#FF5F57}
-.window-btn.minimize{background:#FEBC2E}
-.window-btn.maximize{background:#28C840}
-.window-body{flex:1;overflow:auto;background:#fff;-webkit-overflow-scrolling:touch}
-.window-resize{position:absolute;bottom:0;right:0;width:30px;height:30px;cursor:nwse-resize;z-index:10;touch-action:none}
-.window-resize::after{content:'';position:absolute;bottom:2px;right:2px;width:0;height:0;border-style:solid;border-width:0 0 12px 12px;border-color:transparent transparent #999 transparent}
+.window.maximized{top:32px!important;left:0!important;width:100%!important;height:calc(100vh - 32px - 60px)!important;border-radius:0!important}
+.window-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px;display:flex;align-items:center;cursor:move;user-select:none}
+.window-title{font-weight:600;flex:1;text-align:center;font-size:14px}
+.window-controls{display:flex;gap:8px;position:absolute;left:12px}
+.window-btn{width:12px;height:12px;border-radius:50%;cursor:pointer;border:1px solid rgba(255,255,255,0.3);transition:transform 0.1s}
+.window-btn:hover{transform:scale(1.1)}
+.window-btn.close{background:#FF3B30}
+.window-btn.minimize{background:#FFCC00}
+.window-btn.maximize{background:#34C759}
+.window-body{flex:1;overflow:auto;position:relative}
+.window-resize{position:absolute;bottom:0;right:0;width:20px;height:20px;cursor:nwse-resize;z-index:10}
 
-/* TASKBAR */
-.taskbar{position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(255,255,255,0.3);backdrop-filter:blur(30px);border-top:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;z-index:9998;overflow-x:auto}
-.taskbar-item{width:48px;height:48px;background:rgba(255,255,255,0.9);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:transform 0.2s;flex-shrink:0}
-.taskbar-item:active{transform:scale(0.95)}
-
-/* ON-SCREEN KEYBOARD */
-#osk{position:fixed;bottom:0;left:0;right:0;background:#d1d5db;padding:8px;display:none;z-index:10001;box-shadow:0 -2px 10px rgba(0,0,0,0.2)}
+/* On-Screen Keyboard */
+#osk{position:fixed;bottom:60px;left:0;right:0;background:rgba(240,240,245,0.98);backdrop-filter:blur(20px);padding:10px;display:none;z-index:9000;border-top:1px solid #ccc;max-height:180px;overflow:hidden}
 #osk.show{display:block}
-.osk-row{display:flex;gap:4px;margin-bottom:4px;justify-content:center}
-.osk-key{background:#fff;border:1px solid #9ca3af;border-radius:4px;padding:12px;min-width:32px;text-align:center;cursor:pointer;user-select:none;font-size:14px;font-weight:500}
-.osk-key:active{background:#e5e7eb}
-.osk-key.wide{flex:2}
-.osk-key.space{flex:5}
+.osk-row{display:flex;gap:4px;margin:4px 0;justify-content:center}
+.osk-key{flex:0 0 auto;min-width:28px;height:38px;background:#fff;border:1px solid #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,0.1);transition:background 0.1s,transform 0.1s}
+.osk-key:active{background:#e0e0e0;transform:scale(0.95)}
+.osk-key.space{flex:1;min-width:100px}
+.osk-key.wide{min-width:60px}
+.osk-key.shift{min-width:70px}
 
-/* NOTIFICATIONS */
-.notification{position:fixed;top:45px;right:15px;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.3);padding:12px 16px;min-width:250px;max-width:350px;z-index:10000;animation:slideIn 0.3s}
-@keyframes slideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}
-.notification strong{display:block;margin-bottom:5px}
-
-/* CONTEXT MENU */
-.context-menu{position:fixed;background:#fff;border-radius:6px;box-shadow:0 4px 15px rgba(0,0,0,0.2);padding:4px;min-width:150px;z-index:10000;display:none}
-.context-menu.show{display:block}
-.context-item{padding:6px 10px;cursor:pointer;border-radius:4px;font-size:12px;display:flex;align-items:center;gap:6px}
-.context-item:hover{background:#f0f0f0}
-
-/* BUTTONS */
-.btn{padding:10px 16px;background:#007AFF;color:#fff;border:none;border-radius:8px;cursor:pointer;margin:4px;font-size:14px;font-weight:500;transition:all 0.2s;touch-action:manipulation}
-.btn:active{transform:scale(0.98)}
-.btn-secondary{background:#6c757d}
-.btn-danger{background:#dc3545}
-.btn-success{background:#28a745}
-
-/* INPUTS */
-input,textarea,select{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;margin:6px 0;font-size:14px;font-family:inherit;touch-action:manipulation}
-input:focus,textarea:focus,select:focus{outline:none;border-color:#007AFF;box-shadow:0 0 0 3px rgba(0,122,255,0.1)}
-
-/* FILE BROWSER */
-.file-list{list-style:none;padding:10px}
-.file-item{padding:10px;border-bottom:1px solid #eee;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background 0.2s}
-.file-item:active{background:#f8f9fa}
-.file-item-icon{font-size:32px;flex-shrink:0}
-.file-item-info{flex:1;min-width:0}
-.file-item-name{font-weight:500;font-size:14px;word-break:break-word}
-.file-item-meta{font-size:11px;color:#666;margin-top:2px}
-.file-item-actions{display:flex;gap:4px;flex-shrink:0}
-.breadcrumb{padding:12px 15px;background:#f8f8f8;border-bottom:1px solid #ddd;font-size:13px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.breadcrumb-item{cursor:pointer;color:#007AFF}
-.breadcrumb-item:hover{text-decoration:underline}
-.breadcrumb-separator{color:#999}
-
-/* TERMINAL */
-.terminal{background:#1e1e1e;color:#0f0;font-family:'Courier New',monospace;padding:12px;height:100%;overflow-y:auto;font-size:13px}
-.terminal-line{margin:3px 0;line-height:1.4;word-break:break-all}
-.terminal-input{background:transparent;border:none;color:#0f0;font-family:inherit;font-size:inherit;width:calc(100% - 20px);outline:none}
-
-/* CALCULATOR */
-.calculator-display{background:#2d2d2d;color:#fff;padding:20px 15px;font-size:36px;text-align:right;border-radius:6px;margin-bottom:15px;min-height:80px;display:flex;align-items:center;justify-content:flex-end;word-break:break-all}
-.calculator-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:15px}
-.calc-btn{padding:20px;border:none;border-radius:10px;font-size:20px;font-weight:600;cursor:pointer;transition:all 0.15s;background:#f0f0f0;color:#000;touch-action:manipulation}
-.calc-btn:active{transform:scale(0.95)}
-.calc-btn.operator{background:#ff9500;color:#fff}
-.calc-btn.equals{background:#34c759;color:#fff}
-.calc-btn.clear{background:#ff3b30;color:#fff}
-
-/* MOBILE RESPONSIVE */
+/* Responsive */
 @media (max-width:768px){
   .window{min-width:90vw!important;width:90vw!important}
   .window.maximized{width:100vw!important;height:calc(100vh - 32px - 60px - 180px)!important}
@@ -160,6 +102,54 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#007AFF;box-sh
   .calculator-display{font-size:24px}
   .calc-btn{padding:14px;font-size:16px}
 }
+
+/* App-specific styles */
+.file-browser{padding:15px;height:100%}
+.breadcrumb{display:flex;align-items:center;padding:10px;background:#f5f5f5;border-radius:6px;margin-bottom:15px;flex-wrap:wrap}
+.breadcrumb-item{padding:5px 10px;cursor:pointer;border-radius:4px;transition:background 0.2s;user-select:none}
+.breadcrumb-item:hover{background:rgba(0,0,0,0.05)}
+.breadcrumb-separator{margin:0 5px;opacity:0.5}
+.file-list{list-style:none;display:grid;gap:8px}
+.file-item{padding:12px;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background 0.2s,border-color 0.2s}
+.file-item:hover{background:#f9f9f9;border-color:#667eea}
+.file-icon{font-size:24px}
+.file-info{flex:1}
+.file-name{font-weight:500}
+.file-date{font-size:12px;color:#666;margin-top:2px}
+.file-actions{display:flex;gap:5px}
+.btn{padding:6px 12px;background:#667eea;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;transition:background 0.2s}
+.btn:hover{background:#5568d3}
+.btn.danger{background:#FF3B30}
+.btn.danger:hover{background:#e02818}
+.btn.success{background:#34C759}
+.btn.success:hover{background:#2ab84a}
+input,textarea{padding:10px;border:2px solid #e0e0e0;border-radius:6px;font-size:14px;font-family:inherit;transition:border-color 0.2s}
+input:focus,textarea:focus{outline:none;border-color:#667eea}
+.terminal{background:#1a1a1a;color:#00ff00;font-family:'Courier New',monospace;padding:15px;height:100%;overflow-y:auto;font-size:14px}
+.terminal-line{margin:3px 0;word-break:break-all}
+.terminal-input{background:#1a1a1a;color:#00ff00;border:none;font-family:'Courier New',monospace;width:100%;padding:5px;font-size:14px}
+.terminal-input:focus{outline:none}
+.calculator{padding:20px;background:#f5f5f5;height:100%}
+.calculator-display{background:#fff;padding:20px 15px;border-radius:8px;text-align:right;font-size:32px;font-weight:300;margin-bottom:15px;min-height:80px;display:flex;align-items:center;justify-content:flex-end;box-shadow:0 2px 5px rgba(0,0,0,0.1);word-break:break-all}
+.calc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.calc-btn{padding:20px;background:#fff;border:none;border-radius:8px;font-size:20px;cursor:pointer;transition:background 0.2s,transform 0.1s;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.calc-btn:hover{background:#f0f0f0}
+.calc-btn:active{transform:scale(0.95)}
+.calc-btn.operator{background:#667eea;color:#fff}
+.calc-btn.operator:hover{background:#5568d3}
+.calc-btn.equals{background:#34C759;color:#fff;grid-column:span 2}
+.calc-btn.equals:hover{background:#2ab84a}
+.notepad{display:flex;flex-direction:column;height:100%;padding:10px}
+.notepad textarea{flex:1;border:none;padding:15px;font-family:monospace;font-size:14px;resize:none}
+.paint-canvas{display:block;border:2px solid #ddd;cursor:crosshair;touch-action:none;background:#fff}
+.paint-controls{padding:10px;background:#f5f5f5;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.color-btn{width:30px;height:30px;border:2px solid #ddd;border-radius:50%;cursor:pointer;transition:transform 0.1s}
+.color-btn:hover{transform:scale(1.1)}
+.color-btn.active{border-color:#000;border-width:3px}
+.game-container{text-align:center;padding:20px}
+.game-canvas{border:2px solid #333;margin:10px auto;display:block;background:#000;touch-action:none}
+.game-score{font-size:24px;font-weight:bold;margin:10px;color:#667eea}
+.game-info{margin:10px;color:#666;font-size:14px}
 </style>
 </head>
 <body>
@@ -487,6 +477,7 @@ function createWindow(title, content, width = 600, height = 400) {
   }
 
   win.style.zIndex = ++zIndex;
+
   win.innerHTML = `
     <div class="window-header">
       <div class="window-controls">
@@ -1251,6 +1242,7 @@ function openGames() {
   `;
 }
 
+// Snake Game
 function playSnake() {
   const body = createWindow('Snake', '', 420, 520);
   const uniqueId = Date.now();
@@ -1269,8 +1261,11 @@ function playSnake() {
   let dir = {x: 1, y: 0};
   let food = {x: 15, y: 15};
   let score = 0;
+  let gameActive = true;
 
+  // Keyboard controls
   document.addEventListener('keydown', e => {
+    if (!gameActive) return;
     if (e.key === 'ArrowUp' && dir.y === 0) dir = {x: 0, y: -1};
     if (e.key === 'ArrowDown' && dir.y === 0) dir = {x: 0, y: 1};
     if (e.key === 'ArrowLeft' && dir.x === 0) dir = {x: -1, y: 0};
@@ -1299,10 +1294,13 @@ function playSnake() {
   });
 
   const gameLoop = setInterval(() => {
+    if (!gameActive) return;
+
     const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
 
     if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 ||
         snake.some(s => s.x === head.x && s.y === head.y)) {
+      gameActive = false;
       clearInterval(gameLoop);
       showNotification('Game Over', `Score: ${score}`);
       return;
@@ -1320,13 +1318,123 @@ function playSnake() {
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, 400, 400);
-    ctx.fillStyle = '#0f0';
+    ctx.fillStyle = '#34C759';
     snake.forEach(s => ctx.fillRect(s.x * grid, s.y * grid, grid - 2, grid - 2));
-    ctx.fillStyle = '#f00';
+    ctx.fillStyle = '#FF3B30';
     ctx.fillRect(food.x * grid, food.y * grid, grid - 2, grid - 2);
   }, 150);
 }
 
+// Tic-Tac-Toe
+function playTicTacToe() {
+  const body = createWindow('Tic-Tac-Toe', '', 400, 500);
+  body.innerHTML = `
+    <div class="game-container">
+      <div class="game-score" id="tttStatus">Your turn (X)</div>
+      <div id="tttBoard" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:300px;margin:20px auto">
+        ${Array(9).fill(0).map((_, i) => `<div class="calc-btn" style="height:80px;font-size:36px" onclick="tttMove(${i})"></div>`).join('')}
+      </div>
+      <button class="btn" onclick="playTicTacToe()">New Game</button>
+    </div>
+  `;
+
+  window.tttBoard = Array(9).fill('');
+  window.tttPlayer = 'X';
+}
+
+function tttMove(i) {
+  if (window.tttBoard[i] || checkTTTWinner()) return;
+
+  window.tttBoard[i] = window.tttPlayer;
+  document.querySelectorAll('#tttBoard .calc-btn')[i].textContent = window.tttPlayer;
+
+  const winner = checkTTTWinner();
+  if (winner) {
+    document.getElementById('tttStatus').textContent = winner === 'tie' ? 'Tie!' : winner + ' wins!';
+    return;
+  }
+
+  window.tttPlayer = window.tttPlayer === 'X' ? 'O' : 'X';
+  document.getElementById('tttStatus').textContent = window.tttPlayer === 'X' ? 'Your turn (X)' : 'AI turn (O)';
+
+  if (window.tttPlayer === 'O') {
+    setTimeout(tttAI, 500);
+  }
+}
+
+function tttAI() {
+  const empty = window.tttBoard.map((v, i) => v === '' ? i : -1).filter(i => i >= 0);
+  if (empty.length === 0) return;
+
+  const move = empty[Math.floor(Math.random() * empty.length)];
+  tttMove(move);
+}
+
+function checkTTTWinner() {
+  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  for (const [a, b, c] of lines) {
+    if (window.tttBoard[a] && window.tttBoard[a] === window.tttBoard[b] && window.tttBoard[a] === window.tttBoard[c]) {
+      return window.tttBoard[a];
+    }
+  }
+  return window.tttBoard.every(cell => cell) ? 'tie' : null;
+}
+
+// Memory Game
+function playMemory() {
+  const body = createWindow('Memory', '', 500, 600);
+
+  const emojis = ['🔥', '🎮', '🎨', '🎵', '⚡', '🌟', '💎', '🎯'];
+  const cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+
+  body.innerHTML = `
+    <div class="game-container">
+      <div class="game-score" id="memoryScore">Moves: 0 | Pairs: 0/8</div>
+      <div id="memoryBoard" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:400px;margin:20px auto">
+        ${cards.map((emoji, i) => `<div class="calc-btn" style="height:80px;font-size:36px" onclick="memoryFlip(${i})" data-emoji="${emoji}">?</div>`).join('')}
+      </div>
+      <button class="btn" onclick="playMemory()">New Game</button>
+    </div>
+  `;
+
+  window.memoryFlipped = [];
+  window.memoryMatched = [];
+  window.memoryMoves = 0;
+}
+
+function memoryFlip(i) {
+  if (window.memoryFlipped.includes(i) || window.memoryMatched.includes(i) || window.memoryFlipped.length >= 2) return;
+
+  const cards = document.querySelectorAll('#memoryBoard .calc-btn');
+  cards[i].textContent = cards[i].dataset.emoji;
+  window.memoryFlipped.push(i);
+
+  if (window.memoryFlipped.length === 2) {
+    window.memoryMoves++;
+    const [a, b] = window.memoryFlipped;
+
+    if (cards[a].dataset.emoji === cards[b].dataset.emoji) {
+      window.memoryMatched.push(a, b);
+      window.memoryFlipped = [];
+
+      document.getElementById('memoryScore').textContent = `Moves: ${window.memoryMoves} | Pairs: ${window.memoryMatched.length/2}/8`;
+
+      if (window.memoryMatched.length === 16) {
+        setTimeout(() => alert(`You won in ${window.memoryMoves} moves!`), 300);
+      }
+    } else {
+      setTimeout(() => {
+        cards[a].textContent = '?';
+        cards[b].textContent = '?';
+        window.memoryFlipped = [];
+      }, 1000);
+    }
+
+    document.getElementById('memoryScore').textContent = `Moves: ${window.memoryMoves} | Pairs: ${window.memoryMatched.length/2}/8`;
+  }
+}
+
+// Pong
 function playPong() {
   const body = createWindow('Pong', '', 420, 520);
   const uniqueId = Date.now();
@@ -1344,10 +1452,17 @@ function playPong() {
   let p1 = {y: 160, score: 0};
   let p2 = {y: 160, score: 0};
 
-  canvas.addEventListener('mousemove', e => {
+  const updatePaddle = (clientY) => {
     const rect = canvas.getBoundingClientRect();
-    p1.y = e.clientY - rect.top - 40;
-  });
+    p1.y = clientY - rect.top - 40;
+    p1.y = Math.max(0, Math.min(320, p1.y));
+  };
+
+  canvas.addEventListener('mousemove', e => updatePaddle(e.clientY));
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    updatePaddle(e.touches[0].clientY);
+  }, {passive: false});
 
   canvas.addEventListener('touchmove', e => {
     e.preventDefault();
@@ -1360,8 +1475,14 @@ function playPong() {
     ball.y += ball.dy;
 
     if (ball.y < 0 || ball.y > 390) ball.dy *= -1;
-    if (ball.x < 20 && ball.y > p1.y && ball.y < p1.y + 80) ball.dx *= -1;
-    if (ball.x > 370 && ball.y > p2.y && ball.y < p2.y + 80) ball.dx *= -1;
+
+    if (ball.x < 20 && ball.y > p1.y && ball.y < p1.y + 80) {
+      ball.dx = Math.abs(ball.dx);
+      ball.dx *= 1.05;
+    }
+    if (ball.x > 370 && ball.y > p2.y && ball.y < p2.y + 80) {
+      ball.dx = -Math.abs(ball.dx);
+    }
 
     if (ball.x < 0) {
       p2.score++;
@@ -1382,7 +1503,7 @@ function playPong() {
     ctx.fillRect(10, p1.y, 10, 80);
     ctx.fillRect(380, p2.y, 10, 80);
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, 5, 0, Math.PI * 2);
+    ctx.arc(ball.x, ball.y, 8, 0, Math.PI * 2);
     ctx.fill();
   }, 1000/60);
 }
