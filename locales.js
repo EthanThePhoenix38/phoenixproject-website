@@ -460,10 +460,10 @@ function updateLanguageButton() {
   const langBtn = document.getElementById('langBtn') || document.getElementById('langSwitcher');
   if (langBtn) {
     if (currentLang === 'fr') {
-      langBtn.textContent = 'EN';
+      langBtn.textContent = '🇬🇧';
       langBtn.setAttribute('aria-label', 'Switch to English');
     } else {
-      langBtn.textContent = 'FR';
+      langBtn.textContent = '🇫🇷';
       langBtn.setAttribute('aria-label', 'Passer au français');
     }
   }

@@ -1,0 +1,20 @@
+name = "api-service"
+main = "src/index.js"
+compatibility_date = "2026-01-27"
+workers_dev = true
+
+[env.production]
+name = "api-service-production"
+vars = { ENVIRONMENT = "production" }
+
+[env.development]
+name = "api-service-dev"
+vars = { ENVIRONMENT = "development" }
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# CLOUDFLARE_ACCOUNT_ID - via GitHub Secrets
+# SUPABASE_URL - via GitHub Secrets
+# SUPABASE_ANON_KEY - via GitHub Secrets
+# UPSTASH_REDIS_REST_URL - via GitHub Secrets
+# UPSTASH_REDIS_REST_TOKEN - via GitHub Secrets
+# RESEND_API_KEY - via GitHub Secrets
