@@ -582,19 +582,25 @@
 
 .template-selector {
   position: fixed;
-  top: 90px;
+  top: 140px;
   right: 20px;
   z-index: 2000;
+  width: 160px;
+  min-width: 140px;
   background: var(--bg-card);
   padding: 0.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 15px var(--shadow);
+  max-height: 0;
+  overflow: hidden;
   border: 1px solid var(--border-color);
-  display: none;
-  transition: all 0.3s ease;
+  opacity: 0;
 }
 
 .template-selector.visible {
+  max-height: 250px;
+  opacity: 1;
+  transform: translateY(0);
   display: block;
 }
 
