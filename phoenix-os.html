@@ -103,6 +103,58 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   .calc-btn{padding:14px;font-size:16px}
 }
 
+/* Desktop area - fills space between menubar and taskbar */
+.desktop-area{flex:1;overflow:hidden;position:relative;padding:20px}
+
+/* Shutdown screen */
+#shutdownScreen{position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10001;gap:20px}
+#shutdownScreen.show{display:flex}
+.shutdown-icon{font-size:80px;animation:pulse 1s infinite}
+
+/* Menubar layout */
+.menubar-left{display:flex;align-items:center}
+
+/* Start Menu */
+.menu-dropdown{position:absolute;top:32px;left:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0 0 12px 0;box-shadow:0 8px 30px rgba(0,0,0,0.25);min-width:210px;z-index:998;display:none;overflow:hidden;border:1px solid rgba(200,200,200,0.3)}
+.menu-dropdown.show{display:block}
+.menu-item{padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14px;color:#333;transition:background 0.15s;user-select:none}
+.menu-item:hover{background:rgba(102,126,234,0.12)}
+.menu-item span{font-size:18px}
+.menu-separator{height:1px;background:#e0e0e0;margin:4px 0}
+
+/* Notifications */
+.notification{position:fixed;top:40px;right:12px;background:rgba(30,30,40,0.93);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.35);z-index:20000;animation:notifIn 0.3s ease;font-size:13px;max-width:260px;backdrop-filter:blur(10px)}
+@keyframes notifIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* Context Menu */
+.context-menu{position:fixed;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.2);min-width:160px;z-index:19000;display:none;overflow:hidden;border:1px solid rgba(200,200,200,0.3)}
+.context-menu.show{display:block}
+.context-item{padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:14px;color:#333;transition:background 0.15s}
+.context-item:hover{background:rgba(102,126,234,0.1)}
+
+/* Button variants - align class names with HTML usage */
+.btn-danger,.btn.danger{background:#FF3B30}
+.btn-danger:hover,.btn.danger:hover{background:#e02818}
+.btn-success,.btn.success{background:#34C759}
+.btn-success:hover,.btn.success:hover{background:#2ab84a}
+.btn-secondary{background:rgba(102,126,234,0.08);color:#667eea;border:1px solid rgba(102,126,234,0.3)}
+.btn-secondary:hover{background:rgba(102,126,234,0.15)}
+
+/* File Browser Items */
+.file-item-icon{font-size:26px;min-width:32px;text-align:center}
+.file-item-info{flex:1;min-width:0}
+.file-item-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-item-meta{font-size:12px;color:#888;margin-top:2px}
+.file-item-actions{display:flex;gap:5px;flex-shrink:0}
+
+/* Calculator buttons - alias for both class names */
+.calculator-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* OSK keyboard layout toggle */
+#oskToggle{text-align:right;padding:2px 6px 4px}
+.osk-layout-btn{background:#e8e8f0;border:1px solid #bbb;border-radius:4px;font-size:11px;padding:3px 8px;cursor:pointer;user-select:none;display:inline-block;color:#333}
+.osk-layout-btn:active{background:#d0d0e0}
+
 /* App-specific styles */
 .file-browser{padding:15px;height:100%}
 .breadcrumb{display:flex;align-items:center;padding:10px;background:#f5f5f5;border-radius:6px;margin-bottom:15px;flex-wrap:wrap}
@@ -247,60 +299,10 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
   </div>
 </div>
 
-<!-- ON-SCREEN KEYBOARD -->
+<!-- ON-SCREEN KEYBOARD (layout populated by JS based on IP) -->
 <div id="osk">
-  <div class="osk-row">
-    <div class="osk-key" onclick="oskType('1')">1</div>
-    <div class="osk-key" onclick="oskType('2')">2</div>
-    <div class="osk-key" onclick="oskType('3')">3</div>
-    <div class="osk-key" onclick="oskType('4')">4</div>
-    <div class="osk-key" onclick="oskType('5')">5</div>
-    <div class="osk-key" onclick="oskType('6')">6</div>
-    <div class="osk-key" onclick="oskType('7')">7</div>
-    <div class="osk-key" onclick="oskType('8')">8</div>
-    <div class="osk-key" onclick="oskType('9')">9</div>
-    <div class="osk-key" onclick="oskType('0')">0</div>
-  </div>
-  <div class="osk-row">
-    <div class="osk-key" onclick="oskType('q')">q</div>
-    <div class="osk-key" onclick="oskType('w')">w</div>
-    <div class="osk-key" onclick="oskType('e')">e</div>
-    <div class="osk-key" onclick="oskType('r')">r</div>
-    <div class="osk-key" onclick="oskType('t')">t</div>
-    <div class="osk-key" onclick="oskType('y')">y</div>
-    <div class="osk-key" onclick="oskType('u')">u</div>
-    <div class="osk-key" onclick="oskType('i')">i</div>
-    <div class="osk-key" onclick="oskType('o')">o</div>
-    <div class="osk-key" onclick="oskType('p')">p</div>
-  </div>
-  <div class="osk-row">
-    <div class="osk-key" onclick="oskType('a')">a</div>
-    <div class="osk-key" onclick="oskType('s')">s</div>
-    <div class="osk-key" onclick="oskType('d')">d</div>
-    <div class="osk-key" onclick="oskType('f')">f</div>
-    <div class="osk-key" onclick="oskType('g')">g</div>
-    <div class="osk-key" onclick="oskType('h')">h</div>
-    <div class="osk-key" onclick="oskType('j')">j</div>
-    <div class="osk-key" onclick="oskType('k')">k</div>
-    <div class="osk-key" onclick="oskType('l')">l</div>
-  </div>
-  <div class="osk-row">
-    <div class="osk-key wide" onclick="oskShift()">⇧</div>
-    <div class="osk-key" onclick="oskType('z')">z</div>
-    <div class="osk-key" onclick="oskType('x')">x</div>
-    <div class="osk-key" onclick="oskType('c')">c</div>
-    <div class="osk-key" onclick="oskType('v')">v</div>
-    <div class="osk-key" onclick="oskType('b')">b</div>
-    <div class="osk-key" onclick="oskType('n')">n</div>
-    <div class="osk-key" onclick="oskType('m')">m</div>
-    <div class="osk-key wide" onclick="oskBackspace()">⌫</div>
-  </div>
-  <div class="osk-row">
-    <div class="osk-key" onclick="oskType('.')">.</div>
-    <div class="osk-key space" onclick="oskType(' ')">space</div>
-    <div class="osk-key wide" onclick="oskEnter()">↵</div>
-    <div class="osk-key" onclick="toggleOSK()">✕</div>
-  </div>
+  <div id="oskRows"></div>
+  <div id="oskToggle"></div>
 </div>
 
 <div class="context-menu" id="contextMenu">
@@ -634,9 +636,88 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.context-menu')) hideContextMenu();
 });
 
-// ON-SCREEN KEYBOARD
+// ON-SCREEN KEYBOARD - AZERTY (France) / QWERTY (other)
 let oskTarget = null;
 let oskShiftActive = false;
+let oskCurrentLayout = 'azerty'; // default AZERTY, changed by IP detection
+
+const OSK_LAYOUTS = {
+  azerty: [
+    ['1','2','3','4','5','6','7','8','9','0'],
+    ['a','z','e','r','t','y','u','i','o','p'],
+    ['q','s','d','f','g','h','j','k','l','m'],
+    ['SHIFT','w','x','c','v','b','n',',','BACK'],
+    ['.',' ','ENTER','CLOSE']
+  ],
+  qwerty: [
+    ['1','2','3','4','5','6','7','8','9','0'],
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l'],
+    ['SHIFT','z','x','c','v','b','n','m','BACK'],
+    ['.',' ','ENTER','CLOSE']
+  ]
+};
+
+function renderOSK(layout) {
+  oskCurrentLayout = layout;
+  const rows = OSK_LAYOUTS[layout];
+  const rowsContainer = document.getElementById('oskRows');
+  rowsContainer.innerHTML = '';
+
+  rows.forEach(row => {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'osk-row';
+    row.forEach(key => {
+      const btn = document.createElement('div');
+      btn.className = 'osk-key';
+      if (key === ' ') {
+        btn.className += ' space';
+        btn.textContent = 'espace';
+        btn.onclick = () => oskType(' ');
+      } else if (key === 'ENTER') {
+        btn.className += ' wide';
+        btn.textContent = '↵';
+        btn.onclick = oskEnter;
+      } else if (key === 'BACK') {
+        btn.className += ' wide';
+        btn.textContent = '⌫';
+        btn.onclick = oskBackspace;
+      } else if (key === 'SHIFT') {
+        btn.className += ' wide';
+        btn.textContent = '⇧';
+        btn.onclick = oskShift;
+      } else if (key === 'CLOSE') {
+        btn.textContent = '✕';
+        btn.onclick = toggleOSK;
+      } else {
+        btn.textContent = key;
+        btn.onclick = () => oskType(key);
+      }
+      rowDiv.appendChild(btn);
+    });
+    rowsContainer.appendChild(rowDiv);
+  });
+
+  // Layout toggle button
+  const toggleContainer = document.getElementById('oskToggle');
+  toggleContainer.innerHTML = '';
+  const toggleBtn = document.createElement('span');
+  toggleBtn.className = 'osk-layout-btn';
+  toggleBtn.textContent = layout === 'azerty' ? 'QWERTY' : 'AZERTY';
+  toggleBtn.title = layout === 'azerty' ? 'Passer en QWERTY' : 'Passer en AZERTY';
+  toggleBtn.onclick = () => renderOSK(oskCurrentLayout === 'azerty' ? 'qwerty' : 'azerty');
+  toggleContainer.appendChild(toggleBtn);
+}
+
+// Detect IP country: AZERTY for France, QWERTY otherwise
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(data => {
+    renderOSK((data.country_code || '') === 'FR' ? 'azerty' : 'qwerty');
+  })
+  .catch(() => {
+    renderOSK('azerty'); // default AZERTY if detection fails
+  });
 
 function showOSK(target) {
   oskTarget = target;
