@@ -155,6 +155,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .osk-layout-btn{background:#e8e8f0;border:1px solid #bbb;border-radius:4px;font-size:11px;padding:3px 8px;cursor:pointer;user-select:none;display:inline-block;color:#333}
 .osk-layout-btn:active{background:#d0d0e0}
 
+/* Mini-cards for minimized windows */
+.mini-card{position:absolute;bottom:8px;background:rgba(102,126,234,0.85);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 2px 10px rgba(0,0,0,0.3);user-select:none;white-space:nowrap;z-index:500;transition:transform 0.15s}
+.mini-card:hover{transform:translateY(-3px)}
+
+/* Calendar popup */
+#calendarPopup{position:fixed;top:36px;right:60px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.2);padding:16px;z-index:20000;display:none;min-width:260px;border:1px solid rgba(200,200,200,0.3)}
+#calendarPopup.show{display:block}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-weight:600}
+.cal-nav{cursor:pointer;padding:4px 10px;border-radius:6px;background:rgba(102,126,234,0.1);border:none;font-size:16px;cursor:pointer}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-day-name{font-size:11px;color:#999;font-weight:500;padding:2px}
+.cal-day{font-size:13px;padding:5px 2px;border-radius:6px;cursor:pointer}
+.cal-day:hover{background:rgba(102,126,234,0.1)}
+.cal-day.today{background:#667eea;color:#fff;font-weight:700}
+.cal-day.other-month{color:#ccc}
+
+/* Alarm popup */
+#alarmPopup{position:fixed;top:36px;right:20px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.2);padding:16px;z-index:20000;display:none;min-width:220px;border:1px solid rgba(200,200,200,0.3)}
+#alarmPopup.show{display:block}
+
 /* App-specific styles */
 .file-browser{padding:15px;height:100%}
 .breadcrumb{display:flex;align-items:center;padding:10px;background:#f5f5f5;border-radius:6px;margin-bottom:15px;flex-wrap:wrap}
@@ -239,32 +259,41 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
       <div class="menubar-item" onclick="toggleStartMenu()">Apps</div>
     </div>
     <div class="menubar-right">
-      <div class="menubar-item">🔔</div>
-      <div class="menubar-item">📶</div>
-      <div class="menubar-item">🔋</div>
-      <div class="menubar-item" id="clock">00:00</div>
+      <div class="menubar-item" id="batteryIcon" title="Batterie">🔋</div>
+      <div class="menubar-item" id="wifiIcon" title="Réseau" onclick="showWifiStatus()" style="cursor:pointer">📶</div>
+      <div class="menubar-item" onclick="openAlarm()" title="Alarme" style="cursor:pointer">🔔</div>
+      <div class="menubar-item" id="clock" onclick="toggleCalendar()" style="cursor:pointer;user-select:none">00:00</div>
       <div class="menubar-item" onclick="openSettings()">⚙️</div>
     </div>
   </div>
 
   <div class="menu-dropdown" id="startMenu">
-    <div class="menu-item" onclick="openFiles();closeStartMenu()"><span>📁</span> Files</div>
-    <div class="menu-item" onclick="openEditor();closeStartMenu()"><span>📝</span> Editor</div>
+    <div class="menu-item" onclick="openFiles();closeStartMenu()"><span>📁</span> Fichiers</div>
+    <div class="menu-item" onclick="openEditor();closeStartMenu()"><span>📝</span> Éditeur</div>
     <div class="menu-item" onclick="openTerminal();closeStartMenu()"><span>⌨️</span> Terminal</div>
-    <div class="menu-item" onclick="openCalculator();closeStartMenu()"><span>🔢</span> Calculator</div>
-    <div class="menu-item" onclick="openBrowser();closeStartMenu()"><span>🌐</span> Browser</div>
-    <div class="menu-item" onclick="openPaint();closeStartMenu()"><span>🎨</span> Paint</div>
-    <div class="menu-item" onclick="openGames();closeStartMenu()"><span>🎮</span> Games</div>
+    <div class="menu-item" onclick="openCalculator();closeStartMenu()"><span>🔢</span> Calculatrice</div>
+    <div class="menu-item" onclick="openBrowser();closeStartMenu()"><span>🌐</span> Navigateur</div>
+    <div class="menu-item" onclick="openMail();closeStartMenu()"><span>✉️</span> Courrier</div>
+    <div class="menu-item" onclick="openPaint();closeStartMenu()"><span>🎨</span> Peinture</div>
+    <div class="menu-item" onclick="openGames();closeStartMenu()"><span>🎮</span> Jeux</div>
     <div class="menu-separator"></div>
-    <div class="menu-item" onclick="openSettings();closeStartMenu()"><span>⚙️</span> Settings</div>
-    <div class="menu-item" onclick="shutdown()"><span>⏻</span> Shutdown</div>
+    <div class="menu-item" onclick="openSettings();closeStartMenu()"><span>⚙️</span> Paramètres</div>
+    <div class="menu-item" onclick="shutdown()"><span>⏻</span> Éteindre</div>
   </div>
 
   <div class="desktop-area" id="desktopArea">
     <div class="desktop-icons">
+      <div class="desktop-icon" ondblclick="openAbout()">
+        <div class="desktop-icon-img">🔥</div>
+        <div class="desktop-icon-label">PhoenixOS</div>
+      </div>
       <div class="desktop-icon" ondblclick="openFiles()">
         <div class="desktop-icon-img">📁</div>
-        <div class="desktop-icon-label">Files</div>
+        <div class="desktop-icon-label">Fichiers</div>
+      </div>
+      <div class="desktop-icon" ondblclick="openEditor()">
+        <div class="desktop-icon-img">📝</div>
+        <div class="desktop-icon-label">Éditeur</div>
       </div>
       <div class="desktop-icon" ondblclick="openTerminal()">
         <div class="desktop-icon-img">⌨️</div>
@@ -272,30 +301,36 @@ input:focus,textarea:focus{outline:none;border-color:#667eea}
       </div>
       <div class="desktop-icon" ondblclick="openCalculator()">
         <div class="desktop-icon-img">🔢</div>
-        <div class="desktop-icon-label">Calculator</div>
+        <div class="desktop-icon-label">Calculatrice</div>
       </div>
       <div class="desktop-icon" ondblclick="openBrowser()">
         <div class="desktop-icon-img">🌐</div>
-        <div class="desktop-icon-label">Browser</div>
+        <div class="desktop-icon-label">Navigateur</div>
+      </div>
+      <div class="desktop-icon" ondblclick="openMail()">
+        <div class="desktop-icon-img">✉️</div>
+        <div class="desktop-icon-label">Courrier</div>
       </div>
       <div class="desktop-icon" ondblclick="openPaint()">
         <div class="desktop-icon-img">🎨</div>
-        <div class="desktop-icon-label">Paint</div>
+        <div class="desktop-icon-label">Peinture</div>
       </div>
       <div class="desktop-icon" ondblclick="openGames()">
         <div class="desktop-icon-img">🎮</div>
-        <div class="desktop-icon-label">Games</div>
+        <div class="desktop-icon-label">Jeux</div>
       </div>
     </div>
   </div>
 
   <div class="taskbar">
-    <div class="taskbar-item" onclick="openFiles()">📁</div>
-    <div class="taskbar-item" onclick="openTerminal()">⌨️</div>
-    <div class="taskbar-item" onclick="openCalculator()">🔢</div>
-    <div class="taskbar-item" onclick="openBrowser()">🌐</div>
-    <div class="taskbar-item" onclick="openPaint()">🎨</div>
-    <div class="taskbar-item" onclick="openGames()">🎮</div>
+    <div class="taskbar-item" onclick="openFiles()" title="Fichiers">📁</div>
+    <div class="taskbar-item" onclick="openEditor()" title="Éditeur">📝</div>
+    <div class="taskbar-item" onclick="openTerminal()" title="Terminal">⌨️</div>
+    <div class="taskbar-item" onclick="openCalculator()" title="Calculatrice">🔢</div>
+    <div class="taskbar-item" onclick="openBrowser()" title="Navigateur">🌐</div>
+    <div class="taskbar-item" onclick="openMail()" title="Courrier">✉️</div>
+    <div class="taskbar-item" onclick="openPaint()" title="Peinture">🎨</div>
+    <div class="taskbar-item" onclick="openGames()" title="Jeux">🎮</div>
   </div>
 </div>
 
@@ -430,7 +465,8 @@ function attemptLogin() {
   if (pwd === 'phoenix' || pwd === '') {
     document.getElementById('loginScreen').classList.remove('show');
     document.getElementById('desktop').classList.add('show');
-    showNotification('Welcome', 'PhoenixOS v2.1.0');
+    applySavedWallpaper();
+    showNotification('Bienvenue', 'PhoenixOS v2.1.0');
     updateClock();
   } else {
     showNotification('Error', 'Incorrect password');
@@ -496,7 +532,14 @@ function createWindow(title, content, width = 600, height = 400) {
   win.querySelector('.close').onclick = () => win.remove();
   win.querySelector('.minimize').onclick = () => {
     win.style.display = 'none';
-    setTimeout(() => win.style.display = 'flex', 100);
+    const area = document.getElementById('desktopArea');
+    const miniCard = document.createElement('div');
+    miniCard.className = 'mini-card';
+    miniCard.textContent = '↑ ' + title;
+    const usedCards = area.querySelectorAll('.mini-card');
+    miniCard.style.left = (8 + usedCards.length * 130) + 'px';
+    miniCard.onclick = () => { win.style.display = 'flex'; miniCard.remove(); };
+    area.appendChild(miniCard);
   };
   win.querySelector('.maximize').onclick = () => {
     win.classList.toggle('maximized');
@@ -709,17 +752,17 @@ function renderOSK(layout) {
   toggleContainer.appendChild(toggleBtn);
 }
 
-// Detect IP country: AZERTY for France, QWERTY otherwise
+// Render AZERTY immediately, switch to QWERTY if non-FR IP
+renderOSK('azerty');
 fetch('https://ipapi.co/json/')
   .then(r => r.json())
   .then(data => {
-    renderOSK((data.country_code || '') === 'FR' ? 'azerty' : 'qwerty');
+    if ((data.country_code || '') !== 'FR') renderOSK('qwerty');
   })
-  .catch(() => {
-    renderOSK('azerty'); // default AZERTY if detection fails
-  });
+  .catch(() => {});
 
 function showOSK(target) {
+  if (!isMobile) return;
   oskTarget = target;
   document.getElementById('osk').classList.add('show');
 }
@@ -968,7 +1011,11 @@ function openTerminal() {
     line.textContent = '$ ' + cmd;
     output.insertBefore(line, output.lastElementChild);
 
-    if (cmd) executeTerminalCommand(cmd, output);
+    if (cmd) {
+      window._termHistory = window._termHistory || [];
+      window._termHistory.push(cmd);
+      executeTerminalCommand(cmd, output);
+    }
 
     input.value = '';
     output.scrollTop = output.scrollHeight;
@@ -983,7 +1030,7 @@ function executeTerminalCommand(cmd, output) {
 
   switch(parts[0]) {
     case 'help':
-      response = 'Commands: help, clear, ls, pwd, cd, mkdir, cat, rm, echo, date, whoami';
+      response = 'Commandes: help, clear, ls, pwd, cd, mkdir, touch, cat, rm, cp, mv, echo, date, whoami, uname, uptime, history, man, open, neofetch, test';
       break;
     case 'clear':
       output.innerHTML = '<div class="terminal-line">$ <input type="text" class="terminal-input" autocomplete="off"></div>';
@@ -1046,17 +1093,74 @@ function executeTerminalCommand(cmd, output) {
         response = 'Usage: rm <name>';
       }
       break;
+    case 'touch':
+      if (parts[1]) {
+        FS.createFile(window.termCurrentPath || '/', parts[1], '');
+        response = `Fichier créé: ${parts[1]}`;
+      } else { response = 'Usage: touch <nom>'; }
+      break;
+    case 'cp':
+      if (parts[1] && parts[2]) {
+        const src = FS.read(window.termCurrentPath || '/', parts[1]);
+        if (src !== null) { FS.createFile(window.termCurrentPath || '/', parts[2], src); response = `Copié: ${parts[1]} → ${parts[2]}`; }
+        else response = 'Fichier source introuvable';
+      } else { response = 'Usage: cp <source> <dest>'; }
+      break;
+    case 'mv':
+      if (parts[1] && parts[2]) {
+        const mvSrc = FS.read(window.termCurrentPath || '/', parts[1]);
+        if (mvSrc !== null) {
+          FS.createFile(window.termCurrentPath || '/', parts[2], mvSrc);
+          FS.delete(window.termCurrentPath || '/', parts[1]);
+          response = `Déplacé: ${parts[1]} → ${parts[2]}`;
+        } else response = 'Fichier source introuvable';
+      } else { response = 'Usage: mv <source> <dest>'; }
+      break;
     case 'echo':
       response = parts.slice(1).join(' ');
       break;
     case 'date':
-      response = new Date().toString();
+      response = new Date().toLocaleString('fr-FR');
       break;
     case 'whoami':
       response = 'phoenix-user';
       break;
+    case 'uname':
+      response = parts[1] === '-a' ? 'PhoenixOS 2.1.0 web-kernel #1 SMP ' + navigator.userAgent : 'PhoenixOS';
+      break;
+    case 'uptime':
+      response = `En ligne depuis: ${Math.floor(performance.now()/60000)} min`;
+      break;
+    case 'history':
+      response = (window._termHistory || []).slice(-20).join('\n') || '(vide)';
+      break;
+    case 'man':
+      const manPages = {help:'Affiche les commandes',ls:'Liste les fichiers',cd:'Change de dossier',mkdir:'Crée un dossier',touch:'Crée un fichier vide',cat:'Affiche le contenu',rm:'Supprime un fichier',cp:'Copie un fichier',mv:'Déplace un fichier',echo:'Affiche du texte',date:'Date et heure',whoami:'Utilisateur actuel',uname:'Info système',uptime:'Temps depuis démarrage',open:'Ouvre une app',neofetch:'Info système stylisée'};
+      response = parts[1] ? (manPages[parts[1]] || 'Pas de manuel pour: ' + parts[1]) : 'Usage: man <commande>';
+      break;
+    case 'open':
+      if (parts[1]) {
+        const appMap = {files:openFiles,editor:openEditor,terminal:openTerminal,calculator:openCalculator,browser:openBrowser,paint:openPaint,games:openGames,mail:openMail,settings:openSettings};
+        if (appMap[parts[1]]) { appMap[parts[1]](); response = `Ouverture: ${parts[1]}`; }
+        else response = 'App inconnue. Apps: ' + Object.keys(appMap).join(', ');
+      } else response = 'Usage: open <app>';
+      break;
+    case 'test':
+      setTimeout(runTests, 100);
+      response = 'Lancement des tests...';
+      break;
+    case 'neofetch':
+      response = `🔥 PhoenixOS v2.1.0
+-----------------
+OS: PhoenixOS Web Edition
+Kernel: Browser JS Engine
+Shell: PhoenixShell
+Resolution: ${window.innerWidth}x${window.innerHeight}
+Browser: ${navigator.userAgent.split(' ').slice(-2).join(' ')}
+Storage: ${(JSON.stringify(localStorage).length/1024).toFixed(1)} KB`;
+      break;
     default:
-      response = `Command not found: ${parts[0]}`;
+      response = `Commande introuvable: ${parts[0]}. Tapez 'help'`;
   }
 
   const respLine = document.createElement('div');
@@ -1184,26 +1288,38 @@ function calcExec(a, b, op) {
 
 // BROWSER
 function openBrowser() {
-  const body = createWindow('Browser', '', 800, 600);
+  const body = createWindow('Navigateur', '', 800, 600);
   body.style.padding = '0';
   const uniqueId = Date.now();
   body.innerHTML = `
-    <div style="display:flex;gap:8px;padding:12px;background:#f8f8f8;border-bottom:1px solid #ddd">
-      <input type="text" id="browserUrl${uniqueId}" placeholder="Enter URL..." value="https://example.com" style="flex:1;margin:0" onfocus="showOSK(this)">
-      <button class="btn btn-success" style="padding:8px 16px;margin:0" onclick="browserGo(${uniqueId})">Go</button>
+    <div style="display:flex;gap:8px;padding:10px;background:#f8f8f8;border-bottom:1px solid #ddd;align-items:center">
+      <input type="text" id="browserUrl${uniqueId}" placeholder="Entrez une URL (ex: wikipedia.org)..." style="flex:1;margin:0" onfocus="showOSK(this)">
+      <button class="btn btn-success" style="padding:8px 16px;margin:0;white-space:nowrap" onclick="browserGo(${uniqueId})">↗ Ouvrir</button>
     </div>
-    <iframe id="browserFrame${uniqueId}" style="width:100%;height:calc(100% - 60px);border:none" sandbox="allow-same-origin allow-scripts"></iframe>
+    <div id="browserStart${uniqueId}" style="padding:30px;text-align:center">
+      <div style="font-size:48px;margin-bottom:10px">🌐</div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:20px;color:#333">Navigateur PhoenixOS</div>
+      <p style="color:#888;font-size:13px;margin-bottom:24px">Les sites s'ouvrent dans un nouvel onglet (les iframes sont bloquées par les sites).</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:480px;margin:0 auto">
+        ${[['🔍','Google','https://google.com'],['📺','YouTube','https://youtube.com'],['📖','Wikipédia','https://fr.wikipedia.org'],
+           ['🐦','Twitter/X','https://x.com'],['💻','GitHub','https://github.com'],['🌤️','Météo','https://meteofrance.com']].map(([icon,label,url]) =>
+          `<div onclick="window.open('${url}','_blank')" style="padding:16px;background:#f0f4ff;border-radius:10px;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#dce6ff'" onmouseout="this.style.background='#f0f4ff'">
+            <div style="font-size:28px">${icon}</div>
+            <div style="font-size:12px;font-weight:500;margin-top:6px;color:#444">${label}</div>
+          </div>`).join('')}
+      </div>
+    </div>
   `;
 }
 
 window.browserGo = function(id) {
   const input = document.getElementById('browserUrl' + id);
-  const frame = document.getElementById('browserFrame' + id);
   let url = input.value.trim();
+  if (!url) return;
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     url = 'https://' + url;
   }
-  frame.src = url;
+  window.open(url, '_blank');
 };
 
 // PAINT
@@ -1291,20 +1407,58 @@ window.clearPaint = function(id) {
 };
 
 // SETTINGS
+const WALLPAPERS = [
+  {label:'Violet (défaut)', value:'linear-gradient(135deg,#667eea,#764ba2)'},
+  {label:'Coucher de soleil', value:'linear-gradient(135deg,#f093fb,#f5576c)'},
+  {label:'Océan', value:'linear-gradient(135deg,#4facfe,#00f2fe)'},
+  {label:'Forêt', value:'linear-gradient(135deg,#43e97b,#38f9d7)'},
+  {label:'Nuit', value:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)'},
+  {label:'Or', value:'linear-gradient(135deg,#f7971e,#ffd200)'},
+  {label:'Rose', value:'linear-gradient(135deg,#ee9ca7,#ffdde1)'},
+  {label:'Ardoise', value:'linear-gradient(135deg,#434343,#000000)'},
+];
+
 function openSettings() {
   closeStartMenu();
-  const body = createWindow('Settings', '', 500, 400);
+  const body = createWindow('Paramètres', '', 520, 480);
+  const wallpapersHtml = WALLPAPERS.map((w, i) =>
+    `<div onclick="setWallpaper(${i})" title="${w.label}" style="width:60px;height:40px;background:${w.value};border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border 0.2s" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='transparent'"></div>`
+  ).join('');
+
   body.innerHTML = `
     <div style="padding:20px">
-      <h3 style="margin-bottom:15px">System Info</h3>
-      <p><strong>OS:</strong> PhoenixOS v2.1.0</p>
-      <p><strong>Platform:</strong> ${navigator.platform}</p>
-      <p><strong>Storage:</strong> ${(JSON.stringify(localStorage).length / 1024).toFixed(2)} KB</p>
-      <hr style="margin:20px 0">
-      <button class="btn btn-danger" onclick="if(confirm('Clear all data?')){localStorage.clear();location.reload()}">Clear Data</button>
-      <button class="btn" onclick="shutdown()">Shutdown</button>
+      <h3 style="margin-bottom:6px">Fond d'écran</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">${wallpapersHtml}</div>
+      <hr style="margin:0 0 16px 0;border-color:#eee">
+      <h3 style="margin-bottom:10px">Informations système</h3>
+      <table style="font-size:14px;border-collapse:collapse;width:100%">
+        <tr><td style="padding:4px 0;color:#888">Système</td><td>PhoenixOS v2.1.0</td></tr>
+        <tr><td style="padding:4px 0;color:#888">Plateforme</td><td>${navigator.platform}</td></tr>
+        <tr><td style="padding:4px 0;color:#888">Stockage utilisé</td><td>${(JSON.stringify(localStorage).length / 1024).toFixed(2)} KB</td></tr>
+        <tr><td style="padding:4px 0;color:#888">Résolution</td><td>${window.innerWidth} × ${window.innerHeight}</td></tr>
+      </table>
+      <hr style="margin:16px 0;border-color:#eee">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-danger" style="margin:0" onclick="if(confirm('Effacer toutes les données ?')){localStorage.clear();showNotification('Données effacées','Tous les fichiers ont été supprimés.');}">🗑️ Effacer données</button>
+        <button class="btn" style="margin:0" onclick="shutdown()">⏻ Éteindre</button>
+      </div>
     </div>
   `;
+}
+
+window.setWallpaper = function(i) {
+  const w = WALLPAPERS[i];
+  document.getElementById('desktop').style.background = w.value;
+  localStorage.setItem('phoenixos_wallpaper', i);
+  showNotification('Fond d\'écran', w.label + ' appliqué');
+};
+
+// Apply saved wallpaper on login
+function applySavedWallpaper() {
+  const saved = localStorage.getItem('phoenixos_wallpaper');
+  if (saved !== null && WALLPAPERS[saved]) {
+    document.getElementById('desktop').style.background = WALLPAPERS[saved].value;
+  }
 }
 
 // GAMES
@@ -1594,51 +1748,83 @@ function playTicTacToe() {
   const uniqueId = Date.now();
   body.innerHTML = `
     <div style="text-align:center;padding:15px">
-      <div id="tttStatus${uniqueId}" style="font-size:18px;font-weight:600;margin-bottom:15px">Player X's turn</div>
+      <div id="tttStatus${uniqueId}" style="font-size:18px;font-weight:600;margin-bottom:15px">Votre tour (X)</div>
       <div id="tttBoard${uniqueId}" style="display:grid;grid-template-columns:repeat(3,100px);gap:8px;justify-content:center"></div>
-      <button class="btn btn-success" style="margin-top:15px" onclick="playTicTacToe()">New Game</button>
+      <button class="btn btn-success" style="margin-top:15px" onclick="playTicTacToe()">Nouvelle partie</button>
     </div>
   `;
 
   const statusEl = document.getElementById('tttStatus' + uniqueId);
   const boardEl = document.getElementById('tttBoard' + uniqueId);
-
+  const cells = [];
   let board = Array(9).fill('');
-  let currentPlayer = 'X';
   let gameOver = false;
+
+  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+  function checkWinner(b) {
+    for (const [a,bb,c] of lines) {
+      if (b[a] && b[a] === b[bb] && b[a] === b[c]) return b[a];
+    }
+    return b.every(v => v) ? 'TIE' : null;
+  }
+
+  function aiMove() {
+    // Win: find AI win
+    for (let i = 0; i < 9; i++) {
+      if (!board[i]) {
+        board[i] = 'O';
+        if (checkWinner(board) === 'O') return i;
+        board[i] = '';
+      }
+    }
+    // Block: prevent player win
+    for (let i = 0; i < 9; i++) {
+      if (!board[i]) {
+        board[i] = 'X';
+        if (checkWinner(board) === 'X') { board[i] = ''; return i; }
+        board[i] = '';
+      }
+    }
+    // Center
+    if (!board[4]) return 4;
+    // Corners
+    for (const c of [0,2,6,8]) { if (!board[c]) return c; }
+    // Any
+    return board.findIndex(v => !v);
+  }
+
+  function placeMove(i, player) {
+    board[i] = player;
+    cells[i].textContent = player;
+    cells[i].style.color = player === 'X' ? '#007AFF' : '#FF3B30';
+    cells[i].style.cursor = 'default';
+    const w = checkWinner(board);
+    if (w) {
+      gameOver = true;
+      statusEl.textContent = w === 'TIE' ? 'Égalité !' : (w === 'X' ? 'Vous gagnez ! 🎉' : 'IA gagne ! 🤖');
+      return true;
+    }
+    return false;
+  }
 
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
-    cell.style.cssText = 'width:100px;height:100px;background:#f8f8f8;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer;font-weight:bold;border-radius:8px';
+    cell.style.cssText = 'width:100px;height:100px;background:#f8f8f8;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer;font-weight:bold;border-radius:8px;transition:background 0.15s';
+    cell.onmouseover = () => { if (!board[i] && !gameOver) cell.style.background = '#e8eeff'; };
+    cell.onmouseout = () => { cell.style.background = '#f8f8f8'; };
     cell.onclick = () => {
       if (gameOver || board[i]) return;
-
-      board[i] = currentPlayer;
-      cell.textContent = currentPlayer;
-      cell.style.color = currentPlayer === 'X' ? '#007AFF' : '#FF3B30';
-
-      const winner = checkWinner();
-      if (winner) {
-        gameOver = true;
-        statusEl.textContent = winner === 'TIE' ? "Tie!" : `${winner} wins!`;
-        return;
-      }
-
-      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      statusEl.textContent = `Player ${currentPlayer}'s turn`;
+      if (placeMove(i, 'X')) return;
+      statusEl.textContent = 'IA réfléchit...';
+      setTimeout(() => {
+        const m = aiMove();
+        if (m >= 0) placeMove(m, 'O');
+        if (!gameOver) statusEl.textContent = 'Votre tour (X)';
+      }, 400);
     };
+    cells.push(cell);
     boardEl.appendChild(cell);
-  }
-
-  function checkWinner() {
-    const lines = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-    for (const [a,b,c] of lines) {
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a];
-      }
-    }
-    if (board.every(cell => cell)) return 'TIE';
-    return null;
   }
 }
 
@@ -1716,12 +1902,374 @@ function playMemory() {
 
 // CLOCK
 function updateClock() {
-  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('fr-FR', {
     hour: '2-digit',
     minute: '2-digit'
   });
 }
 setInterval(updateClock, 1000);
+
+// CALENDAR POPUP
+let calYear, calMonth;
+function toggleCalendar() {
+  const popup = document.getElementById('calendarPopup');
+  if (popup.classList.contains('show')) {
+    popup.classList.remove('show');
+    return;
+  }
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  renderCalendar();
+  popup.classList.add('show');
+}
+
+document.addEventListener('click', e => {
+  const popup = document.getElementById('calendarPopup');
+  if (popup && !popup.contains(e.target) && e.target.id !== 'clock') {
+    popup.classList.remove('show');
+  }
+});
+
+function renderCalendar() {
+  const popup = document.getElementById('calendarPopup');
+  const now = new Date();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const monthNames = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+  let html = `<div class="cal-header">
+    <button class="cal-nav" onclick="calNav(-1)">‹</button>
+    <span>${monthNames[calMonth]} ${calYear}</span>
+    <button class="cal-nav" onclick="calNav(1)">›</button>
+  </div>
+  <div class="cal-grid">
+    ${['Lu','Ma','Me','Je','Ve','Sa','Di'].map(d => `<div class="cal-day-name">${d}</div>`).join('')}`;
+
+  const startOffset = (firstDay + 6) % 7;
+  for (let i = 0; i < startOffset; i++) {
+    html += '<div class="cal-day other-month"></div>';
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = d === now.getDate() && calMonth === now.getMonth() && calYear === now.getFullYear();
+    html += `<div class="cal-day${isToday ? ' today' : ''}">${d}</div>`;
+  }
+  html += '</div>';
+  popup.innerHTML = html;
+}
+
+window.calNav = function(dir) {
+  calMonth += dir;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+};
+
+// ALARM
+let alarmTimeout = null;
+let alarmInterval = null;
+let alarmAudio = null;
+
+function openAlarm() {
+  const popup = document.getElementById('alarmPopup');
+  if (popup.classList.contains('show')) {
+    popup.classList.remove('show');
+    return;
+  }
+  popup.innerHTML = `
+    <div style="font-weight:600;margin-bottom:12px;font-size:15px">⏰ Alarme</div>
+    <input type="time" id="alarmTime" style="width:100%;margin-bottom:10px;font-size:18px;text-align:center">
+    <button class="btn btn-success" style="width:100%;margin:0 0 6px 0" onclick="setAlarm()">Activer</button>
+    <button class="btn btn-danger" style="width:100%;margin:0" onclick="cancelAlarm()">Annuler alarme</button>
+    <div id="alarmStatus" style="margin-top:10px;font-size:12px;color:#666;text-align:center"></div>
+  `;
+  popup.classList.add('show');
+  const now = new Date();
+  document.getElementById('alarmTime').value = now.toTimeString().slice(0,5);
+}
+
+document.addEventListener('click', e => {
+  const popup = document.getElementById('alarmPopup');
+  if (popup && !popup.contains(e.target) && !e.target.closest('[onclick="openAlarm()"]')) {
+    popup.classList.remove('show');
+  }
+});
+
+window.setAlarm = function() {
+  const timeVal = document.getElementById('alarmTime').value;
+  if (!timeVal) return;
+  cancelAlarm();
+  const [h, m] = timeVal.split(':').map(Number);
+  const now = new Date();
+  let target = new Date();
+  target.setHours(h, m, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const ms = target - now;
+  document.getElementById('alarmStatus').textContent = `Alarme réglée pour ${timeVal}`;
+  alarmTimeout = setTimeout(() => triggerAlarm(), ms);
+};
+
+window.cancelAlarm = function() {
+  if (alarmTimeout) clearTimeout(alarmTimeout);
+  if (alarmInterval) clearInterval(alarmInterval);
+  if (alarmAudio) { alarmAudio.pause(); alarmAudio = null; }
+  alarmTimeout = null; alarmInterval = null;
+  const el = document.getElementById('alarmStatus');
+  if (el) el.textContent = 'Alarme annulée';
+};
+
+function triggerAlarm() {
+  showNotification('⏰ Alarme', 'Réveil ! Cliquez sur 🔔 pour arrêter.');
+  document.getElementById('wifiIcon') && (document.querySelector('[onclick="openAlarm()"]').style.animation = 'pulse 0.5s infinite');
+  // Beep using AudioContext
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let beepCount = 0;
+    alarmInterval = setInterval(() => {
+      if (beepCount >= 20) { cancelAlarm(); return; }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+      beepCount++;
+    }, 600);
+  } catch(e) {}
+}
+
+// WIFI STATUS
+function showWifiStatus() {
+  const online = navigator.onLine;
+  showNotification('📶 Réseau', online ? 'Connecté à Internet' : 'Hors ligne');
+}
+
+// BATTERY
+async function updateBattery() {
+  const el = document.getElementById('batteryIcon');
+  if (!el) return;
+  if (navigator.getBattery) {
+    try {
+      const bat = await navigator.getBattery();
+      const pct = Math.round(bat.level * 100);
+      const icon = pct > 75 ? '🔋' : pct > 40 ? '🪫' : '🪫';
+      el.textContent = icon;
+      el.title = `Batterie : ${pct}%${bat.charging ? ' (en charge)' : ''}`;
+    } catch(e) { el.style.display = 'none'; }
+  } else {
+    el.style.display = 'none';
+  }
+}
+updateBattery();
+
+// ABOUT
+function openAbout() {
+  const body = createWindow('À propos de PhoenixOS', '', 420, 320);
+  body.innerHTML = `
+    <div style="text-align:center;padding:30px">
+      <div style="font-size:64px;margin-bottom:10px">🔥</div>
+      <h2 style="margin-bottom:6px">PhoenixOS</h2>
+      <div style="color:#667eea;font-weight:600;margin-bottom:16px">Version 2.1.0</div>
+      <p style="color:#666;font-size:14px;line-height:1.6">Système d'exploitation web simulé.<br>Fonctionne entièrement dans le navigateur.<br>Données stockées localement.</p>
+      <hr style="margin:20px 0;border-color:#eee">
+      <p style="color:#aaa;font-size:12px">© 2026 Phoenix Project</p>
+    </div>
+  `;
+}
+
+// MAIL APP
+function openMail() {
+  const body = createWindow('Courrier', '', 700, 550);
+  body.style.padding = '0';
+  const uid = Date.now();
+  const savedMails = JSON.parse(localStorage.getItem('phoenixos_mails') || '[]');
+
+  body.innerHTML = `
+    <div style="display:flex;height:100%">
+      <div style="width:200px;background:#f8f8f8;border-right:1px solid #ddd;padding:12px;flex-shrink:0">
+        <button class="btn btn-success" style="width:100%;margin:0 0 16px 0" onclick="composeMail(${uid})">✏️ Composer</button>
+        <div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#555">Boîte de réception</div>
+        <div id="mailList${uid}" style="font-size:13px;color:#888">Aucun message</div>
+      </div>
+      <div id="mailContent${uid}" style="flex:1;padding:20px;overflow:auto">
+        <div style="text-align:center;padding-top:60px;color:#aaa">
+          <div style="font-size:48px;margin-bottom:10px">✉️</div>
+          <div>Sélectionnez un message<br>ou composez-en un nouveau</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Load saved drafts/sent
+  const listEl = body.querySelector('#mailList' + uid);
+  const contentEl = body.querySelector('#mailContent' + uid);
+  if (savedMails.length > 0) {
+    listEl.innerHTML = savedMails.map((m, i) =>
+      `<div style="padding:8px;border-radius:6px;cursor:pointer;margin-bottom:4px" onmouseover="this.style.background='#e8eeff'" onmouseout="this.style.background=''" onclick="showMail(${uid},${i})">
+        <div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.to || '(brouillon)'}</div>
+        <div style="font-size:11px;color:#aaa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.subject || '(sans objet)'}</div>
+      </div>`).join('');
+  }
+
+  window['mailData' + uid] = savedMails;
+  window['showMail'] = (uid, i) => {
+    const m = window['mailData' + uid][i];
+    document.getElementById('mailContent' + uid).innerHTML = `
+      <div style="max-width:600px">
+        <div style="font-size:18px;font-weight:600;margin-bottom:16px">${m.subject || '(sans objet)'}</div>
+        <div style="display:grid;gap:4px;margin-bottom:16px;font-size:13px;color:#555">
+          <div><strong>À :</strong> ${m.to}</div>
+          <div><strong>Date :</strong> ${m.date}</div>
+        </div>
+        <hr style="margin-bottom:16px;border-color:#eee">
+        <div style="font-size:14px;line-height:1.7;white-space:pre-wrap">${m.body}</div>
+        <hr style="margin:16px 0;border-color:#eee">
+        <button class="btn btn-danger" style="margin:0" onclick="deleteMail(${uid},${i})">Supprimer</button>
+      </div>
+    `;
+  };
+
+  window['deleteMail'] = (uid, i) => {
+    const mails = JSON.parse(localStorage.getItem('phoenixos_mails') || '[]');
+    mails.splice(i, 1);
+    localStorage.setItem('phoenixos_mails', JSON.stringify(mails));
+    openMail();
+  };
+}
+
+window.composeMail = function(uid) {
+  const contentEl = document.getElementById('mailContent' + uid);
+  const composeId = Date.now();
+  contentEl.innerHTML = `
+    <div style="max-width:600px">
+      <div style="font-size:16px;font-weight:600;margin-bottom:16px">✏️ Nouveau message</div>
+      <input id="mailTo${composeId}" type="email" placeholder="À (adresse email)" style="width:100%;margin-bottom:8px" onfocus="showOSK(this)">
+      <input id="mailSubject${composeId}" type="text" placeholder="Objet" style="width:100%;margin-bottom:8px" onfocus="showOSK(this)">
+      <textarea id="mailBody${composeId}" placeholder="Votre message..." style="width:100%;height:250px;border:2px solid #e0e0e0;border-radius:6px;padding:10px;font-family:inherit;font-size:14px;resize:none" onfocus="showOSK(this)"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-success" style="margin:0" onclick="sendMail(${uid},${composeId})">📤 Envoyer</button>
+        <button class="btn" style="margin:0" onclick="saveDraft(${uid},${composeId})">💾 Brouillon</button>
+      </div>
+    </div>
+  `;
+};
+
+window.sendMail = function(uid, cid) {
+  const to = document.getElementById('mailTo' + cid).value.trim();
+  const subject = document.getElementById('mailSubject' + cid).value.trim();
+  const body = document.getElementById('mailBody' + cid).value.trim();
+  if (!to) { showNotification('Erreur', 'Entrez une adresse email'); return; }
+  const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(mailto, '_blank');
+  saveDraft(uid, cid);
+  showNotification('✉️ Courrier', 'Message ouvert dans votre client mail');
+};
+
+window.saveDraft = function(uid, cid) {
+  const to = document.getElementById('mailTo' + cid)?.value.trim() || '';
+  const subject = document.getElementById('mailSubject' + cid)?.value.trim() || '';
+  const body = document.getElementById('mailBody' + cid)?.value.trim() || '';
+  const mails = JSON.parse(localStorage.getItem('phoenixos_mails') || '[]');
+  mails.unshift({to, subject, body, date: new Date().toLocaleString('fr-FR')});
+  if (mails.length > 50) mails.pop();
+  localStorage.setItem('phoenixos_mails', JSON.stringify(mails));
+  showNotification('Courrier', 'Brouillon sauvegardé');
+  openMail();
+};
+
+// ADD HTML popup elements to body
+document.body.insertAdjacentHTML('beforeend', `
+  <div id="calendarPopup"></div>
+  <div id="alarmPopup"></div>
+`);
+
+// ---- TDD TEST SUITE ----
+function runTests() {
+  const results = [];
+  function test(name, fn) {
+    try { fn(); results.push({name, ok: true}); }
+    catch(e) { results.push({name, ok: false, err: e.message}); }
+  }
+  function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion failed'); }
+
+  // FS tests
+  const testPath = '/';
+  test('FS: créer un fichier', () => {
+    FS.createFile(testPath, '__test_file__.txt', 'hello');
+    assert(FS.read(testPath, '__test_file__.txt') === 'hello', 'lecture incorrecte');
+  });
+  test('FS: mettre à jour un fichier', () => {
+    FS.update(testPath, '__test_file__.txt', 'world');
+    assert(FS.read(testPath, '__test_file__.txt') === 'world', 'mise à jour incorrecte');
+  });
+  test('FS: lister les fichiers', () => {
+    const list = FS.list(testPath);
+    assert(list.some(f => f.name === '__test_file__.txt'), 'fichier absent de la liste');
+  });
+  test('FS: supprimer un fichier', () => {
+    FS.delete(testPath, '__test_file__.txt');
+    assert(FS.read(testPath, '__test_file__.txt') === null, 'fichier non supprimé');
+  });
+  test('FS: créer un dossier', () => {
+    FS.mkdir(testPath, '__testdir__');
+    const list = FS.list(testPath);
+    assert(list.some(f => f.name === '__testdir__' && f.type === 'folder'), 'dossier absent');
+    FS.delete(testPath, '__testdir__');
+  });
+
+  // Calculator tests
+  test('Calc: addition', () => { assert(calcExec(3, 4, '+') === 7, '3+4≠7'); });
+  test('Calc: soustraction', () => { assert(calcExec(10, 3, '-') === 7, '10-3≠7'); });
+  test('Calc: multiplication', () => { assert(calcExec(6, 7, '*') === 42, '6×7≠42'); });
+  test('Calc: division', () => { assert(calcExec(10, 2, '/') === 5, '10÷2≠5'); });
+  test('Calc: division par zéro', () => { assert(calcExec(5, 0, '/') === 0, 'div/0≠0'); });
+  test('Calc: modulo', () => { assert(calcExec(10, 3, '%') === 1, '10%3≠1'); });
+
+  // TicTacToe tests
+  test('TicTacToe: détection victoire ligne', () => {
+    window.tttBoard = ['X','X','X','','','','','',''];
+    assert(checkTTTWinner() === 'X', 'ligne X non détectée');
+  });
+  test('TicTacToe: détection égalité', () => {
+    window.tttBoard = ['X','O','X','X','O','X','O','X','O'];
+    assert(checkTTTWinner() === 'tie', 'égalité non détectée');
+  });
+  test('TicTacToe: pas de gagnant', () => {
+    window.tttBoard = ['X','O','','','','','','',''];
+    assert(checkTTTWinner() === null, 'faux positif');
+  });
+
+  // isMobile detection
+  test('isMobile: type boolean', () => { assert(typeof isMobile === 'boolean', 'isMobile doit être boolean'); });
+
+  // Clock
+  test('Horloge: mise à jour', () => {
+    updateClock();
+    const txt = document.getElementById('clock')?.textContent;
+    assert(txt && /\d{2}:\d{2}/.test(txt), 'format horloge incorrect: ' + txt);
+  });
+
+  // Wallpaper
+  test('Fond d\'écran: liste non vide', () => { assert(WALLPAPERS.length > 0, 'liste vide'); });
+
+  // Display results
+  const passed = results.filter(r => r.ok).length;
+  const failed = results.filter(r => !r.ok).length;
+  const body = createWindow(`Tests — ${passed}/${results.length} réussis`, '', 550, 500);
+  const lines = results.map(r =>
+    `<div style="padding:6px 10px;border-radius:6px;margin-bottom:4px;background:${r.ok ? '#e6fced' : '#fce6e6'};font-size:13px;font-family:monospace">
+      <span style="color:${r.ok ? '#34C759' : '#FF3B30'}">${r.ok ? '✅' : '❌'}</span> ${r.name}${r.err ? ` — <em>${r.err}</em>` : ''}
+    </div>`).join('');
+  body.innerHTML = `<div style="padding:16px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px">
+      ${passed === results.length ? '🎉 Tous les tests réussis !' : `⚠️ ${failed} échec(s)`}
+    </div>${lines}</div>`;
+
+  return {passed, failed, total: results.length};
+}
 </script>
 </body>
 </html>
