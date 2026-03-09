@@ -77,7 +77,7 @@ a:hover{color:var(--secondary);text-decoration:underline}
 <div class="feature-item"><strong>📱 Responsive</strong><br>Mobile-first design</div>
 <div class="feature-item"><strong>🍪 GDPR</strong><br>Cookie consent management</div>
 <div class="feature-item"><strong>📊 Analytics</strong><br>Visit statistics by country</div>
-<div class="feature-item"><strong>🎮 PhoenixOS</strong><br>Interactive games demo</div>
+<div class="feature-item"><strong>🎮 <a href="phoenix-os.html" target="_blank">PhoenixOS</a></strong><br>Interactive OS simulator with virtual keyboard &amp; 4 games</div>
 <div class="feature-item"><strong>🔍 SEO</strong><br>Complete optimization</div>
 </div>
 
@@ -139,7 +139,7 @@ a:hover{color:var(--secondary);text-decoration:underline}
 ├── templates.css        # 4 template styles
 ├── theme.js            # Interactive features
 ├── locales.js          # Translation system
-├── os-demo.html        # PhoenixOS interactive demo
+├── phoenix-os.html     # PhoenixOS interactive demo
 ├── statistiques.html   # Visitor statistics dashboard
 ├── readme.html         # This interactive README
 ├── 404.html            # Custom error page
@@ -153,9 +153,7 @@ a:hover{color:var(--secondary);text-decoration:underline}
 <p>All rights reserved © 2025 - 2026 ThePhoenixAgency<br>
 Commercial proprietary license - Unauthorized reproduction strictly prohibited.</p>
 
-<p style="margin-top:2rem;opacity:0.6;font-size:0.85rem;text-align:center">
-Last updated: January 26, 2026
-</p>
+<p style="margin-top:2rem;opacity:0.6;font-size:0.85rem;text-align:center" id="lastUpdatedEN"></p>
 </div>
 
 <!-- French Version -->
@@ -174,7 +172,7 @@ Last updated: January 26, 2026
 <div class="feature-item"><strong>📱 Responsive</strong><br>Design Mobile-first</div>
 <div class="feature-item"><strong>🍪 RGPD</strong><br>Gestion consentement cookies</div>
 <div class="feature-item"><strong>📊 Analytiques</strong><br>Statistiques par pays</div>
-<div class="feature-item"><strong>🎮 PhoenixOS</strong><br>Démo jeux interactifs</div>
+<div class="feature-item"><strong>🎮 <a href="phoenix-os.html" target="_blank">PhoenixOS</a></strong><br>Simulateur d'OS interactif avec clavier virtuel &amp; 4 jeux</div>
 <div class="feature-item"><strong>🔍 SEO</strong><br>Optimisation complète</div>
 </div>
 
@@ -236,7 +234,7 @@ Last updated: January 26, 2026
 ├── templates.css        # Styles des 4 templates
 ├── theme.js            # Fonctionnalités interactives
 ├── locales.js          # Système de traduction
-├── os-demo.html        # Démo interactive PhoenixOS
+├── phoenix-os.html     # Démo interactive PhoenixOS
 ├── statistiques.html   # Tableau de bord statistiques
 ├── readme.html         # Ce README interactif
 ├── 404.html            # Page d'erreur personnalisée
@@ -250,9 +248,7 @@ Last updated: January 26, 2026
 <p>Tous droits réservés © 20256 ThePhoenixAgency<br>
 Licence commerciale propriétaire - Reproduction non autorisée strictement interdite.</p>
 
-<p style="margin-top:2rem;opacity:0.6;font-size:0.85rem;text-align:center">
-Dernière mise à jour: 26 janvier 2026
-</p>
+<p style="margin-top:2rem;opacity:0.6;font-size:0.85rem;text-align:center" id="lastUpdatedFR"></p>
 </div>
 
 </div>
@@ -290,6 +286,17 @@ function switchLang(lang) {
     ThemeManager.savePreference('readmeLang', lang);
   }
 }
+
+// Dynamic last-updated date
+(function() {
+  const now = new Date();
+  const enDate = now.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  const frDate = now.toLocaleDateString('fr-FR', {year:'numeric', month:'long', day:'numeric'});
+  const elEN = document.getElementById('lastUpdatedEN');
+  const elFR = document.getElementById('lastUpdatedFR');
+  if (elEN) elEN.textContent = 'Last updated: ' + enDate;
+  if (elFR) elFR.textContent = 'Dernière mise à jour : ' + frDate;
+})();
 
 // Load saved language preference
 document.addEventListener('DOMContentLoaded', () => {
