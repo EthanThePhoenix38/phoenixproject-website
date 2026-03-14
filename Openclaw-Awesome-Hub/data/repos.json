@@ -1,0 +1,27 @@
+{
+  "repos": [
+    {
+      "id": 20396006,
+      "name": "OpenClaw",
+      "full_name": "OpenClaw/OpenClaw",
+      "owner": "OpenClaw",
+      "url": "https://github.com/OpenClaw/OpenClaw",
+      "description": "Open source reimplementation of Captain Claw (1997) platformer game",
+      "description_fr": "Réimplémentation open source du jeu de plateforme Captain Claw (1997)",
+      "stars": 900,
+      "forks_count": 120,
+      "language": "C++",
+      "topics": ["game", "platformer", "sdl2", "captain-claw", "open-source"],
+      "is_fork": false,
+      "license": "MIT",
+      "created_at": "2014-06-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "category": "core_robotics",
+      "page": 1,
+      "added_at": "2026-03-14T00:00:00Z"
+    }
+  ],
+  "last_scan": "2026-03-14T00:00:00Z",
+  "total_found": 1,
+  "new_this_scan": 1
+}

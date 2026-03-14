@@ -1,0 +1,84 @@
+name: Scan Trending OpenClaw Repos
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      max_repos:
+        description: "Max repos per keyword"
+        required: false
+        default: "50"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  scan-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Scan trending repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_REPOS: ${{ github.event.inputs.max_repos || '50' }}
+        run: python scripts/scan_trending.py
+
+      - name: Translate and update README
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/update_readme.py
+
+      - name: Generate individual repo pages
+        run: python scripts/generate_pages.py
+
+      - name: Generate visitor graph SVG
+        run: python scripts/update_visitor_graph.py
+
+      - name: Commit and push to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "auto: update repo list $(date -u '+%Y-%m-%d %H:%M UTC') [skip ci]"
+            git push origin main
+          fi
+
+  push-links-branch:
+    needs: scan-and-update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Push 5 new links to Links branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+        run: python scripts/push_links_batch.py
+
+      - name: Create silent auto-PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+        run: python scripts/create_silent_pr.py

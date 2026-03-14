@@ -1,0 +1,15 @@
+{
+  "categories": {
+    "core_robotics": 1,
+    "arms_manipulation": 0,
+    "motion_control": 0,
+    "electronics": 0,
+    "ai_ml": 0,
+    "computer_vision": 0,
+    "simulation": 0,
+    "iot": 0,
+    "tools": 0
+  },
+  "total": 1,
+  "last_update": "2026-03-14T00:00:00Z"
+}

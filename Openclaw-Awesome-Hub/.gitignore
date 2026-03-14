@@ -1,0 +1,39 @@
+# Environment & secrets — never commit these
+.env
+.env.*
+*.key
+*.pem
+*.secret
+secrets.json
+credentials.json
+config.local.*
+*.token
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temp build artifacts
+docs/_site/
+.jekyll-cache/

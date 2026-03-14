@@ -1,0 +1,57 @@
+name: "📊 Visitor Tracker & Stats"
+
+on:
+  workflow_dispatch:
+    inputs:
+      country:
+        description: "Visitor country code (e.g. FR, US)"
+        required: false
+        default: "Unknown"
+      page:
+        description: "Page visited"
+        required: false
+        default: "/"
+  # This workflow is called via GitHub Pages JS → GitHub API
+  # See docs/assets/tracker.js
+
+permissions:
+  contents: write
+
+jobs:
+  track-visitor:
+    runs-on: ubuntu-latest
+    name: "Record visitor & update graph"
+
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "🐍 Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: "📦 Install dependencies"
+        run: pip install matplotlib numpy
+
+      - name: "📊 Update visitor data & graph"
+        env:
+          VISITOR_COUNTRY: ${{ github.event.inputs.country || 'Unknown' }}
+          VISITOR_PAGE: ${{ github.event.inputs.page || '/' }}
+          VISITOR_TIME: ${{ github.event.head_commit.timestamp }}
+        run: |
+          python scripts/update_visitor_graph.py
+
+      - name: "✅ Commit stats"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/visitors.json data/visitor-graph.svg data/stats.json
+          if git diff --staged --quiet; then
+            echo "No visitor updates"
+          else
+            git commit -m "📊 stats: visitor update [skip ci]"
+            git push origin main
+          fi
