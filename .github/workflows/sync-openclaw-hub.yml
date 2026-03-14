@@ -1,9 +1,11 @@
 name: Sync Openclaw Hub
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
+  push:
+    branches:
+      - claude/openclaw-repos-tracker-mJtrt
+    paths:
+      - "Openclaw-Awesome-Hub/**"
   workflow_dispatch:
 
 permissions:
@@ -11,10 +13,7 @@ permissions:
 
 jobs:
   sync:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.merged == true &&
-       contains(github.event.pull_request.head.ref, 'openclaw'))
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
