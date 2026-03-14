@@ -27,16 +27,25 @@ jobs:
           SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
         run: |
           if [ -z "$SYNC_TOKEN" ]; then
-            echo "Set secret OPENCLAW_SYNC_TOKEN (PAT with repo scope) to enable sync."
-            exit 0
+            echo "OPENCLAW_SYNC_TOKEN secret not set."
+            exit 1
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          cd Openclaw-Awesome-Hub
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global init.defaultBranch main
+
+          # Work in a clean temp dir
+          TMPDIR=$(mktemp -d)
+          cp -r Openclaw-Awesome-Hub/. "$TMPDIR/"
+
+          cd "$TMPDIR"
           git init
+          git checkout -b main
           git add -A
-          git commit -m "sync: from phoenixproject-website [skip ci]"
-          git remote add dest "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
-          git push dest main --force
+          git status
+          git commit -m "init: Openclaw Awesome Hub [skip ci]"
+
+          git remote add origin "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
+          git push origin main --force
           echo "Sync complete."
