@@ -1,0 +1,43 @@
+name: Sync Openclaw Hub
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       contains(github.event.pull_request.head.ref, 'openclaw'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/openclaw-repos-tracker-mJtrt
+          fetch-depth: 0
+          token: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
+
+      - name: Push Openclaw-Awesome-Hub to its repo
+        env:
+          SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
+        run: |
+          if [ -z "$SYNC_TOKEN" ]; then
+            echo "Set secret OPENCLAW_SYNC_TOKEN (PAT with repo scope) to enable sync."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          cd Openclaw-Awesome-Hub
+          git init
+          git add -A
+          git commit -m "sync: from phoenixproject-website [skip ci]"
+          git remote add dest "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
+          git push dest main --force
+          echo "Sync complete."
