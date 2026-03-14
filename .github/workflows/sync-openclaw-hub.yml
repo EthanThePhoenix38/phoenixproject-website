@@ -3,7 +3,7 @@ name: Sync Openclaw Hub
 on:
   push:
     branches:
-      - claude/openclaw-repos-tracker-mJtrt
+      - "claude/openclaw-repos-tracker-mJtrt"
     paths:
       - "Openclaw-Awesome-Hub/**"
   workflow_dispatch:
@@ -13,39 +13,56 @@ permissions:
 
 jobs:
   sync:
-    if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout branch
+        uses: actions/checkout@v4
         with:
           ref: claude/openclaw-repos-tracker-mJtrt
-          fetch-depth: 0
-          token: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
+          fetch-depth: 1
 
-      - name: Push Openclaw-Awesome-Hub to its repo
+      - name: Verify token and repo access
         env:
           SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
         run: |
           if [ -z "$SYNC_TOKEN" ]; then
-            echo "OPENCLAW_SYNC_TOKEN secret not set."
+            echo "ERROR: OPENCLAW_SYNC_TOKEN secret is empty or not set."
+            exit 1
+          fi
+          echo "Token is set (length: ${#SYNC_TOKEN})"
+          echo "Testing API access to destination repo..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token $SYNC_TOKEN" \
+            "https://api.github.com/repos/EthanThePhoenix38/Openclaw-Awesome-Hub")
+          echo "Repo API status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "ERROR: Cannot access EthanThePhoenix38/Openclaw-Awesome-Hub with this token."
             exit 1
           fi
 
+      - name: Push all files to Openclaw-Awesome-Hub
+        env:
+          SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
+        run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global init.defaultBranch main
 
-          # Work in a clean temp dir
           TMPDIR=$(mktemp -d)
+          echo "Copying files from Openclaw-Awesome-Hub/..."
           cp -r Openclaw-Awesome-Hub/. "$TMPDIR/"
+          ls -la "$TMPDIR/"
 
           cd "$TMPDIR"
           git init
           git checkout -b main
           git add -A
-          git status
+          echo "Files staged:"
+          git status --short
           git commit -m "init: Openclaw Awesome Hub [skip ci]"
 
-          git remote add origin "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
+          echo "Pushing to EthanThePhoenix38/Openclaw-Awesome-Hub..."
+          git remote add origin \
+            "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
           git push origin main --force
-          echo "Sync complete."
+          echo "Done."
