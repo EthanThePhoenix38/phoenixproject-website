@@ -21,48 +21,30 @@ jobs:
           ref: claude/openclaw-repos-tracker-mJtrt
           fetch-depth: 1
 
-      - name: Verify token and repo access
+      - name: Debug token and push
         env:
           SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
         run: |
-          if [ -z "$SYNC_TOKEN" ]; then
-            echo "ERROR: OPENCLAW_SYNC_TOKEN secret is empty or not set."
-            exit 1
-          fi
-          echo "Token is set (length: ${#SYNC_TOKEN})"
-          echo "Testing API access to destination repo..."
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token $SYNC_TOKEN" \
-            "https://api.github.com/repos/EthanThePhoenix38/Openclaw-Awesome-Hub")
-          echo "Repo API status: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" != "200" ]; then
-            echo "ERROR: Cannot access EthanThePhoenix38/Openclaw-Awesome-Hub with this token."
-            exit 1
-          fi
+          echo "Token set: $([ -n "$SYNC_TOKEN" ] && echo YES || echo NO)"
+          echo "Token length: ${#SYNC_TOKEN}"
 
-      - name: Push all files to Openclaw-Awesome-Hub
-        env:
-          SYNC_TOKEN: ${{ secrets.OPENCLAW_SYNC_TOKEN }}
-        run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global init.defaultBranch main
 
           TMPDIR=$(mktemp -d)
-          echo "Copying files from Openclaw-Awesome-Hub/..."
           cp -r Openclaw-Awesome-Hub/. "$TMPDIR/"
-          ls -la "$TMPDIR/"
 
           cd "$TMPDIR"
           git init
           git checkout -b main
           git add -A
-          echo "Files staged:"
+          echo "--- Files to push ---"
           git status --short
           git commit -m "init: Openclaw Awesome Hub [skip ci]"
 
-          echo "Pushing to EthanThePhoenix38/Openclaw-Awesome-Hub..."
+          echo "--- Attempting push ---"
           git remote add origin \
             "https://x-access-token:${SYNC_TOKEN}@github.com/EthanThePhoenix38/Openclaw-Awesome-Hub.git"
-          git push origin main --force
-          echo "Done."
+          git push origin main --force 2>&1
+          echo "Exit code: $?"
