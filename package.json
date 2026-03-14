@@ -1,0 +1,20 @@
+{
+  "name": "phoenixproject-website",
+  "version": "1.0.0",
+  "description": "![GitHub stars](https://img.shields.io/github/stars/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github) ![GitHub forks](https://img.shields.io/github/forks/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github) ![GitHub last commit](https://img.shields.io/github/last-commit/EthanThePhoenix38/phoenixproject-website?style=flat-square&logo=github) ![WCAG AA](https://img.shields.io/badge/WCAG-AA%20Compliant-green?style=flat-square&logo=w3c) ![RGPD](https://img.shields.io/badge/RGPD-Compliant-blue?style=flat-square) ![HTML5](https://img.shields.io/badge/HTML5-Semantic-E34F26?style=flat-square&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-Modern-1572B6?style=flat-square&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Responsive](https://img.shields.io/badge/Responsive-Mobile%20First-orange?style=flat-square) ![i18n](https://img.shields.io/badge/i18n-FR%20%7C%20EN-purple?style=flat-square) ![Dark Mode](https://img.shields.io/badge/Dark%20Mode-Optimized-black?style=flat-square) ![SEO](https://img.shields.io/badge/SEO-Optimized-success?style=flat-square) ![Accessibility](https://img.shields.io/badge/A11y-AAA-brightgreen?style=flat-square) ![License](https://img.shields.io/badge/License-Commercial-red?style=flat-square)",
+  "main": "chatbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:25988/git/EthanThePhoenix38/phoenixproject-website"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^28.1.0",
+    "playwright": "^1.58.2"
+  }
+}
