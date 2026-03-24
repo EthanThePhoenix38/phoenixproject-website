@@ -1,2 +1,32 @@
 .DS_Store
 /cloudlare-workers
+
+# Dépendances Node
+node_modules/
+
+# Artefacts de build
+dist/
+build/
+out/
+.next/
+.nuxt/
+coverage/
+
+# Caches & Playwright
+.playwright/
+playwright-report/
+test-results/
+.cache/
+
+# Logs Node
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers macOS
+.DS_Store
+
+# Locks (si tu ne veux plus de verrou npm dans ce repo)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
