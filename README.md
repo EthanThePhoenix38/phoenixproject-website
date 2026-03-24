@@ -15,7 +15,7 @@
 ![Accessibility](https://img.shields.io/badge/A11y-AAA-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-Commercial-red?style=flat-square)
 
-**Last Updated:** January 28, 2026
+**Last Updated:** Marsh 23, 2026
 
 [🇫🇷 Français](#-version-française) | [🇬🇧 English](#-english-version)
 
